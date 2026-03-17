@@ -1,0 +1,19 @@
+{
+  "name": "tenantify",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @tenantify/core && npm run build -w @tenantify/next-app && npm run build -w @tenantify/next-pages && npm run build -w @tenantify/react",
+    "dev": "turbo dev",
+    "clean": "rm -rf node_modules packages/*/dist",
+    "typecheck": "tsc -b"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "tsup": "^8.0.0",
+    "turbo": "^2.0.0"
+  }
+}
