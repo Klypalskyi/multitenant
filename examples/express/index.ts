@@ -1,14 +1,14 @@
 import express from 'express';
 import { loadTenantsConfig } from '@multitenant/config';
 import { createTenantRegistry } from '@multitenant/core';
-import { tenantifyExpress } from '@multitenant/express';
+import { multitenantExpress } from '@multitenant/express';
 
 async function main() {
   const app = express();
   const config = await loadTenantsConfig({ cwd: process.cwd() });
   const registry = createTenantRegistry(config);
 
-  app.use(tenantifyExpress({ registry, environment: 'local' }));
+  app.use(multitenantExpress({ registry, environment: 'local' }));
 
   app.get('/', (req, res) => {
     if (!req.tenant) return res.status(404).send('no tenant');

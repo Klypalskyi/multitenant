@@ -111,7 +111,7 @@ const resolveDomainV2 = (
   if (exactMatches.length > 1 || wildcardMatches.length > 1) {
     // config loader should have prevented this; be safe and error
     throw new Error(
-      `[tenantify] Ambiguous domain resolution for host "${hostname}" in environment "${env}"`,
+      `[multitenant] Ambiguous domain resolution for host "${hostname}" in environment "${env}"`,
     );
   }
 
@@ -151,7 +151,7 @@ export const createTenantRegistry = (config: TenantsConfig): TenantRegistry => {
     const environment = getEnvironment(envOverride, config);
     if (!ENVIRONMENTS.includes(environment)) {
       throw new Error(
-        `[tenantify] Unknown environment "${environment}" for host "${hostname}"`,
+        `[multitenant] Unknown environment "${environment}" for host "${hostname}"`,
       );
     }
 
@@ -161,14 +161,14 @@ export const createTenantRegistry = (config: TenantsConfig): TenantRegistry => {
     const tenant = tenants[match.tenantKey];
     if (!tenant) {
       throw new Error(
-        `[tenantify] Domain for host "${hostname}" resolved to unknown tenant "${match.tenantKey}"`,
+        `[multitenant] Domain for host "${hostname}" resolved to unknown tenant "${match.tenantKey}"`,
       );
     }
 
     const market = markets[tenant.marketKey];
     if (!market) {
       throw new Error(
-        `[tenantify] Tenant "${tenant.key}" references unknown market "${tenant.marketKey}"`,
+        `[multitenant] Tenant "${tenant.key}" references unknown market "${tenant.marketKey}"`,
       );
     }
 

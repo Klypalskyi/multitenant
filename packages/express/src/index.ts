@@ -1,7 +1,7 @@
-import type { Request, Response, NextFunction } from 'express';
-import type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@multitenant/core';
+import type { EnvironmentName, ResolvedTenant, TenantRegistry } from '@multitenant/core';
+import type { NextFunction, Request, Response } from 'express';
 
-export interface TenantifyExpressOptions {
+interface MultitenantExpressOptions {
   registry: TenantRegistry;
   environment?: EnvironmentName;
 }
@@ -14,7 +14,7 @@ declare global {
   }
 }
 
-export function tenantifyExpress(options: TenantifyExpressOptions) {
+export function multitenantExpress(options: MultitenantExpressOptions) {
   const { registry, environment } = options;
   return function tenantMiddleware(
     req: Request,
@@ -36,4 +36,8 @@ export function tenantifyExpress(options: TenantifyExpressOptions) {
   };
 }
 
-export type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@multitenant/core';
+export type {
+  TenantRegistry,
+  ResolvedTenant,
+  EnvironmentName,
+} from '@multitenant/core';

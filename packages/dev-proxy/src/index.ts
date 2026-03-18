@@ -35,7 +35,7 @@ function errorPage(message: string, tenants?: Array<{ key: string; hostExample: 
   const list = tenants
     ? tenants.map((t) => `<li><a href="http://${t.hostExample}">${t.key}</a></li>`).join('')
     : '';
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Tenantify</title></head><body><h1>${message}</h1>${list ? `<ul>${list}</ul>` : ''}</body></html>`;
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Multitenant</title></head><body><h1>${message}</h1>${list ? `<ul>${list}</ul>` : ''}</body></html>`;
 }
 
 export function startDevProxy(options: DevProxyOptions): Promise<DevProxyInstance> {

@@ -41,7 +41,7 @@ export function createTenantMiddleware(
     );
 
     if (!resolved) {
-      throw new Error('[tenantify] Unable to resolve tenant in Next.js middleware');
+      throw new Error('[multitenant] Unable to resolve tenant in Next.js middleware');
     }
 
     const response = NextResponse.next({
@@ -95,7 +95,7 @@ export function requireTenant(
 ): ResolvedTenant {
   const tenant = getTenantFromHeaders(headers, registry, options);
   if (!tenant) {
-    throw new Error('[tenantify] No tenant resolved from request headers');
+    throw new Error('[multitenant] No tenant resolved from request headers');
   }
   return tenant;
 }

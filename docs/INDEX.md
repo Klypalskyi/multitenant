@@ -1,4 +1,4 @@
-# Tenantify Docs
+# Multitenant Docs
 
 Multi-tenant and multi-market management for TypeScript apps.
 
@@ -6,7 +6,7 @@ Multi-tenant and multi-market management for TypeScript apps.
 
 - [Getting started](GETTING-STARTED.md) – install, config, first tenant
 - [Configuration reference](CONFIG/tenants-config.md) – `tenants.config.json` schema
-- [CLI](CLI/tenantify-dev.md) – `tenantify dev`, `check`, `print`
+- [CLI](CLI/tenantify-dev.md) – `multitenant dev`, `check`, `print`
 - [Frameworks](FRAMEWORKS/overview.md) – Next.js, React, Express, Nest
 
 ## For contributors

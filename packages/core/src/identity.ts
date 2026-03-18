@@ -75,7 +75,7 @@ export function assertAccess(
   options?: TenantGuardOptions,
 ): void {
   if (!canAccessTenant(session, options)) {
-    throw new Error('[tenantify] Access denied for tenant / roles / permissions');
+    throw new Error('[multitenant] Access denied for tenant / roles / permissions');
   }
 }
 

@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Tenantify** is a TypeScript monorepo for multi-tenant and multi-market apps. It provides:
+**Multitenant** (formerly Tenantify) is a TypeScript monorepo for multi-tenant and multi-market apps. It provides:
 - A **config-driven** tenant/market model via `tenants.config.json`
 - **Core** resolution (tenant registry, identity guards)
 - **Framework adapters**: React, Next.js App Router, Next.js Pages Router, Express, Nest
-- **CLI**: `tenantify dev` (local proxy with per-tenant subdomains), `tenantify check`, `tenantify print`
+-- **CLI**: `multitenant dev` (local proxy with per-tenant subdomains), `multitenant check`, `multitenant print` (deprecated alias: `tenantify`)
 - **Identity**: encrypted session cookie encode/decode and access guards
 
 ## Monorepo Structure
@@ -19,12 +19,12 @@ packages/
 ├── config/         # @multitenant/config – load/validate tenants.config.json (Zod)
 ├── identity/       # @multitenant/identity – session cookie encode/decode (AES-256-GCM), re-exports guards
 ├── dev-proxy/      # @multitenant/dev-proxy – HTTP proxy for tenant-by-host resolution
-├── cli/            # @multitenant/cli – tenantify dev | check | print
+├── cli/            # @multitenant/cli – multitenant dev | check | print (tenantify alias)
 ├── react/          # @multitenant/react – TenantProvider, useTenant, useMarket, useTenantFlag, useExperiment, etc.
 ├── next-app/       # @multitenant/next-app – createTenantMiddleware, getTenantFromHeaders, requireTenant
 ├── next-pages/     # @multitenant/next-pages – withTenantGSSP, withTenantApi
-├── express/        # @multitenant/express – tenantifyExpress() → req.tenant
-└── nest/           # @multitenant/nest – TenantifyModuleForRoot(), @Tenant() decorator
+├── express/        # @multitenant/express – multitenantExpress() → req.tenant
+└── nest/           # @multitenant/nest – MultitenantModuleForRoot(), @Tenant() decorator
 ```
 
 Each package builds with **tsup** (CJS, ESM, `.d.ts`).
@@ -54,9 +54,9 @@ npm run clean                    # rm -rf node_modules packages/*/dist
 - **Create registry**: `import { createTenantRegistry } from '@multitenant/core'; const registry = createTenantRegistry(config);`
 - **Next App Router**: `createTenantMiddleware(registry, { environment })` in `middleware.ts`; in handlers use `getTenantFromHeaders(headers, registry)` or `requireTenant(headers, registry)`.
 - **React**: `<TenantProvider registry={registry} tenant={resolvedTenant}>` then `useTenant()`, `useMarket()`, etc.
-- **Express**: `app.use(tenantifyExpress({ registry, environment }));` then `req.tenant`.
-- **Nest**: `imports: [TenantifyModuleForRoot({ registry, environment })]`, then `@Tenant()` in controllers.
-- **CLI**: `npx tenantify check`, `npx tenantify print`, `npx tenantify dev --target http://localhost:3000 --port 3100` (optional `--run-dev`).
+- **Express**: `app.use(multitenantExpress({ registry, environment }));` then `req.tenant`.
+- **Nest**: `imports: [MultitenantModuleForRoot({ registry, environment })]`, then `@Tenant()` in controllers.
+- **CLI**: `npx multitenant check`, `npx multitenant print`, `npx multitenant dev --target http://localhost:3000 --port 3100` (optional `--run-dev`; alias: `tenantify`).
 
 ## Docs
 

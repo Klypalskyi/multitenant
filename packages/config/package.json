@@ -1,6 +1,6 @@
 {
   "name": "@multitenant/config",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "zod": "^3.23.8",
-    "@multitenant/core": "^0.1.0"
+    "@multitenant/core": "^0.2.0"
   },
   "publishConfig": {
     "access": "public"

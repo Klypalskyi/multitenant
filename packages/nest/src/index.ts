@@ -8,17 +8,17 @@ import {
 } from '@nestjs/common';
 import type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@multitenant/core';
 
-export const TENANTIFY_MODULE_OPTIONS = 'TENANTIFY_MODULE_OPTIONS';
+export const MULTITENANT_MODULE_OPTIONS = 'MULTITENANT_MODULE_OPTIONS';
 
-export interface TenantifyModuleOptions {
+export interface MultitenantModuleOptions {
   registry: TenantRegistry;
   environment?: EnvironmentName;
 }
 
 @Module({})
-export class TenantifyModule implements NestModule {
+export class MultitenantModule implements NestModule {
   constructor(
-    @Inject(TENANTIFY_MODULE_OPTIONS) private readonly options: TenantifyModuleOptions,
+    @Inject(MULTITENANT_MODULE_OPTIONS) private readonly options: MultitenantModuleOptions,
   ) {}
 
   configure(consumer: MiddlewareConsumer): void {
@@ -40,20 +40,19 @@ export class TenantifyModule implements NestModule {
   }
 }
 
-export function TenantifyModuleForRoot(options: TenantifyModuleOptions) {
+export function MultitenantModuleForRoot(options: MultitenantModuleOptions) {
   return {
-    module: TenantifyModule,
+    module: MultitenantModule,
     providers: [
       {
-        provide: TENANTIFY_MODULE_OPTIONS,
+        provide: MULTITENANT_MODULE_OPTIONS,
         useValue: options,
       },
     ],
-    exports: [TENANTIFY_MODULE_OPTIONS],
+    exports: [MULTITENANT_MODULE_OPTIONS],
   };
 }
 
-/** Param decorator to inject current ResolvedTenant. Use after TenantifyModule middleware. */
 export const Tenant = createParamDecorator(
   (_data: unknown, ctx: ExecutionContext): ResolvedTenant | null => {
     const request = ctx.switchToHttp().getRequest<{ tenant?: ResolvedTenant | null }>();

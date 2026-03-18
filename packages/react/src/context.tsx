@@ -43,7 +43,7 @@ export function TenantProvider({
 export function useTenantContext(): TenantContextValue {
   const ctx = useContext(TenantContext);
   if (!ctx) {
-    throw new Error('[tenantify] useTenant() must be used within TenantProvider');
+    throw new Error('[multitenant] useTenant() must be used within TenantProvider');
   }
   return ctx;
 }

@@ -30,7 +30,7 @@
 2. **Validate**
 
    ```bash
-   npx tenantify check
+   npx multitenant check
    ```
 
 3. **Use in your app**
@@ -38,17 +38,17 @@
    - **Next.js App Router**: `@multitenant/next-app` – middleware + `getTenantFromHeaders` / `requireTenant`
    - **Next.js Pages**: `@multitenant/next-pages` – `withTenantGSSP`, `withTenantApi`
    - **React**: `@multitenant/react` – `TenantProvider`, `useTenant`, `useMarket`
-   - **Express**: `@multitenant/express` – `tenantifyExpress()` middleware
-   - **Nest**: `@multitenant/nest` – `TenantifyModuleForRoot()`, `@Tenant()` decorator
+   - **Express**: `@multitenant/express` – `multitenantExpress()` middleware
+   - **Nest**: `@multitenant/nest` – `MultitenantModuleForRoot()`, `@Tenant()` decorator
 
 4. **Local dev with subdomains**
 
    Start your app (`npm run dev`), then in another terminal:
 
    ```bash
-   npx tenantify dev --target http://localhost:3000 --port 3100
+   npx multitenant dev --target http://localhost:3000 --port 3100
    ```
 
    Open `http://us.localhost:3100` (or the hosts you defined in `domains.local`).
 
-   Optional: `npx tenantify dev --run-dev` to let Tenantify spawn `npm run dev` for you.
+   Optional: `npx multitenant dev --run-dev` to let Multitenant spawn `npm run dev` for you.

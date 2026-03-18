@@ -1,4 +1,4 @@
-## Tenantify
+## Multitenant
 
 Multi-tenant + multi-market toolkit for TypeScript apps.
 
@@ -84,7 +84,11 @@ import tenantsConfig from './tenants.config.json';
 import { createTenantRegistry } from '@multitenant/core';
 
 const registry = createTenantRegistry(tenantsConfig);
-const env = (process.env.TENANTIFY_ENV ?? 'local') as EnvironmentName;
+const env = (
+  process.env.MULTITENANT_ENV ??
+  process.env.TENANTIFY_ENV ??
+  'local'
+) as EnvironmentName;
 
 export const middleware = createTenantMiddleware(registry, {
   environment: env,
@@ -180,14 +184,14 @@ export default function Page({ tenant }: { tenant: any }) {
 import express from 'express';
 import { loadTenantsConfig } from '@multitenant/config';
 import { createTenantRegistry } from '@multitenant/core';
-import { tenantifyExpress } from '@multitenant/express';
+import { multitenantExpress } from '@multitenant/express';
 
 async function main() {
   const app = express();
   const config = await loadTenantsConfig({ cwd: process.cwd() });
   const registry = createTenantRegistry(config);
 
-  app.use(tenantifyExpress({ registry, environment: 'local' }));
+  app.use(multitenantExpress({ registry, environment: 'local' }));
 
   app.get('/', (req, res) => {
     if (!req.tenant) return res.status(404).send('no tenant');
@@ -207,7 +211,7 @@ main().catch((e) => {
 
 ```ts
 import { Module } from '@nestjs/common';
-import { TenantifyModuleForRoot } from '@multitenant/nest';
+import { MultitenantModuleForRoot } from '@multitenant/nest';
 import { loadTenantsConfig } from '@multitenant/config';
 import { createTenantRegistry } from '@multitenant/core';
 
@@ -216,7 +220,7 @@ const registry = createTenantRegistry(config);
 
 @Module({
   imports: [
-    TenantifyModuleForRoot({
+    MultitenantModuleForRoot({
       registry,
       environment: 'local',
     }),
@@ -246,16 +250,16 @@ export class AppController {
 
 ```bash
 # Validate config
-npx tenantify check
+npx multitenant check
 
 # Print a summary
-npx tenantify print
+npx multitenant print
 
 # Dev proxy: app on 3000, proxy on 3100
-npx tenantify dev --target http://localhost:3000 --port 3100
+npx multitenant dev --target http://localhost:3000 --port 3100
 
 # Auto-run app dev server
-npx tenantify dev --run-dev
+npx multitenant dev --run-dev
 ```
 
 ### Local development (this repo)

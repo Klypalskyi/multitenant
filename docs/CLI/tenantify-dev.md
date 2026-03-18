@@ -1,11 +1,11 @@
-# tenantify dev
+# multitenant dev
 
 Starts a local HTTP proxy that maps per-tenant subdomains to your app’s dev server.
 
 ## Usage
 
 ```bash
-npx tenantify dev [options]
+npx multitenant dev [options]
 ```
 
 ## Options
@@ -31,10 +31,10 @@ npx tenantify dev [options]
 
 ```bash
 # App already running on 3000; proxy on 3100
-npx tenantify dev --target http://localhost:3000 --port 3100
+npx multitenant dev --target http://localhost:3000 --port 3100
 
-# Let Tenantify start the app
-npx tenantify dev --run-dev --port 3100
+# Let Multitenant start the app
+npx multitenant dev --run-dev --port 3100
 ```
 
 Then open e.g. `http://us.localhost:3100` (or whatever hosts you defined in `domains.local`).

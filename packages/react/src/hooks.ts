@@ -11,7 +11,7 @@ export function useMarket(): import('@multitenant/core').NormalizedMarket {
   const { registry, tenant } = useTenantContext();
   const market = registry.markets[tenant.marketKey];
   if (!market) {
-    throw new Error(`[tenantify] Market "${tenant.marketKey}" not found`);
+    throw new Error(`[multitenant] Market "${tenant.marketKey}" not found`);
   }
   return market;
 }
@@ -30,7 +30,9 @@ export function useExperiment(key: string): string {
   const { tenant } = useTenantContext();
   const variant = tenant.experiments?.[key];
   if (variant === undefined) {
-    throw new Error(`[tenantify] Experiment "${key}" not found for tenant`);
+    throw new Error(
+      `[multitenant] Experiment "${key}" not found for tenant`,
+    );
   }
   return variant;
 }

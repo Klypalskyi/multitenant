@@ -1,10 +1,10 @@
 # @multitenant/cli
 
-CLI for working with `@multitenant/*` multi-tenant packages. It exposes a `tenantify` binary with:
+CLI for working with `@multitenant/*` multi-tenant packages. It exposes a `multitenant` binary (with a deprecated `tenantify` alias) with:
 
-- `tenantify check` – validate `tenants.config.json`
-- `tenantify print` – print tenants/markets summary
-- `tenantify dev` – start a local dev proxy with per-tenant subdomains
+- `multitenant check` – validate `tenants.config.json`
+- `multitenant print` – print tenants/markets summary
+- `multitenant dev` – start a local dev proxy with per-tenant subdomains
 
 ## Install
 
@@ -17,25 +17,25 @@ Add a script:
 ```jsonc
 {
   "scripts": {
-    "tenant:dev": "tenantify dev --target http://localhost:3000 --port 3100"
+    "tenant:dev": "multitenant dev --target http://localhost:3000 --port 3100"
   }
 }
 ```
 
 ## Commands
 
-### `tenantify check`
+### `multitenant check`
 
 ```bash
-npx tenantify check
+npx multitenant check
 ```
 
 Validates `tenants.config.json` in the current working directory and prints any schema or cross-field errors.
 
-### `tenantify dev`
+### `multitenant dev`
 
 ```bash
-npx tenantify dev --target http://localhost:3000 --port 3100
+npx multitenant dev --target http://localhost:3000 --port 3100
 ```
 
 - Spins up a proxy on `--port`

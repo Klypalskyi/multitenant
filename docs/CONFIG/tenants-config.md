@@ -43,4 +43,4 @@ Each key is a tenant id. Value shape:
 - No overlapping domain patterns **within the same environment** (e.g. two tenants claiming the same host).
 - Any tenant `experiments` override must reference an entry in top-level `experiments`.
 
-Run `npx tenantify check` to validate.
+Run `npx multitenant check` to validate.

@@ -11,9 +11,9 @@ import chokidar from 'chokidar';
 const program = new Command();
 
 program
-  .name('tenantify')
+  .name('multitenant')
   .description('Multi-tenant dev proxy and config tools')
-  .version('0.0.1');
+  .version('0.2.0');
 
 program
   .command('check')
@@ -120,7 +120,7 @@ program
         targetHost: targetUrl.hostname,
         targetPort: parseInt(targetUrl.port || '3000', 10),
       });
-      console.log(`Tenantify dev proxy: http://0.0.0.0:${port} -> ${opts.target}`);
+      console.log(`Multitenant dev proxy: http://0.0.0.0:${port} -> ${opts.target}`);
       console.log('Tenants:', Object.keys(reg.tenants).join(', '));
     };
 
