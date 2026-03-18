@@ -1,22 +1,20 @@
 {
-  "name": "@tenantify/react",
-  "peerDependencies": {
-    "react": ">=18.0.0"
-  },
-  "dependencies": {
-    "@tenantify/core": "*"
-  },
+  "name": "@tenantify/express",
   "version": "0.0.1",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts"
   },
   "devDependencies": {
-    "@types/react": "^18.0.0"
+    "@types/express": "^4.17.21"
+  },
+  "peerDependencies": {
+    "express": ">=4.0.0"
+  },
+  "dependencies": {
+    "@tenantify/core": "*"
   }
 }

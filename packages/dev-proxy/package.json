@@ -1,22 +1,18 @@
 {
-  "name": "@tenantify/react",
-  "peerDependencies": {
-    "react": ">=18.0.0"
-  },
-  "dependencies": {
-    "@tenantify/core": "*"
-  },
+  "name": "@tenantify/dev-proxy",
   "version": "0.0.1",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts"
   },
+  "dependencies": {
+    "@tenantify/core": "*",
+    "http-proxy": "^1.18.1"
+  },
   "devDependencies": {
-    "@types/react": "^18.0.0"
+    "@types/http-proxy": "^1.17.14"
   }
 }

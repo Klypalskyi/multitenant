@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "defaultEnvironment": "local",
+  "markets": {
+    "us": {
+      "label": "United States",
+      "currency": "USD",
+      "locale": "en-US",
+      "timezone": "America/New_York",
+      "primaryDomain": "us.example.com"
+    },
+    "eu": {
+      "label": "Europe",
+      "currency": "EUR",
+      "locale": "en-GB",
+      "timezone": "Europe/London",
+      "primaryDomain": "eu.example.com"
+    }
+  },
+  "tenants": {
+    "us-main": {
+      "label": "US Main",
+      "market": "us",
+      "domains": {
+        "local": {
+          "us.localhost": "us-main",
+          "*.us.localhost": "us-main"
+        },
+        "production": {
+          "us.example.com": "us-main"
+        }
+      }
+    },
+    "eu-main": {
+      "label": "EU Main",
+      "market": "eu",
+      "domains": {
+        "local": {
+          "eu.localhost": "eu-main"
+        },
+        "production": {
+          "eu.example.com": "eu-main"
+        }
+      }
+    }
+  }
+}

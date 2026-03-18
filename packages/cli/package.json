@@ -1,0 +1,21 @@
+{
+  "name": "@tenantify/cli",
+  "version": "0.0.1",
+  "bin": {
+    "tenantify": "./dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/cli.ts src/index.ts --format cjs,esm --dts"
+  },
+  "dependencies": {
+    "@tenantify/core": "*",
+    "@tenantify/config": "*",
+    "@tenantify/dev-proxy": "*",
+    "chokidar": "^3.6.0",
+    "commander": "^12.0.0"
+  }
+}

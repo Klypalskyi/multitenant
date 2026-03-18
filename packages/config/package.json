@@ -1,11 +1,5 @@
 {
-  "name": "@tenantify/react",
-  "peerDependencies": {
-    "react": ">=18.0.0"
-  },
-  "dependencies": {
-    "@tenantify/core": "*"
-  },
+  "name": "@tenantify/config",
   "version": "0.0.1",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -16,7 +10,9 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts"
   },
-  "devDependencies": {
-    "@types/react": "^18.0.0"
+  "dependencies": {
+    "zod": "^3.23.8",
+    "@tenantify/core": "*"
   }
 }
+

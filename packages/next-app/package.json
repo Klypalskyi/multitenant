@@ -1,5 +1,8 @@
 {
   "name": "@tenantify/next-app",
+  "peerDependencies": {
+    "next": ">=13.0.0"
+  },
   "dependencies": {
     "@tenantify/core": "*"
   },

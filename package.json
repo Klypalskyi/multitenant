@@ -1,12 +1,22 @@
 {
   "name": "tenantify",
+  "author": "Michael Klypalskyi <klypalskyi@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/klypalskyi/tenantify.git"
+  },
+  "homepage": "https://github.com/klypalskyi/tenantify",
+  "bugs": {
+    "url": "https://github.com/klypalskyi/tenantify/issues"
+  },
   "private": true,
   "workspaces": [
     "packages/*",
     "examples/*"
   ],
   "scripts": {
-    "build": "npm run build -w @tenantify/core && npm run build -w @tenantify/next-app && npm run build -w @tenantify/next-pages && npm run build -w @tenantify/react",
+    "build": "npm run build -w @tenantify/core && npm run build -w @tenantify/config && npm run build -w @tenantify/identity && npm run build -w @tenantify/dev-proxy && npm run build -w @tenantify/react && npm run build -w @tenantify/next-app && npm run build -w @tenantify/next-pages && npm run build -w @tenantify/express && npm run build -w @tenantify/nest && npm run build -w @tenantify/cli",
     "dev": "turbo dev",
     "clean": "rm -rf node_modules packages/*/dist",
     "typecheck": "tsc -b"
