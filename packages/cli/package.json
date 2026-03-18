@@ -1,13 +1,15 @@
 {
   "name": "@multitenant/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "bin": {
     "tenantify": "./dist/cli.js"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup src/cli.ts src/index.ts --format cjs,esm --dts"
   },
