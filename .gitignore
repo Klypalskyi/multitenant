@@ -9,6 +9,7 @@ pnpm-debug.log*
 # Build outputs
 dist/
 packages/*/dist/
+packages/*/node_modules/
 
 # Logs
 *.log
