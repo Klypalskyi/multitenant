@@ -11,12 +11,13 @@
     "url": "https://github.com/klypalskyi/tenantify/issues"
   },
   "private": true,
+  "packageManager": "npm@10.9.0",
   "workspaces": [
     "packages/*",
     "examples/*"
   ],
   "scripts": {
-    "build": "npm run build -w @tenantify/core && npm run build -w @tenantify/config && npm run build -w @tenantify/identity && npm run build -w @tenantify/dev-proxy && npm run build -w @tenantify/react && npm run build -w @tenantify/next-app && npm run build -w @tenantify/next-pages && npm run build -w @tenantify/express && npm run build -w @tenantify/nest && npm run build -w @tenantify/cli",
+    "build": "turbo run build",
     "dev": "turbo dev",
     "clean": "rm -rf node_modules packages/*/dist",
     "typecheck": "tsc -b"
