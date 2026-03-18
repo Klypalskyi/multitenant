@@ -7,11 +7,11 @@ Multi-tenant + multi-market toolkit for TypeScript apps.
 - **Config-driven tenants/markets** via `tenants.config.json`
 - **Core engine**: `createTenantRegistry(config)` returns a `TenantRegistry` that can resolve a `ResolvedTenant` from host/headers
 - **Framework adapters**:
-  - `@tenantify/next-app` – Next.js App Router middleware + server helpers
-  - `@tenantify/next-pages` – Next.js Pages Router HOC + API wrapper
-  - `@tenantify/react` – `TenantProvider` + hooks
-  - `@tenantify/express` – Express middleware
-  - `@tenantify/nest` – Nest module + `@Tenant()` decorator
+  - `@multitenant/next-app` – Next.js App Router middleware + server helpers
+  - `@multitenant/next-pages` – Next.js Pages Router HOC + API wrapper
+  - `@multitenant/react` – `TenantProvider` + hooks
+  - `@multitenant/express` – Express middleware
+  - `@multitenant/nest` – Nest module + `@Tenant()` decorator
 - **CLI**:
   - `tenantify check` – validate `tenants.config.json`
   - `tenantify print` – print tenants/markets summary
@@ -19,19 +19,19 @@ Multi-tenant + multi-market toolkit for TypeScript apps.
 
 ### Packages
 
-- `@tenantify/core`: types (`TenantsConfig`, `ResolvedTenant`, `Identity`, etc.), `createTenantRegistry`, guards (`canAccessTenant`, `assertAccess`)
-- `@tenantify/config`: `loadTenantsConfig`, `validateTenantsConfig`, `resolveConfigPath`
-- `@tenantify/identity`: cookie encode/decode (AES-256-GCM), re-exports identity types and guards
-- `@tenantify/dev-proxy`: low-level dev proxy (`startDevProxy`)
-- `@tenantify/cli`: `tenantify` binary
-- `@tenantify/react`, `@tenantify/next-app`, `@tenantify/next-pages`, `@tenantify/express`, `@tenantify/nest`: framework adapters
+- `@multitenant/core`: types (`TenantsConfig`, `ResolvedTenant`, `Identity`, etc.), `createTenantRegistry`, guards (`canAccessTenant`, `assertAccess`)
+- `@multitenant/config`: `loadTenantsConfig`, `validateTenantsConfig`, `resolveConfigPath`
+- `@multitenant/identity`: cookie encode/decode (AES-256-GCM), re-exports identity types and guards
+- `@multitenant/dev-proxy`: low-level dev proxy (`startDevProxy`)
+- `@multitenant/cli`: `tenantify` binary
+- `@multitenant/react`, `@multitenant/next-app`, `@multitenant/next-pages`, `@multitenant/express`, `@multitenant/nest`: framework adapters
 
 ### Install
 
 In a consumer app (not this repo), you’ll install from npm once published, e.g.:
 
 ```bash
-npm install @tenantify/core @tenantify/config @tenantify/react @tenantify/next-app @tenantify/next-pages
+npm install @multitenant/core @multitenant/config @multitenant/react @multitenant/next-app @multitenant/next-pages
 ```
 
 ### Basic flow
@@ -64,8 +64,8 @@ npm install @tenantify/core @tenantify/config @tenantify/react @tenantify/next-a
 2. **Load + build registry** (Node entrypoint in your app):
 
 ```ts
-import { loadTenantsConfig } from '@tenantify/config';
-import { createTenantRegistry } from '@tenantify/core';
+import { loadTenantsConfig } from '@multitenant/config';
+import { createTenantRegistry } from '@multitenant/core';
 
 const config = await loadTenantsConfig({ cwd: process.cwd() });
 export const tenantRegistry = createTenantRegistry(config);
@@ -78,10 +78,10 @@ export const tenantRegistry = createTenantRegistry(config);
 `middleware.ts`:
 
 ```ts
-import type { EnvironmentName } from '@tenantify/core';
-import { createTenantMiddleware } from '@tenantify/next-app';
+import type { EnvironmentName } from '@multitenant/core';
+import { createTenantMiddleware } from '@multitenant/next-app';
 import tenantsConfig from './tenants.config.json';
-import { createTenantRegistry } from '@tenantify/core';
+import { createTenantRegistry } from '@multitenant/core';
 
 const registry = createTenantRegistry(tenantsConfig);
 const env = (process.env.TENANTIFY_ENV ?? 'local') as EnvironmentName;
@@ -94,8 +94,8 @@ export const middleware = createTenantMiddleware(registry, {
 `app/layout.tsx`:
 
 ```ts
-import { TenantProvider } from '@tenantify/react';
-import { getTenantFromHeaders } from '@tenantify/next-app';
+import { TenantProvider } from '@multitenant/react';
+import { getTenantFromHeaders } from '@multitenant/next-app';
 import { headers } from 'next/headers';
 import { tenantRegistry } from './tenant-registry';
 
@@ -120,7 +120,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 Inside components:
 
 ```ts
-import { useTenant, useMarket, useTenantFlag } from '@tenantify/react';
+import { useTenant, useMarket, useTenantFlag } from '@multitenant/react';
 
 export function Header() {
   const tenant = useTenant();
@@ -143,7 +143,7 @@ export function Header() {
 
 ```ts
 import type { AppProps } from 'next/app';
-import { TenantProvider } from '@tenantify/react';
+import { TenantProvider } from '@multitenant/react';
 import { tenantRegistry } from '../tenant-registry';
 
 export default function App({ Component, pageProps }: AppProps & { pageProps: { tenant: any } }) {
@@ -159,7 +159,7 @@ export default function App({ Component, pageProps }: AppProps & { pageProps: { 
 
 ```ts
 import type { GetServerSideProps } from 'next';
-import { withTenantGSSP } from '@tenantify/next-pages';
+import { withTenantGSSP } from '@multitenant/next-pages';
 import { tenantRegistry } from '../tenant-registry';
 
 export const getServerSideProps: GetServerSideProps = withTenantGSSP(
@@ -178,9 +178,9 @@ export default function Page({ tenant }: { tenant: any }) {
 
 ```ts
 import express from 'express';
-import { loadTenantsConfig } from '@tenantify/config';
-import { createTenantRegistry } from '@tenantify/core';
-import { tenantifyExpress } from '@tenantify/express';
+import { loadTenantsConfig } from '@multitenant/config';
+import { createTenantRegistry } from '@multitenant/core';
+import { tenantifyExpress } from '@multitenant/express';
 
 async function main() {
   const app = express();
@@ -207,9 +207,9 @@ main().catch((e) => {
 
 ```ts
 import { Module } from '@nestjs/common';
-import { TenantifyModuleForRoot } from '@tenantify/nest';
-import { loadTenantsConfig } from '@tenantify/config';
-import { createTenantRegistry } from '@tenantify/core';
+import { TenantifyModuleForRoot } from '@multitenant/nest';
+import { loadTenantsConfig } from '@multitenant/config';
+import { createTenantRegistry } from '@multitenant/core';
 
 const config = await loadTenantsConfig({ cwd: process.cwd() });
 const registry = createTenantRegistry(config);
@@ -229,8 +229,8 @@ In a controller:
 
 ```ts
 import { Controller, Get } from '@nestjs/common';
-import { Tenant } from '@tenantify/nest';
-import type { ResolvedTenant } from '@tenantify/core';
+import { Tenant } from '@multitenant/nest';
+import type { ResolvedTenant } from '@multitenant/core';
 
 @Controller()
 export class AppController {

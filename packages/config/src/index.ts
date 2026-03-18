@@ -2,7 +2,7 @@ import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import type { ZodIssue } from 'zod';
 import { tenantsConfigSchema } from './schema';
-import type { TenantsConfig, EnvironmentName } from '@tenantify/core';
+import type { TenantsConfig, EnvironmentName } from '@multitenant/core';
 
 export interface LoadTenantsConfigOptions {
   cwd?: string;

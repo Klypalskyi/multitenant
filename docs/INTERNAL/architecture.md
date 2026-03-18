@@ -19,6 +19,6 @@ Core → config, identity, dev-proxy → react, next-app, next-pages, express, n
 
 ## Adding an adapter
 
-1. New package under `packages/<name>`, dependency on `@tenantify/core`.
+1. New package under `packages/<name>`, dependency on `@multitenant/core`.
 2. Export a thin wrapper: accept `TenantRegistry` (+ optional `environment`), resolve via `registry.resolveByRequest(req, { environment })`, attach result to framework context (req, locals, etc.).
 3. Document in `docs/FRAMEWORKS/overview.md` and add a short framework-specific doc under `docs/FRAMEWORKS/`.

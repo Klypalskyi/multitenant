@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import type { EnvironmentName, TenantRegistry, ResolvedTenant } from '@tenantify/core';
+import type { EnvironmentName, TenantRegistry, ResolvedTenant } from '@multitenant/core';
 
 export interface CreateTenantMiddlewareOptions {
   environment?: EnvironmentName;
@@ -100,4 +100,4 @@ export function requireTenant(
   return tenant;
 }
 
-export type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@tenantify/core';
+export type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@multitenant/core';

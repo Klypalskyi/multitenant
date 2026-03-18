@@ -35,11 +35,11 @@
 
 3. **Use in your app**
 
-   - **Next.js App Router**: `@tenantify/next-app` – middleware + `getTenantFromHeaders` / `requireTenant`
-   - **Next.js Pages**: `@tenantify/next-pages` – `withTenantGSSP`, `withTenantApi`
-   - **React**: `@tenantify/react` – `TenantProvider`, `useTenant`, `useMarket`
-   - **Express**: `@tenantify/express` – `tenantifyExpress()` middleware
-   - **Nest**: `@tenantify/nest` – `TenantifyModuleForRoot()`, `@Tenant()` decorator
+   - **Next.js App Router**: `@multitenant/next-app` – middleware + `getTenantFromHeaders` / `requireTenant`
+   - **Next.js Pages**: `@multitenant/next-pages` – `withTenantGSSP`, `withTenantApi`
+   - **React**: `@multitenant/react` – `TenantProvider`, `useTenant`, `useMarket`
+   - **Express**: `@multitenant/express` – `tenantifyExpress()` middleware
+   - **Nest**: `@multitenant/nest` – `TenantifyModuleForRoot()`, `@Tenant()` decorator
 
 4. **Local dev with subdomains**
 

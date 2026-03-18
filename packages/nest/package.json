@@ -1,5 +1,5 @@
 {
-  "name": "@tenantify/nest",
+  "name": "@multitenant/nest",
   "version": "0.1.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -13,7 +13,7 @@
     "@nestjs/core": ">=10.0.0"
   },
   "dependencies": {
-    "@tenantify/core": "^0.1.0"
+    "@multitenant/core": "^0.1.0"
   },
   "publishConfig": {
     "access": "public"

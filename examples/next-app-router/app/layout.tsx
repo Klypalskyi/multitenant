@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { TenantProvider } from '@tenantify/react';
+import { TenantProvider } from '@multitenant/react';
 import { tenantRegistry } from '../tenant-registry';
-import type { ResolvedTenant } from '@tenantify/core';
+import type { ResolvedTenant } from '@multitenant/core';
 
 // In a real app, you'd get this from middleware/headers via a server component.
 const dummyTenant: ResolvedTenant = {

@@ -1,5 +1,5 @@
 {
-  "name": "@tenantify/config",
+  "name": "@multitenant/config",
   "version": "0.1.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "zod": "^3.23.8",
-    "@tenantify/core": "^0.1.0"
+    "@multitenant/core": "^0.1.0"
   },
   "publishConfig": {
     "access": "public"

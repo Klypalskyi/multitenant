@@ -1,5 +1,5 @@
 {
-  "name": "@tenantify/cli",
+  "name": "@multitenant/cli",
   "version": "0.1.0",
   "bin": {
     "tenantify": "./dist/cli.js"
@@ -12,9 +12,9 @@
     "build": "tsup src/cli.ts src/index.ts --format cjs,esm --dts"
   },
   "dependencies": {
-    "@tenantify/core": "^0.1.0",
-    "@tenantify/config": "^0.1.0",
-    "@tenantify/dev-proxy": "^0.1.0",
+    "@multitenant/core": "^0.1.0",
+    "@multitenant/config": "^0.1.0",
+    "@multitenant/dev-proxy": "^0.1.0",
     "chokidar": "^3.6.0",
     "commander": "^12.0.0"
   },

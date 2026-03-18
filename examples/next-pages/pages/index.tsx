@@ -1,8 +1,8 @@
 import React from 'react';
 import type { GetServerSideProps } from 'next';
-import { withTenantGSSP } from '@tenantify/next-pages';
+import { withTenantGSSP } from '@multitenant/next-pages';
 import { tenantRegistry } from '../tenant-registry';
-import type { ResolvedTenant } from '@tenantify/core';
+import type { ResolvedTenant } from '@multitenant/core';
 
 interface Props {
   tenant: ResolvedTenant;

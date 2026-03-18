@@ -1,5 +1,5 @@
 import * as crypto from 'node:crypto';
-import type { EncodedSession } from '@tenantify/core';
+import type { EncodedSession } from '@multitenant/core';
 
 const ALG = 'aes-256-gcm';
 const IV_LEN = 12;

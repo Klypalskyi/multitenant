@@ -1,10 +1,10 @@
 {
-  "name": "@tenantify/next-pages",
+  "name": "@multitenant/next-pages",
   "peerDependencies": {
     "next": ">=12.0.0"
   },
   "dependencies": {
-    "@tenantify/core": "^0.1.0"
+    "@multitenant/core": "^0.1.0"
   },
   "version": "0.1.0",
   "main": "dist/index.js",

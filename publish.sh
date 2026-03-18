@@ -22,16 +22,16 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
 fi
 
 PACKAGES=(
-  "@tenantify/core"
-  "@tenantify/config"
-  "@tenantify/identity"
-  "@tenantify/dev-proxy"
-  "@tenantify/react"
-  "@tenantify/next-app"
-  "@tenantify/next-pages"
-  "@tenantify/express"
-  "@tenantify/nest"
-  "@tenantify/cli"
+  "@multitenant/core"
+  "@multitenant/config"
+  "@multitenant/identity"
+  "@multitenant/dev-proxy"
+  "@multitenant/react"
+  "@multitenant/next-app"
+  "@multitenant/next-pages"
+  "@multitenant/express"
+  "@multitenant/nest"
+  "@multitenant/cli"
 )
 
 echo "===> About to publish the following workspaces to npm:"

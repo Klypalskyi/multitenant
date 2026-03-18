@@ -4,7 +4,7 @@ import type {
   MarketDefinition,
   TenantDefinition,
   TenantsConfig,
-} from '@tenantify/core';
+} from '@multitenant/core';
 
 export const environmentNameSchema: z.ZodType<EnvironmentName> = z.union([
   z.literal('local'),

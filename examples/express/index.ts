@@ -1,7 +1,7 @@
 import express from 'express';
-import { loadTenantsConfig } from '@tenantify/config';
-import { createTenantRegistry } from '@tenantify/core';
-import { tenantifyExpress } from '@tenantify/express';
+import { loadTenantsConfig } from '@multitenant/config';
+import { createTenantRegistry } from '@multitenant/core';
+import { tenantifyExpress } from '@multitenant/express';
 
 async function main() {
   const app = express();
