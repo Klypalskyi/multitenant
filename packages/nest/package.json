@@ -1,6 +1,6 @@
 {
   "name": "@tenantify/nest",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -13,6 +13,9 @@
     "@nestjs/core": ">=10.0.0"
   },
   "dependencies": {
-    "@tenantify/core": "*"
+    "@tenantify/core": "^0.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
