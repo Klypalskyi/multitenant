@@ -1,3 +1,3 @@
-export { loadTenantsConfig, validateTenantsConfig, resolveConfigPath } from '@tenantify/config';
-export { createTenantRegistry } from '@tenantify/core';
-export { startDevProxy } from '@tenantify/dev-proxy';
+export { loadTenantsConfig, validateTenantsConfig, resolveConfigPath } from '@multitenant/config';
+export { createTenantRegistry } from '@multitenant/core';
+export { startDevProxy } from '@multitenant/dev-proxy';

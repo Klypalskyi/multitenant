@@ -1,5 +1,5 @@
 {
-  "name": "@tenantify/dev-proxy",
+  "name": "@multitenant/dev-proxy",
   "version": "0.1.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -9,7 +9,7 @@
     "build": "tsup src/index.ts --format cjs,esm --dts"
   },
   "dependencies": {
-    "@tenantify/core": "^0.1.0",
+    "@multitenant/core": "^0.1.0",
     "http-proxy": "^1.18.1"
   },
   "devDependencies": {

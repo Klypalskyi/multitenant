@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@tenantify/core';
+import type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@multitenant/core';
 
 export interface TenantifyExpressOptions {
   registry: TenantRegistry;
@@ -36,4 +36,4 @@ export function tenantifyExpress(options: TenantifyExpressOptions) {
   };
 }
 
-export type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@tenantify/core';
+export type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@multitenant/core';

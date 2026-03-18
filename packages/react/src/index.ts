@@ -8,4 +8,4 @@ export {
   useTenantConfig,
 } from './hooks';
 export type { TenantProviderProps, TenantContextValue } from './context';
-export type { TenantRegistry, ResolvedTenant, NormalizedMarket } from '@tenantify/core';
+export type { TenantRegistry, ResolvedTenant, NormalizedMarket } from '@multitenant/core';

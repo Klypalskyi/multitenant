@@ -6,7 +6,7 @@ import {
   ExecutionContext,
   Inject,
 } from '@nestjs/common';
-import type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@tenantify/core';
+import type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@multitenant/core';
 
 export const TENANTIFY_MODULE_OPTIONS = 'TENANTIFY_MODULE_OPTIONS';
 
@@ -61,4 +61,4 @@ export const Tenant = createParamDecorator(
   },
 );
 
-export type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@tenantify/core';
+export type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@multitenant/core';

@@ -1,13 +1,13 @@
 'use client';
 
 import { useTenantContext } from './context';
-import type { ThemeConfigRef } from '@tenantify/core';
+import type { ThemeConfigRef } from '@multitenant/core';
 
 export function useTenant() {
   return useTenantContext().tenant;
 }
 
-export function useMarket(): import('@tenantify/core').NormalizedMarket {
+export function useMarket(): import('@multitenant/core').NormalizedMarket {
   const { registry, tenant } = useTenantContext();
   const market = registry.markets[tenant.marketKey];
   if (!market) {

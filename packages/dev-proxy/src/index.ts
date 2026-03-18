@@ -1,7 +1,7 @@
 import * as http from 'node:http';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import HttpProxy from 'http-proxy';
-import type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@tenantify/core';
+import type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@multitenant/core';
 
 export interface DevProxyOptions {
   registry: TenantRegistry;

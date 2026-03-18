@@ -5,7 +5,7 @@ Schema and validation rules.
 ## Location
 
 - **v1**: Single file at **repo root**: `tenants.config.json`.
-- Resolved by `@tenantify/config` via `loadTenantsConfig({ cwd })` (default `process.cwd()`).
+- Resolved by `@multitenant/config` via `loadTenantsConfig({ cwd })` (default `process.cwd()`).
 
 ## Top-level fields
 

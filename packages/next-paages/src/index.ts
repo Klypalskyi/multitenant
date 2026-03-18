@@ -8,7 +8,7 @@ import type {
   TenantRegistry,
   ResolvedTenant,
   EnvironmentName,
-} from '@tenantify/core';
+} from '@multitenant/core';
 
 export interface WithTenantOptions {
   registry: TenantRegistry;
@@ -89,4 +89,4 @@ export function withTenantApi<P = unknown>(
   };
 }
 
-export type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@tenantify/core';
+export type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@multitenant/core';

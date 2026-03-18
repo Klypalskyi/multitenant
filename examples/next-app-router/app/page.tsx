@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useTenant, useMarket } from '@tenantify/react';
+import { useTenant, useMarket } from '@multitenant/react';
 
 export default function Page() {
   const tenant = useTenant();

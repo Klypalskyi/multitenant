@@ -6,7 +6,7 @@ import type {
   ResolvedTenant,
   NormalizedMarket,
   EnvironmentName,
-} from '@tenantify/core';
+} from '@multitenant/core';
 
 export interface TenantContextValue {
   registry: TenantRegistry;

@@ -3,9 +3,9 @@
 import { Command } from 'commander';
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import { loadTenantsConfig, resolveConfigPath } from '@tenantify/config';
-import { createTenantRegistry } from '@tenantify/core';
-import { startDevProxy } from '@tenantify/dev-proxy';
+import { loadTenantsConfig, resolveConfigPath } from '@multitenant/config';
+import { createTenantRegistry } from '@multitenant/core';
+import { startDevProxy } from '@multitenant/dev-proxy';
 import chokidar from 'chokidar';
 
 const program = new Command();
