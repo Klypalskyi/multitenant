@@ -2,7 +2,7 @@
 
 ## Packages
 
-- **core** – Types (`TenantsConfig`, `ResolvedTenant`), `createTenantRegistry`, identity guards. No Node APIs, edge-safe.
+- **core** – Types (`TenantsConfig`, `ResolvedTenant`), `createTenantRegistry`, typed errors (`MultitenantError`, `InvalidTenantsConfigError`, …), identity guards. Pure resolution is edge-safe when you pass a loaded config; **optional** Node auto-load of `tenants.config.json` uses `fs` (see `createTenantRegistry` options).
 - **config** – Load/validate `tenants.config.json` (Zod), cross-field validation. Node-only.
 - **identity** – Encrypt/sign session cookie (AES-256-GCM). Node-only. Re-exports core identity types and guards.
 - **dev-proxy** – HTTP (+ WS upgrade) proxy server; resolves tenant by Host and injects headers. Node-only.
@@ -22,3 +22,18 @@ Core → config, identity, dev-proxy → react, next-app, next-pages, express, n
 1. New package under `packages/<name>`, dependency on `@multitenant/core`.
 2. Export a thin wrapper: accept `TenantRegistry` (+ optional `environment`), resolve via `registry.resolveByRequest(req, { environment })`, attach result to framework context (req, locals, etc.).
 3. Document in `docs/FRAMEWORKS/overview.md` and add a short framework-specific doc under `docs/FRAMEWORKS/`.
+
+## Versioning
+
+**Bump only what changed:** `packages/<name>/package.json` **only if** `packages/<name>/src/` changed. Unchanged packages keep their previous semver until they next ship — versions **may differ across packages** (e.g. core `0.4.0`, express `0.5.0`). The root `package.json` is not versioned for npm.
+
+### Rules
+
+- Bump `packages/<name>/package.json` **only if** `packages/<name>/src/` changed (not root `package.json`)
+- Test files (`.test.ts`), docs, and config do **not** trigger version bumps
+- Use `git diff main --name-only | grep 'packages/.*/src/'` to identify which packages changed
+- Packages **released in one git tag** use the **same new semver** for each bumped package (e.g. all go to `0.5.0`), not mixed patch levels in one release
+- Publish in **dependency order** (core → config, identity, dev-proxy → adapters, cli); `scripts/publish-packages.sh` skips workspaces already at the published version
+- Do not republish a package just because a dependency updated — consumers resolve semver ranges; republish when **that** package’s `src/` changed
+
+See `docs/RELEASE.md` for detailed release instructions.

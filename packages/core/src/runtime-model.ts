@@ -1,5 +1,10 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import {
+  DomainResolutionError,
+  InvalidTenantsConfigError,
+  TenantNotFoundError,
+} from './errors';
 import { extractHostname } from './utils';
 import type {
   DomainMapV2,
@@ -71,6 +76,26 @@ export interface CreateTenantRegistryOptions {
    * Useful for monorepos or non-standard config locations.
    */
   configPath?: string;
+  /**
+   * Log resolution steps to `console.debug` with a `[multitenant]` prefix.
+   * Ignored if `log` is set.
+   */
+  debug?: boolean;
+  /**
+   * Custom logger (e.g. OpenTelemetry). When set, called for resolution steps without requiring `debug`.
+   */
+  log?: (message: string, ...args: unknown[]) => void;
+}
+
+function createResolutionLogger(
+  options: CreateTenantRegistryOptions,
+): ((message: string, ...args: unknown[]) => void) | undefined {
+  if (options.log) return options.log;
+  if (options.debug) {
+    return (message: string, ...args: unknown[]) =>
+      console.debug(`[multitenant] ${message}`, ...args);
+  }
+  return undefined;
 }
 
 function loadTenantsConfigSync(options: CreateTenantRegistryOptions): TenantsConfig {
@@ -86,9 +111,10 @@ function loadTenantsConfigSync(options: CreateTenantRegistryOptions): TenantsCon
     const raw = fs.readFileSync(resolvedConfigPath, 'utf8');
     return JSON.parse(raw) as TenantsConfig;
   } catch (e) {
-    throw new Error(
+    throw new InvalidTenantsConfigError(
       `[multitenant] Failed to auto-load tenants.config.json from "${resolvedConfigPath}". ` +
         'Pass tenants config to createTenantRegistry(tenantsConfig) instead.',
+      { cause: e },
     );
   }
 }
@@ -164,7 +190,7 @@ const resolveDomainV2 = (
 
   if (exactMatches.length > 1 || wildcardMatches.length > 1) {
     // config loader should have prevented this; be safe and error
-    throw new Error(
+    throw new DomainResolutionError(
       `[multitenant] Ambiguous domain resolution for host "${hostname}" in environment "${env}"`,
     );
   }
@@ -202,31 +228,43 @@ export const createTenantRegistry = (
 
   const markets = normalizeMarkets(cfg.markets);
   const tenants = normalizeTenants(cfg.tenants);
+  const debugLog = createResolutionLogger(options);
 
   const resolve = (
     hostname: string,
     envOverride?: EnvironmentName,
   ): ResolvedTenant | null => {
     const environment = getEnvironment(envOverride, cfg);
+    debugLog?.('resolve', { hostname, environment });
+
     if (!ENVIRONMENTS.includes(environment)) {
-      throw new Error(
+      throw new DomainResolutionError(
         `[multitenant] Unknown environment "${environment}" for host "${hostname}"`,
       );
     }
 
     const match = resolveDomainV2(hostname, environment, tenants);
-    if (!match) return null;
+    if (!match) {
+      debugLog?.('no domain match', { hostname, environment });
+      return null;
+    }
+
+    debugLog?.('domain matched', {
+      hostname,
+      tenantKey: match.tenantKey,
+      basePath: match.basePath,
+    });
 
     const tenant = tenants[match.tenantKey];
     if (!tenant) {
-      throw new Error(
+      throw new TenantNotFoundError(
         `[multitenant] Domain for host "${hostname}" resolved to unknown tenant "${match.tenantKey}"`,
       );
     }
 
     const market = markets[tenant.marketKey];
     if (!market) {
-      throw new Error(
+      throw new DomainResolutionError(
         `[multitenant] Tenant "${tenant.key}" references unknown market "${tenant.marketKey}"`,
       );
     }

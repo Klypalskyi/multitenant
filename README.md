@@ -19,12 +19,16 @@ Multi-tenant + multi-market toolkit for TypeScript apps.
 
 ### Packages
 
-- `@multitenant/core`: types (`TenantsConfig`, `ResolvedTenant`, `Identity`, etc.), `createTenantRegistry`, guards (`canAccessTenant`, `assertAccess`)
+- `@multitenant/core`: types (`TenantsConfig`, `ResolvedTenant`, `Identity`, etc.), `createTenantRegistry`, typed errors (`InvalidTenantsConfigError`, `DomainResolutionError`, `TenantNotFoundError`, `isMultitenantError`), guards (`canAccessTenant`, `assertAccess`)
 - `@multitenant/config`: `loadTenantsConfig`, `validateTenantsConfig`, `resolveConfigPath`
 - `@multitenant/identity`: cookie encode/decode (AES-256-GCM), re-exports identity types and guards
 - `@multitenant/dev-proxy`: low-level dev proxy (`startDevProxy`)
 - `@multitenant/cli`: `tenantify` binary
 - `@multitenant/react`, `@multitenant/next-app`, `@multitenant/next-pages`, `@multitenant/express`, `@multitenant/nest`: framework adapters
+
+### Errors
+
+Validation and resolution use typed errors from `@multitenant/core` (`InvalidTenantsConfigError`, `DomainResolutionError`, `TenantNotFoundError`, …). Reference: [docs/INTERNAL/errors.md](docs/INTERNAL/errors.md).
 
 ### Install
 

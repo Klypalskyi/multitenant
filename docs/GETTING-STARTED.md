@@ -33,6 +33,8 @@
    npx multitenant check
    ```
 
+   On failure, the CLI prints the same messages as `validateTenantsConfig` (`InvalidTenantsConfigError` in code). See [Errors](INTERNAL/errors.md).
+
 3. **Use in your app**
 
    - **Next.js App Router**: `@multitenant/next-app` – middleware + `getTenantFromHeaders` / `requireTenant`

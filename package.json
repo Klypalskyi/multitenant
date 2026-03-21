@@ -19,6 +19,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo dev",
+    "test": "turbo run test",
     "clean": "rm -rf node_modules packages/*/dist",
     "typecheck": "tsc -b",
     "release:publish": "npm run build && bash scripts/publish-packages.sh"
@@ -26,6 +27,7 @@
   "devDependencies": {
     "typescript": "^5.4.0",
     "tsup": "^8.0.0",
-    "turbo": "^2.0.0"
+    "turbo": "^2.0.0",
+    "vitest": "^3.0.5"
   }
 }

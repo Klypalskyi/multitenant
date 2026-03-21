@@ -3,6 +3,7 @@ import * as path from 'node:path';
 import type { ZodIssue } from 'zod';
 import { tenantsConfigSchema } from './schema';
 import type { TenantsConfig, EnvironmentName } from '@multitenant/core';
+import { InvalidTenantsConfigError } from '@multitenant/core';
 
 export interface LoadTenantsConfigOptions {
   cwd?: string;
@@ -28,7 +29,7 @@ export function validateTenantsConfig(raw: unknown): TenantsConfig {
     const issues = result.error.issues
       .map((i: ZodIssue) => `- ${i.path.join('.')}: ${i.message}`)
       .join('\n');
-    throw new Error(`Invalid tenants.config.json:\n${issues}`);
+    throw new InvalidTenantsConfigError(`Invalid tenants.config.json:\n${issues}`);
   }
 
   const config = result.data as TenantsConfig;
@@ -38,7 +39,7 @@ export function validateTenantsConfig(raw: unknown): TenantsConfig {
   // 1. tenant.market must exist
   for (const [tenantKey, tenant] of Object.entries(config.tenants)) {
     if (!config.markets[tenant.market]) {
-      throw new Error(
+      throw new InvalidTenantsConfigError(
         `Tenant "${tenantKey}" references unknown market "${tenant.market}"`,
       );
     }
@@ -72,7 +73,7 @@ export function validateTenantsConfig(raw: unknown): TenantsConfig {
             `"${pattern}" used by tenants: ${tenants.join(', ')}`,
         )
         .join('\n');
-      throw new Error(
+      throw new InvalidTenantsConfigError(
         `Overlapping domain patterns in environment "${env}":\n${msg}`,
       );
     }
@@ -84,7 +85,7 @@ export function validateTenantsConfig(raw: unknown): TenantsConfig {
       if (!tenant.experiments) continue;
       for (const key of Object.keys(tenant.experiments)) {
         if (!config.experiments[key]) {
-          throw new Error(
+          throw new InvalidTenantsConfigError(
             `Tenant "${tenantKey}" overrides unknown experiment "${key}"`,
           );
         }
@@ -102,7 +103,7 @@ export async function loadTenantsConfig(
   const configPath = await resolveConfigPath(cwd);
 
   if (!configPath) {
-    throw new Error(`tenants.config.json not found in ${cwd}`);
+    throw new InvalidTenantsConfigError(`tenants.config.json not found in ${cwd}`);
   }
 
   const raw = await fs.readFile(configPath, 'utf8');
@@ -110,8 +111,9 @@ export async function loadTenantsConfig(
   try {
     parsed = JSON.parse(raw);
   } catch (err) {
-    throw new Error(
+    throw new InvalidTenantsConfigError(
       `Failed to parse tenants.config.json: ${(err as Error).message}`,
+      { cause: err },
     );
   }
 

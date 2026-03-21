@@ -7,6 +7,8 @@ Schema and validation rules.
 - **v1**: Single file at **repo root**: `tenants.config.json`.
 - Resolved by `@multitenant/config` via `loadTenantsConfig({ cwd })` (default `process.cwd()`).
 
+Validation failures throw **`InvalidTenantsConfigError`** from `@multitenant/core` (see [Errors](../INTERNAL/errors.md)).
+
 ## Top-level fields
 
 | Field | Type | Required | Description |

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import type { EnvironmentName, TenantRegistry, ResolvedTenant } from '@multitenant/core';
+import { TenantNotFoundError } from '@multitenant/core';
 
 export interface CreateTenantMiddlewareOptions {
   environment?: EnvironmentName;
@@ -64,7 +65,9 @@ export function createTenantMiddleware(
 
     if (!resolved) {
       if (onMissingTenant === 'throw') {
-        throw new Error('[multitenant] Unable to resolve tenant in Next.js middleware');
+        throw new TenantNotFoundError(
+          `[multitenant] Unable to resolve tenant in Next.js middleware (host: ${host ?? '<missing>'})`,
+        );
       }
 
       if (onMissingTenant === 'warn') {
@@ -132,7 +135,7 @@ export function requireTenant(
 ): ResolvedTenant {
   const tenant = getTenantFromHeaders(headers, registry, options);
   if (!tenant) {
-    throw new Error('[multitenant] No tenant resolved from request headers');
+    throw new TenantNotFoundError('[multitenant] No tenant resolved from request headers');
   }
   return tenant;
 }

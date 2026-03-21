@@ -1,6 +1,26 @@
 # Changelog
 
-All notable changes to this project are documented here. Monorepo packages share the same version number.
+All notable changes to this project are documented here. Each `@multitenant/*` package has its own semver in `packages/<name>/package.json`; only packages with `src/` changes get bumped per release (versions may differ across packages between releases).
+
+## [0.4.0] - 2026-03-21
+
+### Added
+
+- **`@multitenant/core`:** `MultitenantError` base class with stable `code`; `InvalidTenantsConfigError`, `DomainResolutionError`, `TenantNotFoundError`; `isMultitenantError()`.
+- **`createTenantRegistry` options:** `debug?: boolean` (logs via `console.debug`); `log?: (message, ...args) => void` for custom resolution logging.
+- **Unit tests:** Vitest in `@multitenant/core` and `@multitenant/config`; root `npm test` runs `turbo run test` (tests depend on `^build`).
+
+### Changed
+
+- **`@multitenant/config`:** `validateTenantsConfig` / `loadTenantsConfig` throw `InvalidTenantsConfigError` instead of generic `Error` for validation and I/O failures.
+- **`@multitenant/core`:** Registry resolution failures use typed errors (`DomainResolutionError`, `TenantNotFoundError`); auto-load failures use `InvalidTenantsConfigError` with `cause`.
+- **`@multitenant/next-app`:** `requireTenant` and middleware `onMissingTenant: 'throw'` throw `TenantNotFoundError` (still `instanceof Error`).
+
+### Documentation
+
+- `docs/INTERNAL/errors.md` — error reference; `docs/INDEX.md` + `docs/CONFIG/tenants-config.md` + `docs/INTERNAL/architecture.md` updated.
+
+---
 
 ## [0.3.0] - 2026-03-20
 
@@ -24,4 +44,5 @@ All notable changes to this project are documented here. Monorepo packages share
 
 Initial published line (see git history for details).
 
+[0.4.0]: https://github.com/klypalskyi/multitenant/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/klypalskyi/multitenant/compare/v0.2.0...v0.3.0
