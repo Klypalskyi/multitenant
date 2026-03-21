@@ -100,11 +100,10 @@ program
       }
     }
 
-    const config = await loadTenantsConfig({ cwd }).catch((e) => {
+    await loadTenantsConfig({ cwd }).catch((e) => {
       console.error((e as Error).message);
       process.exit(1);
     });
-    const registry = createTenantRegistry(config);
 
     const watcher = chokidar.watch(path.join(cwd, 'tenants.config.json'), { ignoreInitial: true });
     let instance: Awaited<ReturnType<typeof startDevProxy>> | null = null;
