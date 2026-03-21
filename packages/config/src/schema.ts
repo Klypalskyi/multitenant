@@ -31,16 +31,36 @@ export const tenantAccessConfigSchema = z.object({
   permissions: z.array(z.string()).optional(),
 });
 
-export const marketDefinitionSchema: z.ZodType<MarketDefinition> = z.object({
-  label: z.string().optional(),
-  currency: z.string(),
-  locale: z.string(),
-  timezone: z.string(),
-  primaryDomain: z.string().optional(),
-  fallbackTenant: z.string().optional(),
-  seo: marketSeoConfigSchema.optional(),
-  theme: themeConfigRefSchema.optional(),
-});
+export const marketDefinitionSchema: z.ZodType<MarketDefinition> = z
+  .object({
+    label: z.string().optional(),
+    currency: z.string(),
+    locale: z.string(),
+    locales: z.array(z.string().min(1)).optional(),
+    timezone: z.string(),
+    primaryDomain: z.string().optional(),
+    fallbackTenant: z.string().optional(),
+    seo: marketSeoConfigSchema.optional(),
+    theme: themeConfigRefSchema.optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.locales && data.locales.length > 0) {
+      const uniq = new Set(data.locales);
+      if (uniq.size !== data.locales.length) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: '[multitenant] market.locales must not contain duplicate entries',
+        });
+      }
+      if (!data.locales.includes(data.locale)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message:
+            '[multitenant] market.locale must be included in market.locales when locales is set',
+        });
+      }
+    }
+  });
 
 const domainTargetSchema = z.union([
   z.string(),

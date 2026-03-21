@@ -23,6 +23,7 @@ Schema and validation rules.
 Each key is a market id. Value shape:
 
 - `currency`, `locale`, `timezone` (required)
+- `locales` (optional) – full list of supported BCP 47 locale tags; when set, must include `locale` and must not duplicate entries. Omitted means only `locale` is supported.
 - `label`, `primaryDomain`, `fallbackTenant` (optional)
 - `seo`: `defaultTitleTemplate`, `defaultMetaDescription`, `canonicalBaseUrl`
 - `theme`: `preset`, `tokens`

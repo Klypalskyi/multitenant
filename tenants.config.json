@@ -6,6 +6,7 @@
       "label": "United States",
       "currency": "USD",
       "locale": "en-US",
+      "locales": ["en-US", "es-US"],
       "timezone": "America/New_York",
       "primaryDomain": "us.example.com"
     },

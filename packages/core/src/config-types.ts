@@ -19,7 +19,15 @@ export interface TenantAccessConfig {
 export interface MarketDefinition {
   label?: string;
   currency: string;
+  /**
+   * Default locale (BCP 47), e.g. `en-US`. Must appear in `locales` when `locales` is set.
+   */
   locale: string;
+  /**
+   * All locales supported for this market. When omitted, only `locale` is used.
+   * When set, must include `locale` and must not contain duplicates.
+   */
+  locales?: string[];
   timezone: string;
   primaryDomain?: string;
   fallbackTenant?: string;

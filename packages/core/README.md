@@ -5,7 +5,7 @@ Core multi-tenant / multi-market engine used by all other `@multitenant/*` packa
 It provides:
 
 - `TenantsConfig` type describing `tenants.config.json`
-- `createTenantRegistry(config)` → `TenantRegistry`
+- `createTenantRegistry(config?, options?)` → `TenantRegistry`
 - Resolution helpers: `resolveByHost`, `resolveByRequest`
 - Identity types: `Identity`, `EncodedSession`
 - Access guards: `canAccessTenant`, `assertAccess`
@@ -28,7 +28,12 @@ const config: TenantsConfig = {
   tenants: { /* ... */ },
 };
 
+// Manual mode: pass the loaded config
 const registry = createTenantRegistry(config);
+
+// Node-only convenience mode:
+// const registry = createTenantRegistry();
+// (auto-loads `<process.cwd()>/tenants.config.json`; in edge runtimes pass config explicitly)
 
 const resolved = registry.resolveByHost('us.example.com', { environment: 'production' });
 ```

@@ -1,4 +1,5 @@
-import { createTenantRegistry } from '@multitenant/core';
+import { TenantsConfig, createTenantRegistry } from '@multitenant/core';
+
 import tenantsConfig from '../../tenants.config.json';
 
-export const tenantRegistry = createTenantRegistry(tenantsConfig as any);
+export const tenantRegistry = createTenantRegistry(tenantsConfig as TenantsConfig);

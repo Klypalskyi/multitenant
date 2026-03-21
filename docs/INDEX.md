@@ -12,3 +12,4 @@ Multi-tenant and multi-market management for TypeScript apps.
 ## For contributors
 
 - [Architecture](INTERNAL/architecture.md) – packages, build, adding adapters
+- [Release (tag, push, npm)](RELEASE.md) – versioning, git tag, publish order

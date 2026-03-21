@@ -5,7 +5,7 @@ Multi-tenant + multi-market toolkit for TypeScript apps.
 ### What it gives you
 
 - **Config-driven tenants/markets** via `tenants.config.json`
-- **Core engine**: `createTenantRegistry(config)` returns a `TenantRegistry` that can resolve a `ResolvedTenant` from host/headers
+- **Core engine**: `createTenantRegistry(config?)` returns a `TenantRegistry` that can resolve a `ResolvedTenant` from host/headers
 - **Framework adapters**:
   - `@multitenant/next-app` – Next.js App Router middleware + server helpers
   - `@multitenant/next-pages` – Next.js Pages Router HOC + API wrapper
@@ -71,6 +71,8 @@ const config = await loadTenantsConfig({ cwd: process.cwd() });
 export const tenantRegistry = createTenantRegistry(config);
 ```
 
+You can also do `createTenantRegistry()` in Node to auto-load `<cwd>/tenants.config.json`. If you’re in an edge runtime, keep passing the loaded config explicitly.
+
 3. **Wire into your framework** (examples below).
 
 ### Next.js App Router example
@@ -94,6 +96,8 @@ export const middleware = createTenantMiddleware(registry, {
   environment: env,
 });
 ```
+
+Note: if you run `next dev` directly (Host doesn't match any tenant domains), `createTenantMiddleware` will passthrough by default (no tenant headers added). If you want strict resolution, pass `onMissingTenant: 'throw'`.
 
 `app/layout.tsx`:
 

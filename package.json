@@ -20,7 +20,8 @@
     "build": "turbo run build",
     "dev": "turbo dev",
     "clean": "rm -rf node_modules packages/*/dist",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "release:publish": "npm run build && bash scripts/publish-packages.sh"
   },
   "devDependencies": {
     "typescript": "^5.4.0",

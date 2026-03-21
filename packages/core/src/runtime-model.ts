@@ -1,3 +1,5 @@
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { extractHostname } from './utils';
 import type {
   DomainMapV2,
@@ -10,6 +12,10 @@ import type {
 
 export interface NormalizedMarket extends MarketDefinition {
   key: string;
+  /**
+   * Full supported locale list (deduped, stable order: `locale` first, then extras from `locales`).
+   */
+  locales: string[];
 }
 
 export interface NormalizedTenant extends TenantDefinition {
@@ -54,14 +60,62 @@ const ENVIRONMENTS: EnvironmentName[] = [
   'production',
 ];
 
+export interface CreateTenantRegistryOptions {
+  /**
+   * Defaults to `process.cwd()` (consumer project root).
+   */
+  cwd?: string;
+  /**
+   * Defaults to `<cwd>/tenants.config.json`.
+   *
+   * Useful for monorepos or non-standard config locations.
+   */
+  configPath?: string;
+}
+
+function loadTenantsConfigSync(options: CreateTenantRegistryOptions): TenantsConfig {
+  const cwd = options.cwd ?? process.cwd();
+  const configPath = options.configPath;
+
+  // Auto-load uses Node fs (static imports — Turbopack-compatible). Edge / no-fs:
+  // pass `createTenantRegistry(tenantsConfig)` instead.
+  const resolvedConfigPath =
+    configPath ?? path.join(cwd, 'tenants.config.json');
+
+  try {
+    const raw = fs.readFileSync(resolvedConfigPath, 'utf8');
+    return JSON.parse(raw) as TenantsConfig;
+  } catch (e) {
+    throw new Error(
+      `[multitenant] Failed to auto-load tenants.config.json from "${resolvedConfigPath}". ` +
+        'Pass tenants config to createTenantRegistry(tenantsConfig) instead.',
+    );
+  }
+}
+
 const WILDCARD = '*.';
+
+function mergeMarketLocales(def: MarketDefinition): string[] {
+  const primary = def.locale;
+  const extra = def.locales ?? [];
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const tag of [primary, ...extra]) {
+    if (!seen.has(tag)) {
+      seen.add(tag);
+      out.push(tag);
+    }
+  }
+  return out;
+}
 
 const normalizeMarkets = (
   markets: Record<string, MarketDefinition>,
 ): Record<string, NormalizedMarket> => {
   const result: Record<string, NormalizedMarket> = {};
   for (const [key, value] of Object.entries(markets)) {
-    result[key] = { ...value, key };
+    const locales = mergeMarketLocales(value);
+    result[key] = { ...value, key, locales };
   }
   return result;
 };
@@ -140,15 +194,20 @@ const getEnvironment = (
   return 'local';
 };
 
-export const createTenantRegistry = (config: TenantsConfig): TenantRegistry => {
-  const markets = normalizeMarkets(config.markets);
-  const tenants = normalizeTenants(config.tenants);
+export const createTenantRegistry = (
+  config?: TenantsConfig,
+  options: CreateTenantRegistryOptions = {},
+): TenantRegistry => {
+  const cfg = config ?? loadTenantsConfigSync(options);
+
+  const markets = normalizeMarkets(cfg.markets);
+  const tenants = normalizeTenants(cfg.tenants);
 
   const resolve = (
     hostname: string,
     envOverride?: EnvironmentName,
   ): ResolvedTenant | null => {
-    const environment = getEnvironment(envOverride, config);
+    const environment = getEnvironment(envOverride, cfg);
     if (!ENVIRONMENTS.includes(environment)) {
       throw new Error(
         `[multitenant] Unknown environment "${environment}" for host "${hostname}"`,
@@ -176,8 +235,8 @@ export const createTenantRegistry = (config: TenantsConfig): TenantRegistry => {
     const flags = tenant.flags ?? {};
 
     const experiments: Record<string, string> = {};
-    if (config.experiments) {
-      for (const [key, exp] of Object.entries(config.experiments)) {
+    if (cfg.experiments) {
+      for (const [key, exp] of Object.entries(cfg.experiments)) {
         const override = tenant.experiments?.[key];
         if (override?.forcedVariant) {
           experiments[key] = override.forcedVariant;
