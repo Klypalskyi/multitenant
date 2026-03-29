@@ -32,11 +32,12 @@ local_ver() {
 
 for p in "${pkgs[@]}"; do
   lv="$(local_ver "$p")"
-  rv="$(npm view "$p" version 2>/dev/null || true)"
-  if [[ -n "$rv" && "$lv" == "$rv" ]]; then
+  # Exact version check is idempotent even when `npm view pkg` is flaky or unauthenticated.
+  if [[ "$(npm view "$p@$lv" version 2>/dev/null || true)" == "$lv" ]]; then
     echo "Skip $p (already on npm at $lv)"
     continue
   fi
+  rv="$(npm view "$p" version 2>/dev/null || true)"
   if [[ -n "$rv" && "$(printf '%s\n' "$rv" "$lv" | sort -V | head -n1)" == "$lv" && "$lv" != "$rv" ]]; then
     echo "Refusing $p: local version $lv is older than npm $rv" >&2
     exit 1
