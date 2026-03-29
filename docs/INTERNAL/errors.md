@@ -4,7 +4,7 @@ All errors extend **`MultitenantError`** and expose a stable **`code`** string f
 
 | Class | `code` | When |
 |-------|--------|------|
-| `InvalidTenantsConfigError` | `MULTITENANT_INVALID_CONFIG` | Zod / cross-field validation failures, missing `tenants.config.json`, JSON parse errors, failed auto-load in `createTenantRegistry()` when config is omitted |
+| `InvalidTenantsConfigError` | `MULTITENANT_INVALID_CONFIG` | Zod / cross-field validation failures, **config merge** conflicts (object vs non-object at same path, Phase 3.3), missing `tenants.config.json`, JSON parse errors, failed auto-load in `createTenantRegistry()` when config is omitted |
 | `DomainResolutionError` | `MULTITENANT_DOMAIN_RESOLUTION` | Ambiguous domain patterns at runtime, unknown `environment` during resolution, tenant references unknown market (inconsistent config) |
 | `TenantNotFoundError` | `MULTITENANT_TENANT_NOT_FOUND` | Domain target points at a missing tenant row; `requireTenant()` / Next middleware `onMissingTenant: 'throw'` when no tenant resolves |
 

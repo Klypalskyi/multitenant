@@ -17,7 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```
 packages/
-├── core/           # Types, TenantRegistry, typed errors, identity guards, getTenantConfig helpers
+├── core/           # Types, TenantRegistry, typed errors, identity guards, getTenantConfig (merged market/tenant/env config)
 ├── config/         # Load/validate tenants.config.json (Zod + cross-field checks)
 ├── database/       # Node ALS tenant scope (runWithTenantScope); pool cache; no bundled driver
 ├── drizzle/        # Reference: Drizzle + pg wired to database package (Phase 8.7)

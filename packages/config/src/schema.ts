@@ -6,6 +6,15 @@ import type {
   TenantsConfig,
 } from '@multitenant/core';
 
+const configByEnvironmentSchema = z
+  .object({
+    local: z.record(z.unknown()).optional(),
+    development: z.record(z.unknown()).optional(),
+    staging: z.record(z.unknown()).optional(),
+    production: z.record(z.unknown()).optional(),
+  })
+  .strict();
+
 export const environmentNameSchema: z.ZodType<EnvironmentName> = z.union([
   z.literal('local'),
   z.literal('development'),
@@ -45,6 +54,7 @@ export const tenantDatabaseConfigSchema = z.object({
 export const marketDefinitionSchema: z.ZodType<MarketDefinition> = z
   .object({
     label: z.string().optional(),
+    config: z.record(z.unknown()).optional(),
     currency: z.string(),
     locale: z.string(),
     locales: z.array(z.string().min(1)).optional(),
@@ -117,6 +127,7 @@ export const tenantDefinitionSchema: z.ZodType<TenantDefinition> = z.object({
   config: z.record(z.unknown()).optional(),
   access: tenantAccessConfigSchema.optional(),
   database: tenantDatabaseConfigSchema.optional(),
+  configByEnvironment: configByEnvironmentSchema.optional(),
 });
 
 export const experimentDefinitionSchema = z.object({

@@ -18,6 +18,11 @@ export interface TenantAccessConfig {
 
 export interface MarketDefinition {
   label?: string;
+  /**
+   * Optional defaults merged into every tenant in this market (Phase 3.3).
+   * Order: **market → tenant `config` → tenant `configByEnvironment[env]`**.
+   */
+  config?: Record<string, unknown>;
   currency: string;
   /**
    * Default locale (BCP 47), e.g. `en-US`. Must appear in `locales` when `locales` is set.
@@ -73,6 +78,10 @@ export interface TenantDefinition {
     overrides?: Record<string, string>;
   };
   config?: Record<string, unknown>;
+  /**
+   * Per-deployment-environment overlays on top of **`config`** (same merge order as `config`).
+   */
+  configByEnvironment?: Partial<Record<EnvironmentName, Record<string, unknown>>>;
   access?: TenantAccessConfig;
   /** Optional per-tenant database URL via env (see Phase 8.5). */
   database?: TenantDatabaseConfig;

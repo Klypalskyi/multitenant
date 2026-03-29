@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **`@multitenant/typeorm` 0.1.0** (Phase 8.7) + publish script **`npm view pkg@version`** skip; **8.7** ORM set complete (Drizzle, Kysely, Prisma, TypeORM @ v0.1.0); dashboard ORM row **Shipped**.
+**Last reviewed:** 2026-03-29 — **Phase 3.3** config merge (`market.config` → `tenant.config` → `configByEnvironment`): **`@multitenant/core` 0.5.2**, **`@multitenant/config` 0.4.3**, **`@multitenant/react` 0.5.2**; `multitenant check` validates merge conflicts.
 
 ---
 
@@ -109,6 +109,7 @@
 
 - `flags` on tenant + `useTenantFlag`.
 - Per-environment domain maps (`local`, `development`, `staging`, `production`).
+- **3.3:** merged **`config`** stack + `multitenant check` validation (see table).
 
 ### Remaining work
 
@@ -116,7 +117,7 @@
 |----|------|---------------------|
 | 3.1 | **Server + client parity for config** | **Shipped (v0.5.0)** — `getTenantConfig` in `@multitenant/core` |
 | 3.2 | **Feature surface** | **Partial (v0.5.0)** — `isTenantFeatureEnabled` (flags map); separate `features` block + migration still optional |
-| 3.3 | **Environment merge (if still needed)** | Explicit merge order (market → tenant → env override); tests; `multitenant check` validates conflicts |
+| 3.3 | **Environment merge** | **Done (v0.5.2 / config 0.4.3 / react 0.5.2):** merge order **market `config`** → **tenant `config`** → **`configByEnvironment[env]`**; deep merge + object/scalar conflict errors; **`validateTenantsConfig`** + **`getTenantConfig`**, **`useTenantConfig`**; **`docs/CONFIG/tenants-config.md`**. |
 | 3.4 | **Async config (optional)** | **Partial:** `docs/GETTING-STARTED.md` — load/validate async at bootstrap; pass sync config into `createTenantRegistry`; refresh policy out of scope |
 
 ---

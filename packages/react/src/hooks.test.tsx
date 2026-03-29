@@ -18,7 +18,12 @@ function baseConfig(): TenantsConfig {
     version: 1,
     defaultEnvironment: 'local',
     markets: {
-      us: { currency: 'USD', locale: 'en-US', timezone: 'America/New_York' },
+      us: {
+        currency: 'USD',
+        locale: 'en-US',
+        timezone: 'America/New_York',
+        config: { shared: true },
+      },
     },
     experiments: {
       hero: { description: 'Hero', defaultVariant: 'control', variants: ['control', 'variant_a'] },
@@ -28,7 +33,7 @@ function baseConfig(): TenantsConfig {
         market: 'us',
         domains: { local: { 'app.test': 'us-main' } },
         flags: { beta: true },
-        config: { apiUrl: 'https://api.example' },
+        config: { apiUrl: 'https://api.example', shared: false },
         experiments: {
           hero: { forcedVariant: 'variant_a' },
         },
@@ -78,10 +83,14 @@ describe('hooks', () => {
     expect(result.current).toBe(false);
   });
 
-  it('useTenantConfig returns tenant config object', () => {
+  it('useTenantConfig returns merged market → tenant config', () => {
     const { Wrapper } = makeFixture();
-    const { result } = renderHook(() => useTenantConfig<{ apiUrl: string }>(), { wrapper: Wrapper });
+    const { result } = renderHook(
+      () => useTenantConfig<{ apiUrl: string; shared: boolean }>(),
+      { wrapper: Wrapper },
+    );
     expect(result.current.apiUrl).toBe('https://api.example');
+    expect(result.current.shared).toBe(false);
   });
 
   it('useExperiment returns forced variant when set', () => {

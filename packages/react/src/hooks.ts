@@ -1,7 +1,7 @@
 'use client';
 
+import { getTenantConfig, type ThemeConfigRef } from '@multitenant/core';
 import { useTenantContext } from './context';
-import type { ThemeConfigRef } from '@multitenant/core';
 
 export function useTenant() {
   return useTenantContext().tenant;
@@ -39,6 +39,5 @@ export function useExperiment(key: string): string {
 
 export function useTenantConfig<T = Record<string, unknown>>(): T {
   const { registry, tenant } = useTenantContext();
-  const tenantDef = registry.tenants[tenant.tenantKey];
-  return (tenantDef?.config ?? {}) as T;
+  return getTenantConfig<T>(registry, tenant.tenantKey, tenant.environment);
 }

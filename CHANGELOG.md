@@ -4,6 +4,17 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] `@multitenant/core` 0.5.2, `@multitenant/config` 0.4.3, `@multitenant/react` 0.5.2 — Phase 3.3 config merge
+
+### Added
+
+- **Market `config`**, tenant **`configByEnvironment`** (`local` \| `development` \| `staging` \| `production`), **deep merge** order: market → tenant → env overlay; object vs non-object **`InvalidTenantsConfigError`** on clash.
+- **`mergeTenantConfigLayers`** in **`@multitenant/core`**; **`getTenantConfig(registry, tenantKey, environment?)`** uses merged layers; **`useTenantConfig`** uses resolved tenant’s **`environment`**.
+
+### Documentation
+
+- **`docs/CONFIG/tenants-config.md`**, **`docs/INTERNAL/errors.md`**, **`PLAN.md`** (Phase 3.3 **Done**).
+
 ## [2026-03-29] `@multitenant/typeorm` 0.1.0 — TypeORM Postgres DataSource reference (Phase 8.7)
 
 ### Added

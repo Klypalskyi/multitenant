@@ -3,7 +3,7 @@ import * as path from 'node:path';
 import type { ZodIssue } from 'zod';
 import { tenantsConfigSchema } from './schema';
 import type { TenantsConfig, EnvironmentName } from '@multitenant/core';
-import { InvalidTenantsConfigError } from '@multitenant/core';
+import { InvalidTenantsConfigError, mergeTenantConfigLayers } from '@multitenant/core';
 
 export interface LoadTenantsConfigOptions {
   cwd?: string;
@@ -79,7 +79,50 @@ export function validateTenantsConfig(raw: unknown): TenantsConfig {
     }
   }
 
-  // 3. experiments overrides reference existing experiments
+  // 3. config merge (market → tenant → configByEnvironment[env]) — no object/scalar clashes
+  const envNames: EnvironmentName[] = [
+    'local',
+    'development',
+    'staging',
+    'production',
+  ];
+  for (const [tenantKey, tenant] of Object.entries(config.tenants)) {
+    const market = config.markets[tenant.market];
+    const overlays = tenant.configByEnvironment;
+    const activeEnvs = overlays
+      ? envNames.filter((e) => {
+          const layer = overlays[e];
+          return layer && Object.keys(layer).length > 0;
+        })
+      : [];
+    if (activeEnvs.length === 0) {
+      try {
+        mergeTenantConfigLayers([market?.config, tenant.config], { tenantKey });
+      } catch (e) {
+        if (e instanceof InvalidTenantsConfigError) throw e;
+        throw e;
+      }
+    } else {
+      for (const env of activeEnvs) {
+        try {
+          mergeTenantConfigLayers(
+            [market?.config, tenant.config, overlays![env]],
+            { tenantKey },
+          );
+        } catch (e) {
+          if (e instanceof InvalidTenantsConfigError) {
+            throw new InvalidTenantsConfigError(
+              `${e.message} (when merging environment "${env}")`,
+              { cause: e },
+            );
+          }
+          throw e;
+        }
+      }
+    }
+  }
+
+  // 4. experiments overrides reference existing experiments
   if (config.experiments) {
     for (const [tenantKey, tenant] of Object.entries(config.tenants)) {
       if (!tenant.experiments) continue;

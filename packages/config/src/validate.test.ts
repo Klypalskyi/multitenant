@@ -43,6 +43,73 @@ describe('validateTenantsConfig', () => {
     expect(() => validateTenantsConfig(raw)).toThrow(InvalidTenantsConfigError);
   });
 
+  it('throws when market/tenant config merge has object vs scalar conflict', () => {
+    const raw = {
+      version: 1,
+      markets: {
+        us: {
+          currency: 'USD',
+          locale: 'en-US',
+          timezone: 'UTC',
+          config: { a: { b: 1 } },
+        },
+      },
+      tenants: {
+        x: {
+          market: 'us',
+          domains: { local: { 'x.test': 'x' } },
+          config: { a: 2 },
+        },
+      },
+    };
+    expect(() => validateTenantsConfig(raw)).toThrow(InvalidTenantsConfigError);
+  });
+
+  it('throws when configByEnvironment overlay conflicts with nested object', () => {
+    const raw = {
+      version: 1,
+      markets: {
+        us: { currency: 'USD', locale: 'en-US', timezone: 'UTC' },
+      },
+      tenants: {
+        x: {
+          market: 'us',
+          domains: { local: { 'x.test': 'x' } },
+          config: { features: { a: 1 } },
+          configByEnvironment: {
+            local: { features: 'all' },
+          },
+        },
+      },
+    };
+    expect(() => validateTenantsConfig(raw)).toThrow(InvalidTenantsConfigError);
+  });
+
+  it('accepts valid market → tenant → configByEnvironment merge', () => {
+    const raw = {
+      version: 1,
+      markets: {
+        us: {
+          currency: 'USD',
+          locale: 'en-US',
+          timezone: 'UTC',
+          config: { base: 1, deep: { x: 0 } },
+        },
+      },
+      tenants: {
+        x: {
+          market: 'us',
+          domains: { local: { 'x.test': 'x' } },
+          config: { y: 2, deep: { y: 1 } },
+          configByEnvironment: {
+            local: { z: 3, deep: { x: 1 } },
+          },
+        },
+      },
+    };
+    expect(() => validateTenantsConfig(raw)).not.toThrow();
+  });
+
   it('throws InvalidTenantsConfigError for overlapping domains', () => {
     const raw = {
       version: 1,
