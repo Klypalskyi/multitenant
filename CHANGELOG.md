@@ -4,6 +4,13 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Phase 3.4 — async config bootstrap docs
+
+### Documentation
+
+- **`docs/GETTING-STARTED.md`** — **`loadTenantsConfig`** + **`createTenantRegistry`**; remote **`fetch`** + **`validateTenantsConfig`**; refresh explicitly **out of scope**; Next / Edge caveat.
+- **`PLAN.md`** — Phase **3.4** **Done**; **Last reviewed**; Sprint **C**.
+
 ## [2026-03-29] `@multitenant/database` 0.5.6 — Phase 8.1 ResolvedTenant in ALS scope
 
 ### Added

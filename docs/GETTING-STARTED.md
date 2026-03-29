@@ -69,4 +69,46 @@ For scope and pitfalls, see [Why Multitenant](WHY-MULTITENANT.md).
 
 ## Async or remote config (bootstrap only)
 
-`createTenantRegistry` is **synchronous** — pass an already-loaded `TenantsConfig` object. If config comes from **S3, Control Plane, or your DB**, load and validate it **once** at process/App startup (e.g. `await fetchConfig()` → `validateTenantsConfig(raw)`), then construct the registry and reuse that instance for the lifetime of the worker (refresh on interval or signal if your ops model requires it). Do **not** make the registry itself async; keep async I/O at the edges and inject the resulting config into middleware and DI.
+`createTenantRegistry` is **synchronous** — pass an already-loaded `TenantsConfig`. **Loading** that object may be async (disk, HTTP, control plane); do that **once** at process bootstrap (or before first request), then keep a **single registry instance** for the lifetime of the worker. Do **not** add an async registry API; keep async I/O at the edges and pass the validated config into middleware, Route Handlers, and DI.
+
+**Refresh / hot reload** (signal, cron, watch) is **application-defined** and out of scope here: replace the registry handle your modules use, or restart the process, consistent with your deployment model.
+
+### Load from disk (Node)
+
+Uses the same discovery as the CLI: **`tenants.config.json`** in **`cwd`** (default `process.cwd()`).
+
+```ts
+import { createTenantRegistry } from '@multitenant/core';
+import { loadTenantsConfig } from '@multitenant/config';
+
+const config = await loadTenantsConfig(); // or loadTenantsConfig({ cwd: '/app' })
+export const registry = createTenantRegistry(config);
+```
+
+`loadTenantsConfig` parses JSON, runs **`validateTenantsConfig`**, and throws **`InvalidTenantsConfigError`** on failure (same shape as `npx multitenant check`). See [Errors](INTERNAL/errors.md).
+
+### Load from a remote URL or arbitrary source
+
+Fetch (or read from your DB), parse JSON, then validate:
+
+```ts
+import { createTenantRegistry } from '@multitenant/core';
+import { validateTenantsConfig } from '@multitenant/config';
+
+async function bootstrapRegistryFromUrl() {
+  const res = await fetch(process.env.TENANTS_CONFIG_URL!, { headers: { Accept: 'application/json' } });
+  if (!res.ok) throw new Error(`config fetch ${res.status}`);
+  const raw: unknown = await res.json();
+  const config = validateTenantsConfig(raw);
+  return createTenantRegistry(config);
+}
+
+// Plain Node ESM supports top-level await; otherwise call inside async main() and assign to a module let.
+export const registry = await bootstrapRegistryFromUrl();
+```
+
+In **Next.js**, avoid top-level `await` in modules that Edge may load: run bootstrap in **`instrumentation.ts`** (Node), or use a **lazy** server-only module that awaits once on first use (see [Why Multitenant](WHY-MULTITENANT.md) — Edge vs Node).
+
+### After bootstrap
+
+Pass **`registry`** into **`createTenantMiddleware`**, **`multitenantExpress`**, **`withTenantGSSP`**, etc. Client bundles should receive **`ResolvedTenant`** or derived props from the server; do not ship full **`TenantsConfig`** to the browser unless you intend to expose tenant topology.

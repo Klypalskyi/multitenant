@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **Phase 8.1** **Done** (`@multitenant/database` **v0.5.6**, tag **v0.6.14**): **`getResolvedTenantFromScope`**, **`requireResolvedTenantFromScope`**; **`TenantScopeState.resolved`** documented; scope tests. *(Prior: **1.1** **v0.6.13**.)*
+**Last reviewed:** 2026-03-29 — **Phase 3.4** **Done** (tag **v0.6.15**): **`docs/GETTING-STARTED.md`** — **`loadTenantsConfig`** / **`validateTenantsConfig`** bootstrap recipes (disk + remote), registry singleton note, Next bootstrap caveat, explicit **refresh out of scope**. *(Prior: **8.1** **v0.6.14**.)*
 
 ---
 
@@ -122,7 +122,7 @@
 | 3.1 | **Server + client parity for config** | **Shipped (v0.5.0)** — `getTenantConfig` in `@multitenant/core` |
 | 3.2 | **Feature surface** | **Partial (v0.5.0)** — `isTenantFeatureEnabled` (flags map); separate `features` block + migration still optional |
 | 3.3 | **Environment merge** | **Done (v0.5.2 / config 0.4.3 / react 0.5.2):** merge order **market `config`** → **tenant `config`** → **`configByEnvironment[env]`**; deep merge + object/scalar conflict errors; **`validateTenantsConfig`** + **`getTenantConfig`**, **`useTenantConfig`**; **`docs/CONFIG/tenants-config.md`**. |
-| 3.4 | **Async config (optional)** | **Partial:** `docs/GETTING-STARTED.md` — load/validate async at bootstrap; pass sync config into `createTenantRegistry`; refresh policy out of scope |
+| 3.4 | **Async config (optional)** | **Done:** **`docs/GETTING-STARTED.md`** — **`loadTenantsConfig`** (disk **`cwd`**), **`validateTenantsConfig`** after **`fetch`**/remote JSON; **`createTenantRegistry`** only after validated config; Next **`instrumentation.ts`** / server-only lazy init note; **refresh / hot reload** explicitly **out of scope** (app-defined) |
 
 ---
 
@@ -272,6 +272,7 @@ Exit criteria are mandatory; task lists are indicative.
 ### Sprint C — Value + identity ✅ (core deliverables)
 
 - `getTenantConfig` / `isTenantFeatureEnabled` (Phase 3); identity cookie header helpers (Phase 4.1 partial) — **shipped**.
+- **Done (2026-03):** Phase **3.4** — **`GETTING-STARTED.md`** async config bootstrap (**`loadTenantsConfig`**, remote **`validateTenantsConfig`**).
 
 **Exit:** Server/client parity for config and flags — **met** for the shipped slice.
 
