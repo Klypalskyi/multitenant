@@ -1,25 +1,35 @@
 {
   "name": "@multitenant/site",
   "private": true,
-  "description": "Nextra 4 docs / landing (same stack as shuding/nextra-docs-template lineage: Next + nextra-theme-docs)",
+  "description": "Public docs / landing — Next.js + Fumadocs (MDX, Tailwind 4).",
   "scripts": {
     "dev": "next dev --port 3101",
     "build": "next build",
     "start": "next start --port 3101",
-    "test": "vitest run"
+    "test": "vitest run",
+    "docs:patch-titles": "node ./scripts/patch-doc-titles.mjs",
+    "types:check": "fumadocs-mdx && next typegen && tsc --noEmit"
   },
   "license": "MIT",
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
+    "fumadocs-core": "16.7.7",
+    "fumadocs-mdx": "14.2.11",
+    "fumadocs-ui": "16.7.7",
+    "mermaid": "^11.13.0",
     "next": "^16.1.7",
-    "nextra": "4.6.1",
-    "nextra-theme-docs": "4.6.1",
+    "next-themes": "^0.4.6",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "@types/mdx": "^2.0.13",
     "@types/node": "^22.10.0",
     "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.2",
     "typescript": "^5.4.0",
     "vitest": "3.2.4"
   }

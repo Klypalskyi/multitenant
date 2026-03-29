@@ -1,0 +1,17 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "---Introduction---",
+    "why-multitenant",
+    "getting-started",
+    "config",
+    "---Errors & examples---",
+    "errors",
+    "examples",
+    "---Reference---",
+    "...packages",
+    "---CLI---",
+    "...cli"
+  ]
+}

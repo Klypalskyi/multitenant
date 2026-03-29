@@ -29,5 +29,5 @@ Copy-paste snippets assuming this repo tree (`../../tenants.config.json` from `e
 
 ## Using in your own app
 
-1. Run **`npx multitenant init`** (or copy root `tenants.config.json` and adjust domains).
+1. Run **`npx @multitenant/cli init`** (or copy root `tenants.config.json` and adjust domains).
 2. For local multi-host testing, use **`multitenant dev`** — see [`docs/CLI/tenantify-dev.md`](../docs/CLI/tenantify-dev.md).

@@ -18,7 +18,7 @@ On each **`TenantDefinition`** (optional):
 }
 ```
 
-- **`database.envVar`** — must match `/^[A-Za-z_][A-Za-z0-9_]*$/` (validated by `@multitenant/config` / `npx multitenant check`).
+- **`database.envVar`** — must match `/^[A-Za-z_][A-Za-z0-9_]*$/` (validated by `@multitenant/config` / `npx @multitenant/cli check`).
 - Put the real DSN in **deployment env**, secret manager injection, or local `.env` (gitignored).
 
 ## Runtime resolution

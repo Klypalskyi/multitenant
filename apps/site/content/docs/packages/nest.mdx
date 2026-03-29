@@ -1,0 +1,56 @@
+---
+title: "NestJS"
+description: "`@multitenant/nest` — Nest module, middleware, and `@Tenant()`."
+---
+
+**NestJS** integration: register tenant resolution once, inject **`ResolvedTenant`** into handlers with **`@Tenant()`**, and use guard-friendly patterns alongside **`@multitenant/core`**.
+
+Registers global middleware (same resolution as Express) and exposes **`@Tenant()`** for route parameters.
+
+## Install
+
+```bash
+npm install @multitenant/nest @nestjs/common @nestjs/core
+```
+
+Peers: **`@nestjs/common`**, **`@nestjs/core`**.
+
+## Module
+
+```ts
+import { MultitenantModuleForRoot } from '@multitenant/nest';
+
+@Module({
+  imports: [
+    MultitenantModuleForRoot({
+      registry,
+      environment: 'local',
+    }),
+  ],
+})
+export class AppModule {}
+```
+
+## Parameter decorator
+
+```ts
+import type { ResolvedTenant } from '@multitenant/core';
+import { Tenant } from '@multitenant/nest';
+
+@Get('profile')
+getProfile(@Tenant() tenant: ResolvedTenant | null) {
+  // tenant may be null if host did not resolve
+}
+```
+
+Use guards when **`tenant` must** be non-null.
+
+## Registry instance
+
+Create **`registry`** once in bootstrap (**`loadTenantsConfig`** → **`createTenantRegistry`**) and pass the **same object** into **`MultitenantModuleForRoot`** and any custom providers your services need. This package does not auto-register **`TenantRegistry`** as a Nest provider.
+
+For a full DI recipe (token + **`TenantRequiredGuard`**), see the **`docs/FRAMEWORKS/nestjs.md`** file in the GitHub repo — the ideas are the same as above, with more Nest-specific wiring.
+
+## See also
+
+- [`@multitenant/core`](/docs/packages/core) — registry and types

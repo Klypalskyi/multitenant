@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+
+html {
+  scrollbar-gutter: stable;
+}
+
+html:has(body[data-scroll-locked]) {
+  scrollbar-gutter: auto;
+}
+
+/* Sidebar readability: clearer hierarchy (Fumadocs default + tweaks) */
+@layer components {
+  #nd-sidebar [data-sidebar-panel] {
+    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  }
+
+  #nd-sidebar a[data-active='true'] {
+    font-weight: 600;
+  }
+}

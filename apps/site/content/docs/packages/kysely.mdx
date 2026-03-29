@@ -1,0 +1,21 @@
+---
+title: "Kysely"
+description: "`@multitenant/kysely` — tenant-scoped Kysely."
+---
+
+Thin **Kysely** + **`pg`** helpers: **`getOrCreateTenantNodePgPool`**, **`getTenantNodePgKysely`**, **`createNodePgKysely`** — per-tenant **Kysely** from **`ResolvedTenant`**. Postgres-oriented; resolution stays in **`@multitenant/core`**.
+
+## Install
+
+```bash
+npm install @multitenant/kysely kysely pg
+```
+
+## Main APIs
+
+- **`getOrCreateTenantNodePgPool`**, **`getTenantNodePgKysely`**, **`createNodePgKysely`**
+
+## See also
+
+- [`@multitenant/database`](/docs/packages/database)
+- [`@multitenant/core`](/docs/packages/core)

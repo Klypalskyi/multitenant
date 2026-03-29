@@ -1,0 +1,47 @@
+---
+title: "multitenant init"
+description: "Scaffold `tenants.config.json` and starter files."
+---
+
+Writes a **minimal, valid** **`tenants.config.json`** and optionally **starter files** for an adapter.
+
+## Usage
+
+```bash
+npx @multitenant/cli init [options]
+```
+
+## Common options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| **`--cwd`** | **`process.cwd()`** | Working directory |
+| **`--tenant`** | **`main`** | Tenant id |
+| **`--market`** | **`default`** | Market id |
+| **`--local-host`** | **`main.localhost`** | Host for **`domains.local`** |
+| **`--framework`** | **`none`** | **`none` \| `next-app` \| `next-pages` \| `express`** |
+| **`--force`** | off | Non-interactive overwrite |
+
+## What gets created
+
+1. Validates before write (same as **`multitenant check`**).
+2. If **`tenants.config.json`** exists, prompts unless **`--force`** (or errors if non-TTY without **`--force`**).
+
+### `--framework`
+
+| Value | Files |
+|-------|--------|
+| **`none`** | Config only |
+| **`next-app`** | **`middleware.ts`** using **`createTenantMiddleware`** |
+| **`next-pages`** | **`lib/tenant-registry.ts`** for GSSP / API wrappers |
+| **`express`** | **`multitenant.server.example.ts`** — rename into your server |
+
+Install peers: **`@multitenant/next-app`**, **`next`**, **`react`**, etc., as needed.
+
+## After init
+
+```bash
+npx @multitenant/cli check
+```
+
+For multi-host local dev, use **`npx @multitenant/cli dev`** (or **`multitenant dev`** after **`npm install @multitenant/cli`**) — [dev, check, print](/docs/cli/dev-check-print).

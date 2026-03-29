@@ -158,7 +158,7 @@ export async function runInit(opts: InitOptions): Promise<void> {
 
   switch (opts.framework) {
     case 'none':
-      console.log('Run: npx multitenant check');
+      console.log('Run: npx @multitenant/cli check');
       return;
     case 'next-app': {
       const mw = path.join(opts.cwd, 'middleware.ts');
@@ -208,5 +208,5 @@ export async function runInit(opts: InitOptions): Promise<void> {
       break;
   }
 
-  console.log('Run: npx multitenant check');
+  console.log('Run: npx @multitenant/cli check');
 }

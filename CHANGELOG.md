@@ -4,9 +4,16 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+### Changed
+
+- **`@multitenant/cli`** — init success output references **`npx @multitenant/cli check`** (npm package is **`@multitenant/cli`**, not **`multitenant`**).
+- **`apps/site`** — docs and README use **`npx @multitenant/cli`** for copy-paste commands; **Mermaid** diagrams render via **`remarkMdxMermaid`** + a **`Mermaid`** MDX component (**`mermaid`** + **`next-themes`**).
+- **`apps/site`** — **Frameworks** section removed: adapter overview lives on **`/docs`** (home); Next/Express/Nest/React guides merged into **`content/docs/packages/*`**. Legacy **`/docs/frameworks/*`** URLs redirect. Sidebar **Tooling** is **CLI** only.
+- **`apps/site`** — **Nextra** replaced by **Fumadocs** (`fumadocs-mdx`, `fumadocs-ui`, Tailwind 4). MDX source is **`content/docs/`** with **`meta.json`** sidebars; routes are **`/`** (landing) and **`/docs/*`**. **`@vercel/analytics`** retained.
+
 ### Added
 
-- **`apps/site`** — full **integrator** documentation in MDX (not link-only): why / getting started / config / packages / errors / examples / CLI / frameworks; **`docs-structure.test.ts`** (Vitest).
+- **`apps/site`** — full **integrator** documentation in MDX (not link-only): why / getting started / config / packages (incl. adapter guides) / errors / examples / CLI; **`docs-structure.test.ts`** (Vitest).
 
 ### Removed
 

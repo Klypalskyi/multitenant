@@ -16,6 +16,8 @@ npm run test:coverage -w @multitenant/cli
 
 ## Install
 
+The npm package is **`@multitenant/cli`** (binary **`multitenant`**). **`npx multitenant …`** fails with 404 — use **`npx @multitenant/cli …`** or install first.
+
 ```bash
 npm install -D @multitenant/cli
 ```
@@ -35,7 +37,7 @@ Add a script:
 ### `multitenant init`
 
 ```bash
-npx multitenant init [--framework next-app|next-pages|express|none] [--force]
+npx @multitenant/cli init [--framework next-app|next-pages|express|none] [--force]
 ```
 
 Writes a minimal valid `tenants.config.json` at `--cwd` (default: current directory). Full reference: [docs/CLI/init.md](https://github.com/klypalskyi/multitenant/blob/master/docs/CLI/init.md).
@@ -43,7 +45,7 @@ Writes a minimal valid `tenants.config.json` at `--cwd` (default: current direct
 ### `multitenant check`
 
 ```bash
-npx multitenant check
+npx @multitenant/cli check
 ```
 
 Validates `tenants.config.json` in the current working directory and prints any schema or cross-field errors.
@@ -51,7 +53,7 @@ Validates `tenants.config.json` in the current working directory and prints any 
 ### `multitenant dev`
 
 ```bash
-npx multitenant dev --target http://localhost:3000 --port 3100
+npx @multitenant/cli dev --target http://localhost:3000 --port 3100
 ```
 
 - Spins up a proxy on `--port`

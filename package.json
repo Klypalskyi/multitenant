@@ -37,8 +37,6 @@
   },
   "devDependencies": {
     "@vitest/coverage-v8": "3.2.4",
-    "nextra": "4.6.1",
-    "nextra-theme-docs": "4.6.1",
     "typescript": "^5.4.0",
     "tsup": "^8.0.0",
     "turbo": "^2.0.0",

@@ -14,7 +14,7 @@ const program = new Command();
 program
   .name('multitenant')
   .description('Multi-tenant dev proxy and config tools')
-  .version('0.5.2');
+  .version('0.5.3');
 
 program
   .command('init')

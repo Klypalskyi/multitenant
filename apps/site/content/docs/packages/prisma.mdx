@@ -1,0 +1,22 @@
+---
+title: "Prisma"
+description: "`@multitenant/prisma` — tenant-scoped Prisma clients."
+---
+
+**Prisma Client** helpers for **multi-tenant Postgres**: **`createSharedPrismaClient`**, **`getOrCreateTenantPrismaClient`** — cache **Prisma** instances per tenant (or share where safe; see options). Assumes you already resolved **`ResolvedTenant`** with **`@multitenant/core`**.
+
+## Install
+
+```bash
+npm install @multitenant/prisma @prisma/client
+```
+
+## Main APIs
+
+- **`createSharedPrismaClient`**, **`getOrCreateTenantPrismaClient`**
+- **`GetOrCreateTenantPrismaClientOptions`** for tuning pool / datasource URL mapping
+
+## See also
+
+- [`@multitenant/database`](/docs/packages/database)
+- [`@multitenant/core`](/docs/packages/core)

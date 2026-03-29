@@ -5,7 +5,7 @@ Scaffold a minimal, valid `tenants.config.json` at the project root (or `--cwd`)
 ## Usage
 
 ```bash
-npx multitenant init [options]
+npx @multitenant/cli init [options]
 ```
 
 ## Options
@@ -39,7 +39,7 @@ Install peer packages for the adapter you use (`@multitenant/next-app`, `@multit
 ## After init
 
 ```bash
-npx multitenant check
+npx @multitenant/cli check
 ```
 
 For local multi-host testing, run your app and the dev proxy (see [multitenant dev](tenantify-dev.md)).
@@ -50,4 +50,4 @@ For local multi-host testing, run your app and the dev proxy (see [multitenant d
 
 ## Success criteria (PLAN)
 
-From an empty folder: `npx multitenant init` → `npx multitenant check` exits 0; optional `--framework next-app` gives a runnable middleware stub once Next and `@multitenant/*` deps are installed.
+From an empty folder: `npx @multitenant/cli init` → `npx @multitenant/cli check` exits 0; optional `--framework next-app` gives a runnable middleware stub once Next and `@multitenant/*` deps are installed.

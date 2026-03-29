@@ -1,0 +1,23 @@
+---
+title: "Config"
+description: "`@multitenant/config` — load and validate tenants.config.json."
+---
+
+Load and **validate** **`tenants.config.json`** with **Zod** plus cross-field checks. Same rules as **`multitenant check`**. Depends on **`@multitenant/core`** for shared types.
+
+## Install
+
+```bash
+npm install @multitenant/config
+```
+
+## Main APIs
+
+- **`loadTenantsConfig(path?)`** — read file, parse, validate; throws **`InvalidTenantsConfigError`** on failure
+- **`validateTenantsConfig(data)`** — validate an in-memory object
+
+## See also
+
+- [Configuration](/docs/config) — field reference for **`tenants.config.json`**
+- [CLI](/docs/cli/dev-check-print) — **`multitenant check`** uses this validation path
+- [`@multitenant/core`](/docs/packages/core) — **`createTenantRegistry`** accepts parsed config

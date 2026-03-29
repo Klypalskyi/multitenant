@@ -1,0 +1,77 @@
+---
+title: "Overview"
+description: "All `@multitenant/*` packages at a glance."
+---
+
+All public libraries are scoped **`@multitenant/…`** on npm. Install only what your app needs; **`@multitenant/next`** is a convenience meta-package for Next.js App Router projects. Each published package has its own page under **Packages** in the sidebar.
+
+## Core & config
+
+| Package | Role |
+|---------|------|
+| **[`@multitenant/core`](/docs/packages/core)** | **`createTenantRegistry`**, **`resolveByHost`**, **`resolveByRequest`**, **`getTenantConfig`**, **`isTenantFeatureEnabled`**, **`TenantNotFoundError`**, … |
+| **[`@multitenant/config`](/docs/packages/config)** | **`loadTenantsConfig`**, **`validateTenantsConfig`** — same validation as **`multitenant check`** |
+
+```bash
+npm install @multitenant/core @multitenant/config
+```
+
+## CLI & dev proxy
+
+| Package | Role |
+|---------|------|
+| **[`@multitenant/cli`](/docs/packages/cli)** | **`multitenant init`**, **`check`**, **`print`**, **`dev`** (local proxy + config hot reload) |
+| **[`@multitenant/dev-proxy`](/docs/packages/dev-proxy)** | HTTP proxy + WebSocket upgrade used by **`multitenant dev`** |
+
+```bash
+npm install -D @multitenant/cli
+# or: npx @multitenant/cli …
+```
+
+## Next.js
+
+| Package | Role |
+|---------|------|
+| **[`@multitenant/next`](/docs/packages/next#nextjs-meta)** | Meta — re-exports **core**, **config**, **react**, **next-app** |
+| **[`@multitenant/next-app`](/docs/packages/next#nextjs-app-router)** | App Router — **`createTenantMiddleware`**, **`getTenantFromHeaders`**, **`requireTenant`**; **`/auto`**, **`/auto-node`** |
+| **[`@multitenant/next-pages`](/docs/packages/next#nextjs-pages-router)** | Pages Router — **`withTenantGSSP`**, **`withTenantApi`** |
+
+```bash
+npm install @multitenant/next-app next react react-dom
+# or: npm install @multitenant/next next react react-dom
+```
+
+## React
+
+| Package | Role |
+|---------|------|
+| **[`@multitenant/react`](/docs/packages/react)** | **`TenantProvider`**, **`useTenant`**, **`useMarket`**, **`useTenantConfig`**, **`useTenantFlag`**, … |
+
+Peers: **`react`** ≥ 18.
+
+## Servers
+
+| Package | Role |
+|---------|------|
+| **[`@multitenant/express`](/docs/packages/express)** | **`multitenantExpress({ registry, environment })`** → **`req.tenant`** |
+| **[`@multitenant/nest`](/docs/packages/nest)** | **`MultitenantModuleForRoot`**, **`@Tenant()`** decorator |
+
+```bash
+npm install @multitenant/express express
+npm install @multitenant/nest @nestjs/common @nestjs/core
+```
+
+## Identity & database (optional)
+
+| Package | Role |
+|---------|------|
+| **[`@multitenant/identity`](/docs/packages/identity)** | Encrypted session cookie helpers, **`getSessionFromCookieHeader`**, **`buildSessionSetCookieHeader`**, **`assertAccess`** |
+| **[`@multitenant/database`](/docs/packages/database)** | **`runWithTenantScope`**, Postgres helpers, bounded pool cache — **Node only**, not Edge |
+
+## ORM references (thin, Postgres-oriented)
+
+**[`@multitenant/drizzle`](/docs/packages/drizzle)**, **[`@multitenant/kysely`](/docs/packages/kysely)**, **[`@multitenant/prisma`](/docs/packages/prisma)**, **[`@multitenant/typeorm`](/docs/packages/typeorm)** — map **`ResolvedTenant`** → pool/client/**`DataSource`**. They **do not** replace **`createTenantRegistry`**; they sit beside it.
+
+---
+
+Versions are **per package** on npm. Release process: **`docs/RELEASE.md`** and **`npm run release:publish`** from the monorepo.

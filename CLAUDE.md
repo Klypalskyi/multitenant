@@ -17,7 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```
 apps/
-├── site/ # Nextra 4 + nextra-theme-docs (marketing / docs); Vercel root apps/site
+├── site/ # Next.js + Fumadocs (MDX in content/docs); Vercel root apps/site
 
 packages/
 ├── core/           # Types, TenantRegistry, typed errors, identity guards, getTenantConfig (merged market/tenant/env config)

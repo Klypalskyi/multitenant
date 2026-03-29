@@ -1,0 +1,45 @@
+---
+title: "Errors"
+description: "`MultitenantError` hierarchy and stable `code` values."
+---
+
+Every failure mode you should catch in integrator code extends **`MultitenantError`** and exposes a stable **`code`** string — use **`instanceof`** or **`switch (e.code)`**, not fragile **`message`** substring checks.
+
+## Taxonomy
+
+| Class | `code` | When |
+|-------|--------|------|
+| **`InvalidTenantsConfigError`** | **`MULTITENANT_INVALID_CONFIG`** | Zod / cross-field validation, **config merge** conflicts, missing file, bad JSON |
+| **`DomainResolutionError`** | **`MULTITENANT_DOMAIN_RESOLUTION`** | Ambiguous domains at runtime, unknown **environment**, inconsistent market reference |
+| **`TenantNotFoundError`** | **`MULTITENANT_TENANT_NOT_FOUND`** | Domain points at missing tenant; **`requireTenant()`**; middleware **`onMissingTenant: 'throw'`** with no match |
+
+Helper: **`isMultitenantError(unknown)`** — type guard.
+
+## Config layer
+
+**`validateTenantsConfig`** and **`loadTenantsConfig`** throw **`InvalidTenantsConfigError`** (not a generic **`Error`**).
+
+## Registry debugging
+
+**`createTenantRegistry(config, { debug: true })`** logs resolution steps to **`console.debug`** ( **`[multitenant]`** prefix ).
+
+**`log: (msg, ...args) => void`** — plug in your logger (e.g. OpenTelemetry). No secrets logged; host, environment, matched **`tenantKey`**, **`basePath`** when set.
+
+## Adapter behaviour differences
+
+### Next.js App Router (`@multitenant/next-app`)
+
+See [Next.js — App Router](/docs/packages/next#nextjs-app-router). **`requireTenant()`** throws **`TenantNotFoundError`** when headers do not yield a tenant.
+
+### Next.js Pages (`@multitenant/next-pages`)
+
+See [Next.js — Pages Router](/docs/packages/next#nextjs-pages-router).
+
+| API | When host does not resolve |
+|-----|-----------------------------|
+| **`withTenantApi`** | **404** JSON **`{ error, code: 'MULTITENANT_TENANT_NOT_FOUND' }`** |
+| **`withTenantGSSP`** | **`{ notFound: true }`** — Next **`notFound()`**; **no** thrown **`TenantNotFoundError`** in GSSP itself |
+
+### Express
+
+**`onMissingTenant: 'throw'`** → pass **`TenantNotFoundError`** to **`next(err)`**; pair with a middleware that uses **`isMultitenantError`** (see [Express](/docs/packages/express)).

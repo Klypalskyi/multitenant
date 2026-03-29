@@ -1,0 +1,21 @@
+---
+title: "Database"
+description: "`@multitenant/database` — ALS scope and Postgres helpers."
+---
+
+**Node-only** **AsyncLocalStorage** scope for the current tenant (and related context): **`runWithTenantScope`** so downstream DB layers see **`tenantKey`** / **`environment`** without threading arguments everywhere. Includes Postgres-oriented pool helpers and a **bounded pool cache**; **not** for Edge runtimes.
+
+## Install
+
+```bash
+npm install @multitenant/database
+```
+
+## Main APIs
+
+- **`runWithTenantScope(store, fn)`**
+- Postgres pool helpers aligned with **`ResolvedTenant`** (see package **`README`** / exports)
+
+## See also
+
+- [`@multitenant/drizzle`](/docs/packages/drizzle), [`@multitenant/kysely`](/docs/packages/kysely), [`@multitenant/prisma`](/docs/packages/prisma), [`@multitenant/typeorm`](/docs/packages/typeorm) — ORM-specific facades on top of per-tenant pools/clients

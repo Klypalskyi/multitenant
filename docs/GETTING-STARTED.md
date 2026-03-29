@@ -7,9 +7,9 @@ For scope and pitfalls, see [Why Multitenant](WHY-MULTITENANT.md).
    **Option A — scaffold**
 
    ```bash
-   npx multitenant init
+   npx @multitenant/cli init
    # optional: --framework next-app | next-pages | express
-   npx multitenant check
+   npx @multitenant/cli check
    ```
 
    **Option B — hand-write**
@@ -42,7 +42,7 @@ For scope and pitfalls, see [Why Multitenant](WHY-MULTITENANT.md).
 2. **Validate**
 
    ```bash
-   npx multitenant check
+   npx @multitenant/cli check
    ```
 
    On failure, the CLI prints the same messages as `validateTenantsConfig` (`InvalidTenantsConfigError` in code). See [Errors](INTERNAL/errors.md).
@@ -60,12 +60,12 @@ For scope and pitfalls, see [Why Multitenant](WHY-MULTITENANT.md).
    Start your app (`npm run dev`), then in another terminal:
 
    ```bash
-   npx multitenant dev --target http://localhost:3000 --port 3100
+   npx @multitenant/cli dev --target http://localhost:3000 --port 3100
    ```
 
    Open `http://us.localhost:3100` (or the hosts you defined in `domains.local`).
 
-   Optional: `npx multitenant dev --run-dev` to let Multitenant spawn `npm run dev` for you.
+   Optional: `npx @multitenant/cli dev --run-dev` to let Multitenant spawn `npm run dev` for you.
 
 ## Async or remote config (bootstrap only)
 
@@ -85,7 +85,7 @@ const config = await loadTenantsConfig(); // or loadTenantsConfig({ cwd: '/app' 
 export const registry = createTenantRegistry(config);
 ```
 
-`loadTenantsConfig` parses JSON, runs **`validateTenantsConfig`**, and throws **`InvalidTenantsConfigError`** on failure (same shape as `npx multitenant check`). See [Errors](INTERNAL/errors.md).
+`loadTenantsConfig` parses JSON, runs **`validateTenantsConfig`**, and throws **`InvalidTenantsConfigError`** on failure (same shape as `npx @multitenant/cli check`). See [Errors](INTERNAL/errors.md).
 
 ### Load from a remote URL or arbitrary source
 

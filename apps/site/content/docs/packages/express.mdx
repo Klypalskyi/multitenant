@@ -1,0 +1,58 @@
+---
+title: "Express"
+description: "`@multitenant/express` — Express middleware and `req.tenant`."
+---
+
+**Express** middleware: **`req.tenant`** (and related fields) after **`createTenantRegistry`** resolves the incoming **Host** / forwarded headers for the active **environment**.
+
+Middleware resolves **`ResolvedTenant | null`** from **`Host`** / **`x-forwarded-host`** and assigns **`req.tenant`**.
+
+## Install
+
+```bash
+npm install @multitenant/express express
+```
+
+Peer: **`express`**.
+
+## Main API
+
+```ts
+app.use(multitenantExpress({ registry, environment: 'local' }));
+```
+
+| Option | Description |
+|--------|-------------|
+| **`registry`** | From **`createTenantRegistry(config)`** |
+| **`environment`** | **`local`**, **`production`**, … |
+| **`onMissingTenant`** | **`'passthrough'`** (default): **`req.tenant = null`**. **`'throw'`**: **`next(new TenantNotFoundError(…))`** |
+
+Importing **`@multitenant/express`** augments **`Express.Request`** with **`tenant`**.
+
+## Error middleware
+
+```ts
+import type { Request, Response, NextFunction } from 'express';
+import { isMultitenantError } from '@multitenant/core';
+
+app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  if (isMultitenantError(err)) {
+    const status =
+      err.code === 'MULTITENANT_TENANT_NOT_FOUND'
+        ? 404
+        : err.code === 'MULTITENANT_INVALID_CONFIG'
+          ? 500
+          : 400;
+    return res.status(status).json({ error: err.message, code: err.code });
+  }
+  throw err;
+});
+```
+
+## Runnable example
+
+See [Examples](/docs/examples) — **`examples/express-minimal`** in the monorepo.
+
+## See also
+
+- [`@multitenant/core`](/docs/packages/core) — **`createTenantRegistry`**

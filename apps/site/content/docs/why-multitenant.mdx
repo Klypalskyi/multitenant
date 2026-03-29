@@ -1,0 +1,96 @@
+---
+title: "Why Multitenant?"
+description: "When this stack fits, host→tenant flow, and pitfalls."
+---
+
+## Stack overview
+
+One **`tenants.config.json`** feeds **`createTenantRegistry`**; framework packages resolve **`ResolvedTenant`** the same way in each stack.
+
+```mermaid
+flowchart TB
+  subgraph cfg [Config]
+    TC["tenants.config.json"]
+  end
+  subgraph core [Core]
+    REG["createTenantRegistry"]
+  end
+  subgraph adapters [Adapters]
+    NA["@multitenant/next-app"]
+    NP["@multitenant/next-pages"]
+    EX["@multitenant/express"]
+    RC["@multitenant/react"]
+    NS["@multitenant/nest"]
+  end
+  TC --> REG
+  REG --> NA
+  REG --> NP
+  REG --> EX
+  REG --> RC
+  REG --> NS
+```
+
+## What this stack optimizes for
+
+- **Host-based (or header-assisted) tenant resolution** from a **single config file** shared across services.
+- **Markets** shared across tenants (locale, currency, timezone) without duplicating boilerplate.
+- **Typed errors** and small **framework adapters** so you do not fork `ResolvedTenant` per app.
+
+## Host → registry → tenant
+
+```mermaid
+flowchart LR
+  subgraph inbound [Inbound request]
+    H[Host / X-Forwarded-Host]
+  end
+  subgraph core [Core]
+    C[tenants.config.json]
+    R[createTenantRegistry]
+    T[ResolvedTenant]
+  end
+  H --> R
+  C --> R
+  R --> T
+```
+
+**Resolution is not authentication.** Knowing the tenant from the hostname does **not** prove who the user is. Use **`@multitenant/identity`** (or your IdP) for authorization on sensitive data.
+
+## Typical Next.js App Router path
+
+Middleware resolves the tenant on the **Edge** and forwards stable headers; server code re-hydrates a **`ResolvedTenant`** via **`getTenantFromHeaders`** using the **same** registry module as middleware. See [Next.js — App Router](/docs/packages/next#nextjs-app-router).
+
+```mermaid
+flowchart TD
+  REQ[HTTP request]
+  MW[Edge middleware]
+  H[x-tenant-key / market headers]
+  SRV[Server: RSC / Route Handler / Server Action]
+  GTH[getTenantFromHeaders]
+  RES[ResolvedTenant]
+
+  REQ --> MW
+  MW --> H
+  H --> SRV
+  SRV --> GTH
+  GTH --> RES
+```
+
+## When not to use
+
+- **Tenant is purely from JWT / session**, never from host — you may still use **`TenantsConfig`** for markets, but forced routing from **`Host`** is the wrong mental model.
+- **Thousands of dynamic tenants** with no stable domain map — you will fight DNS and config size; consider a DB-backed resolver (out of scope for core).
+- **Edge DB / heavy Node work in middleware** — keep middleware thin; DB access belongs in **Node** runtimes (see **`@multitenant/database`** + [Getting started](/docs/getting-started) Edge note).
+
+## Common pitfalls
+
+1. **`next dev` on raw `localhost`** without matching **`domains.local`** — middleware may passthrough with no tenant; use **`npx @multitenant/cli dev`** (or **`multitenant dev`** after install) and hosts from your config, or **`onMissingTenant: 'throw'`** only when you control **Host**.
+2. **Trusting `X-Tenant-Id` from the client** — resolve from **registry + trusted proxy headers**, then validate session if needed.
+3. **Duplicating `ResolvedTenant` types** — import from **`@multitenant/core`** only.
+4. **Skipping session ↔ host alignment** — if you use identity cookies, the session tenant must **match** the host-resolved tenant on mutating routes.
+
+## Next on this site
+
+- [Getting started](/docs/getting-started)
+- [Examples](/docs/examples)
+- [Configuration](/docs/config)
+- [Errors](/docs/errors)

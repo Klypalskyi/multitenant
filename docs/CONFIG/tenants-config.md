@@ -64,4 +64,4 @@ There is **no** separate **`features`** field on **`TenantDefinition`** — avoi
 - **Config merge** must not hit object vs non-object clashes (per environment that defines a non-empty `configByEnvironment` layer).
 - Any tenant `experiments` override must reference an entry in top-level `experiments`.
 
-Run `npx multitenant check` to validate.
+Run `npx @multitenant/cli check` to validate.

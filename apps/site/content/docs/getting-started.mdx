@@ -1,0 +1,112 @@
+---
+title: "Getting started"
+description: "Install, config, validation, and wiring adapters."
+---
+
+For scope and mental model, read [Why Multitenant?](/docs/why-multitenant) first.
+
+The CLI is published on npm as **`@multitenant/cli`** (binary name **`multitenant`**). Use **`npx @multitenant/cli …`** so `npx` resolves the published package; there is no **`multitenant`** package at the root of the registry.
+
+## 1. Add config
+
+### Option A — scaffold
+
+```bash
+npx @multitenant/cli init
+# optional: --framework next-app | next-pages | express
+npx @multitenant/cli check
+```
+
+### Option B — minimal hand-written file
+
+Create **`tenants.config.json`** at the project root:
+
+```json
+{
+  "version": 1,
+  "defaultEnvironment": "local",
+  "markets": {
+    "us": {
+      "currency": "USD",
+      "locale": "en-US",
+      "timezone": "America/New_York"
+    }
+  },
+  "tenants": {
+    "us-main": {
+      "market": "us",
+      "domains": {
+        "local": { "us.localhost": "us-main" },
+        "production": { "us.example.com": "us-main" }
+      }
+    }
+  }
+}
+```
+
+## 2. Validate
+
+```bash
+npx @multitenant/cli check
+```
+
+On failure you get the same messages as **`validateTenantsConfig`** in code (**`InvalidTenantsConfigError`**). See [Errors](/docs/errors).
+
+## 3. Wire your stack
+
+| Stack | Package | What you use |
+|-------|---------|----------------|
+| **Next.js App Router** | `@multitenant/next-app` | Middleware + **`getTenantFromHeaders`** / **`requireTenant`** |
+| **Next.js Pages** | `@multitenant/next-pages` | **`withTenantGSSP`**, **`withTenantApi`** |
+| **React** | `@multitenant/react` | **`TenantProvider`**, **`useTenant`**, **`useMarket`**, … |
+| **Express** | `@multitenant/express` | **`multitenantExpress()`** → **`req.tenant`** |
+| **Nest** | `@multitenant/nest` | **`MultitenantModuleForRoot`**, **`@Tenant()`** |
+
+Meta-install line (re-exports several packages): **`@multitenant/next`**.
+
+## 4. Local dev with real hostnames
+
+Start your app (e.g. port **3000**), then in another terminal:
+
+```bash
+npx @multitenant/cli dev --target http://localhost:3000 --port 3100
+```
+
+Open **`http://us.localhost:3100`** (or whatever you put in **`domains.local`**). The proxy injects **`x-tenant-key`**, **`x-market-key`**, etc.
+
+Optional: **`npx @multitenant/cli dev --run-dev`** to let the CLI spawn **`npm run dev`** for you. Full options: [CLI: dev, check, print](/docs/cli/dev-check-print).
+
+## Async or remote config (bootstrap only)
+
+**`createTenantRegistry`** is **synchronous** — pass an already-loaded **`TenantsConfig`**. Load config **once** at bootstrap (disk, HTTP, CMS map → plain object), **`validateTenantsConfig`**, then keep **one registry instance** per worker.
+
+### Load from disk (Node)
+
+```ts
+import { createTenantRegistry } from '@multitenant/core';
+import { loadTenantsConfig } from '@multitenant/config';
+
+const config = await loadTenantsConfig(); // or loadTenantsConfig({ cwd: '/app' })
+export const registry = createTenantRegistry(config);
+```
+
+### Validate after fetch / CMS mapping
+
+```ts
+import { createTenantRegistry } from '@multitenant/core';
+import { validateTenantsConfig } from '@multitenant/config';
+
+async function bootstrapRegistryFromUrl() {
+  const res = await fetch(process.env.TENANTS_CONFIG_URL!, { headers: { Accept: 'application/json' } });
+  if (!res.ok) throw new Error(`config fetch ${res.status}`);
+  const raw: unknown = await res.json();
+  const config = validateTenantsConfig(raw);
+  return createTenantRegistry(config);
+}
+```
+
+**Refresh / hot reload** of config in a long-lived process is **your** concern (replace the registry handle, or restart).
+
+In **Next.js**, avoid top-level **`await`** in modules **Edge** may load: bootstrap in **`instrumentation.ts`** (Node) or a lazy server-only module — see [Next.js — App Router](/docs/packages/next#nextjs-app-router).
+
+After bootstrap, pass **`registry`** into **`createTenantMiddleware`**, **`multitenantExpress`**, **`withTenantGSSP`**, etc. Client bundles should receive **`ResolvedTenant`** (or derived props), not the full **`TenantsConfig`**, unless you intentionally expose topology.

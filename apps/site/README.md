@@ -1,27 +1,23 @@
 # `@multitenant/site`
 
-Public docs / landing built with **Nextra 4** + **`nextra-theme-docs`** (same lineage as [shuding/nextra-docs-template](https://github.com/shuding/nextra-docs-template): Next.js + docs theme; App Router + `_meta.global`).
+Public docs / landing: **Next.js** (App Router) + **Fumadocs** (**`fumadocs-mdx`**, **`fumadocs-ui`**, Tailwind 4). MDX lives in **`content/docs/`** (sidebar via **`meta.json`** per folder).
 
-**Content:** integrator MDX under **`app/`** — **Getting started**, **Configuration**, **Packages**, **Errors**, **Examples** (snippets from **express-minimal** / **next-minimal**), **CLI**, **Frameworks**. Deep internal docs (ORM, DB scope, …) remain in repo **`docs/`**.
+**Tests:** `npm test -w @multitenant/site` (`docs-structure.test.ts` guards doc files).
 
-**Tests:** `npm test -w @multitenant/site` (`docs-structure.test.ts`).
+**Sidebar labels** come from each page’s YAML `title` / `description`. To bulk-refresh titles after editing MDX, run `npm run docs:patch-titles -w @multitenant/site` (see `scripts/patch-doc-titles.mjs`).
 
-## Develop
+## Local
 
-From repo root:
+From the monorepo root:
 
 ```bash
-npm install
-npm run dev -w @multitenant/site
+npm run site:dev
+# → http://localhost:3101
 ```
 
-Open [http://localhost:3101](http://localhost:3101).
+- **`/`** — short landing
+- **`/docs/*`** — documentation (search API at **`/api/search`**)
 
-If you see a **duplicate React** / `useContext` error after changing dependencies, run **`npm dedupe`** at the repo root (npm sometimes nests `apps/site/node_modules` until deduped).
+## Deploy (Vercel)
 
-## Vercel
-
-1. Import the repo, set **Root Directory** to `apps/site`.
-2. Install / build commands are in [`vercel.json`](./vercel.json) (`npm ci` + `npm run build -w @multitenant/site` from the monorepo root).
-
-Deploy by connecting this repo in **Vercel** (Git integration); **Root Directory** `apps/site` picks up [`vercel.json`](./vercel.json).
+**Root Directory** `apps/site`. Install/build run from the repo root via [`vercel.json`](./vercel.json) (`npm ci` + `npm run build -w @multitenant/site`).

@@ -1,0 +1,50 @@
+---
+title: "Home"
+description: "Multitenant — config-driven tenant and market resolution for TypeScript."
+---
+
+**Config-driven** tenant and **market** resolution for TypeScript: one **`tenants.config.json`**, **`createTenantRegistry`**, and adapters for **Next.js** (App + Pages), **Express**, **Nest**, and **React** — with **typed errors** you can branch on in production.
+
+## Adapters & packages
+
+Every adapter expects a **`TenantRegistry`** from **`createTenantRegistry(config)`** where **`config`** is your validated **`TenantsConfig`** (JSON file, **`loadTenantsConfig`**, or **`validateTenantsConfig`** after a CMS map).
+
+Scaffold stubs: **`npx @multitenant/cli init --framework …`**.
+
+| Package | Use case |
+|---------|----------|
+| **`@multitenant/next`** / **`next-app`** / **`next-pages`** | **Next.js** — meta package, App Router, Pages Router — [guide](/docs/packages/next) |
+| **`@multitenant/react`** | **`TenantProvider`**, hooks — [guide](/docs/packages/react) |
+| **`@multitenant/express`** | **`multitenantExpress`** → **`req.tenant`** — [guide](/docs/packages/express) |
+| **`@multitenant/nest`** | **`MultitenantModuleForRoot`**, **`@Tenant()`** — [guide](/docs/packages/nest) |
+| **`@multitenant/drizzle`** / **kysely** / **prisma** / **typeorm** | **Reference** ORM wiring — pools per tenant; see [Packages](/docs/packages/overview) |
+
+### Edge vs Node (App Router)
+
+| Runtime | Resolve tenant | DB / Node APIs |
+|---------|----------------|----------------|
+| **Edge middleware** | Yes — thin, static JSON | **No** |
+| **Node server** | **`getTenantFromHeaders`** / **`requireTenant`** | Yes — e.g. **`@multitenant/database`** ALS |
+
+Details: [Next.js — App Router](/docs/packages/next#nextjs-app-router).
+
+## Read next
+
+- **[Why Multitenant?](/docs/why-multitenant)** — mental model, when **not** to use this, pitfalls.
+- **[Getting started](/docs/getting-started)** — install, minimal config, validation, async/bootstrap.
+- **[Configuration](/docs/config)** — `tenants.config.json` schema, flags, merge rules.
+- **[Packages](/docs/packages/overview)** — scoped **`@multitenant/*`** installs at a glance.
+- **[Examples](/docs/examples)** — copy-paste from the real **`express-minimal`** and **`next-minimal`** workspaces.
+- **[Errors](/docs/errors)** — `MultitenantError` hierarchy and stable **`code`** strings.
+- **[CLI](/docs/cli/init)** — `init`, `dev` proxy, `check`, `print`.
+
+## 30-second bootstrap
+
+```bash
+npx @multitenant/cli init --force
+npx @multitenant/cli check
+```
+
+Then wire **`@multitenant/next-app`**, **`@multitenant/express`**, or another adapter — see [Getting started](/docs/getting-started) and [Next.js](/docs/packages/next).
+
+The monorepo also ships **reference** ORM packages (**Drizzle**, **Kysely**, **Prisma**, **TypeORM**) and **`@multitenant/database`** (ALS scope). Deep-dive markdown for contributors remains in the [GitHub `docs/` tree](https://github.com/klypalskyi/multitenant/tree/master/docs).

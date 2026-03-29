@@ -1,10 +1,13 @@
 import { Analytics } from '@vercel/analytics/react';
-import { Footer, Layout, Navbar } from 'nextra-theme-docs';
-import { Head } from 'nextra/components';
-import { getPageMap } from 'nextra/page-map';
+import { RootProvider } from 'fumadocs-ui/provider/next';
+import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import 'nextra-theme-docs/style.css';
+import './global.css';
+
+const inter = Inter({
+  subsets: ['latin'],
+});
 
 export const metadata: Metadata = {
   title: {
@@ -15,28 +18,11 @@ export const metadata: Metadata = {
     'Multi-tenant + multi-market toolkit for TypeScript — config-driven hosts, Next.js, Express, Nest, React.',
 };
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
-  const pageMap = await getPageMap();
-
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" dir="ltr" suppressHydrationWarning>
-      <Head />
-      <body>
-        <Layout
-          navbar={
-            <Navbar
-              logo={<strong>@multitenant</strong>}
-              projectLink="https://github.com/klypalskyi/multitenant"
-              chatLink="https://github.com/klypalskyi/multitenant/issues"
-            />
-          }
-          footer={<Footer>MIT — Multitenant monorepo</Footer>}
-          editLink="Edit this page on GitHub"
-          docsRepositoryBase="https://github.com/klypalskyi/multitenant/tree/master/apps/site"
-          pageMap={pageMap}
-        >
-          {children}
-        </Layout>
+    <html lang="en" className={inter.className} dir="ltr" suppressHydrationWarning>
+      <body className="flex min-h-screen flex-col">
+        <RootProvider>{children}</RootProvider>
         <Analytics />
       </body>
     </html>

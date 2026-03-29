@@ -1,0 +1,24 @@
+---
+title: "Core"
+description: "`@multitenant/core` — registry, resolution, typed errors."
+---
+
+Resolution engine: build a **`TenantRegistry`** from config (or auto-load **`tenants.config.json`**) and resolve tenants by **host** or **request**. Typed **`MultitenantError`** subclasses for config, unknown domains, and missing tenants.
+
+## Install
+
+```bash
+npm install @multitenant/core
+```
+
+## Main APIs
+
+- **`createTenantRegistry(config?, options?)`** — returns **`resolveByHost`**, **`resolveByRequest`**, **`getTenant`**, etc.
+- **`resolveByHost(hostname)`** / **`resolveByRequest(req, { environment })`**
+- **`getTenantConfig`**, **`isTenantFeatureEnabled`**
+- Errors: **`InvalidTenantsConfigError`**, **`DomainResolutionError`**, **`TenantNotFoundError`**, **`isMultitenantError`**
+
+## See also
+
+- [Configuration](/docs/config) — JSON schema for the registry input
+- [Home](/docs) — adapters & package map

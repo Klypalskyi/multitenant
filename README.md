@@ -10,15 +10,15 @@ Intro / pitfalls / diagram: [docs/WHY-MULTITENANT.md](docs/WHY-MULTITENANT.md).
 
 **Quick links:** [Getting started](docs/GETTING-STARTED.md) · [Config reference](docs/CONFIG/tenants-config.md) · [Framework overview](docs/FRAMEWORKS/overview.md) · [docs index](docs/INDEX.md) · [Release / publish](docs/RELEASE.md)
 
-**Docs site:** [apps/site](apps/site) — Nextra 4 + `nextra-theme-docs`; **full integrator guides + examples** (not just GitHub links). Local: **`npm run site:dev`**. Production: Vercel **Root Directory** `apps/site` (see `apps/site/vercel.json`).
+**Docs site:** [apps/site](apps/site) — Next.js + **Fumadocs** (MDX in `content/docs/`); **full integrator guides + examples** (not just GitHub links). Local: **`npm run site:dev`**. Production: Vercel **Root Directory** `apps/site` (see `apps/site/vercel.json`).
 
-**Hands-on:** [docs/INDEX.md](docs/INDEX.md), [examples/README.md](examples/README.md) (**[`express-minimal`](examples/express-minimal/)**, **[`next-minimal`](examples/next-minimal/)**, **`config-smoke`**), **`npx multitenant init`**.
+**Hands-on:** [docs/INDEX.md](docs/INDEX.md), [examples/README.md](examples/README.md) (**[`express-minimal`](examples/express-minimal/)**, **[`next-minimal`](examples/next-minimal/)**, **`config-smoke`**), **`npx @multitenant/cli init`**.
 
 ### 30-second start
 
 ```bash
-npx multitenant init --force
-npx multitenant check
+npx @multitenant/cli init --force
+npx @multitenant/cli check
 ```
 
 Scaffold writes a valid `tenants.config.json` (and optional framework stubs with `--framework next-app` | `next-pages` | `express`). Then install adapters in your app, e.g. `npm install @multitenant/next next react` or per-package installs — see [Getting started](docs/GETTING-STARTED.md) and [CLI: init](docs/CLI/init.md).
@@ -302,16 +302,16 @@ export class AppController {
 
 ```bash
 # Validate config
-npx multitenant check
+npx @multitenant/cli check
 
 # Print a summary
-npx multitenant print
+npx @multitenant/cli print
 
 # Dev proxy: app on 3000, proxy on 3100
-npx multitenant dev --target http://localhost:3000 --port 3100
+npx @multitenant/cli dev --target http://localhost:3000 --port 3100
 
 # Auto-run app dev server
-npx multitenant dev --run-dev
+npx @multitenant/cli dev --run-dev
 ```
 
 ### Open source

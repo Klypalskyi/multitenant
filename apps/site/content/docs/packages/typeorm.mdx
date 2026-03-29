@@ -1,0 +1,22 @@
+---
+title: "TypeORM"
+description: "`@multitenant/typeorm` — tenant-scoped DataSource."
+---
+
+**TypeORM** **DataSource** helpers for Postgres: **`createSharedPostgresDataSource`**, **`getOrCreateTenantPostgresDataSource`** — map **`ResolvedTenant`** → **`DataSource`** with bounded caching. Use **`@multitenant/core`** for request/host tenant resolution.
+
+## Install
+
+```bash
+npm install @multitenant/typeorm typeorm pg reflect-metadata
+```
+
+## Main APIs
+
+- **`createSharedPostgresDataSource`**, **`getOrCreateTenantPostgresDataSource`**
+- **`PostgresDataSourceExtras`** / options types
+
+## See also
+
+- [`@multitenant/database`](/docs/packages/database)
+- [`@multitenant/core`](/docs/packages/core)

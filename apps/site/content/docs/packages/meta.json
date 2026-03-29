@@ -1,0 +1,27 @@
+{
+  "title": "Packages",
+  "defaultOpen": true,
+  "pages": [
+    "overview",
+    "---Core & config---",
+    "core",
+    "config",
+    "---CLI & dev---",
+    "cli",
+    "dev-proxy",
+    "---React.js---",
+    "next",
+    "react",
+    "---Node.js---",
+    "express",
+    "nest",
+    "---Data layer---",
+    "identity",
+    "database",
+    "---ORM helpers---",
+    "drizzle",
+    "kysely",
+    "prisma",
+    "typeorm"
+  ]
+}

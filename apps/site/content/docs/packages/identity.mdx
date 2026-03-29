@@ -1,0 +1,22 @@
+---
+title: "Identity"
+description: "`@multitenant/identity` — encrypted session cookies."
+---
+
+**Node-only** helpers for **encrypted session cookies** (**AES-256-GCM**): parse **`Cookie`** headers, build **`Set-Cookie`** values, and optional **`assertAccess`** patterns for tenant-scoped sessions. Complements resolution from **`@multitenant/core`**; does not replace host-based tenant detection.
+
+## Install
+
+```bash
+npm install @multitenant/identity
+```
+
+## Main APIs
+
+- **`getSessionFromCookieHeader`**, **`buildSessionSetCookieHeader`**
+- Session payload types and **`assertAccess`** utilities (see package exports)
+
+## See also
+
+- [`@multitenant/core`](/docs/packages/core) — **`ResolvedTenant`** and errors
+- [Errors](/docs/errors) — how **`MultitenantError`** fits with auth failures

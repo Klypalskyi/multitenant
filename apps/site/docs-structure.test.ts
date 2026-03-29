@@ -2,57 +2,49 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const appDir = join(__dirname, 'app');
+const contentDir = join(__dirname, 'content/docs');
 
-/** Every public MDX page we ship — catches accidental deletes when editing nav. */
+/** Every shipped MDX doc — catches accidental deletes when editing nav. */
 const requiredMdx = [
-  'page.mdx',
-  'why-multitenant/page.mdx',
-  'getting-started/page.mdx',
-  'config/page.mdx',
-  'packages/overview/page.mdx',
-  'packages/core/page.mdx',
-  'packages/config/page.mdx',
-  'packages/cli/page.mdx',
-  'packages/dev-proxy/page.mdx',
-  'packages/next-app/page.mdx',
-  'packages/next-pages/page.mdx',
-  'packages/next/page.mdx',
-  'packages/react/page.mdx',
-  'packages/express/page.mdx',
-  'packages/nest/page.mdx',
-  'packages/identity/page.mdx',
-  'packages/database/page.mdx',
-  'packages/drizzle/page.mdx',
-  'packages/kysely/page.mdx',
-  'packages/prisma/page.mdx',
-  'packages/typeorm/page.mdx',
-  'errors/page.mdx',
-  'examples/page.mdx',
-  'cli/init/page.mdx',
-  'cli/dev-check-print/page.mdx',
-  'frameworks/overview/page.mdx',
-  'frameworks/next-app/page.mdx',
-  'frameworks/next-pages/page.mdx',
-  'frameworks/express/page.mdx',
-  'frameworks/nest/page.mdx',
-  'frameworks/react/page.mdx',
+  'index.mdx',
+  'why-multitenant.mdx',
+  'getting-started.mdx',
+  'config.mdx',
+  'packages/overview.mdx',
+  'packages/core.mdx',
+  'packages/config.mdx',
+  'packages/cli.mdx',
+  'packages/dev-proxy.mdx',
+  'packages/next.mdx',
+  'packages/react.mdx',
+  'packages/express.mdx',
+  'packages/nest.mdx',
+  'packages/identity.mdx',
+  'packages/database.mdx',
+  'packages/drizzle.mdx',
+  'packages/kysely.mdx',
+  'packages/prisma.mdx',
+  'packages/typeorm.mdx',
+  'errors.mdx',
+  'examples.mdx',
+  'cli/init.mdx',
+  'cli/dev-check-print.mdx',
 ];
 
 describe('@multitenant/site docs pages', () => {
   it.each(requiredMdx)('has non-trivial %s', (rel) => {
-    const abs = join(appDir, rel);
+    const abs = join(contentDir, rel);
     expect(existsSync(abs), `missing ${rel}`).toBe(true);
     const text = readFileSync(abs, 'utf8');
     expect(text.length).toBeGreaterThan(120);
     expect(text).toMatch(/#{1,3} /);
   });
 
-  it('home links to key sections', () => {
-    const home = readFileSync(join(appDir, 'page.mdx'), 'utf8');
-    expect(home).toContain('/getting-started');
-    expect(home).toContain('/frameworks/overview');
-    expect(home).toContain('/packages/overview');
-    expect(home).toContain('/examples');
+  it('home index links to key sections', () => {
+    const home = readFileSync(join(contentDir, 'index.mdx'), 'utf8');
+    expect(home).toContain('/docs/getting-started');
+    expect(home).toContain('/docs/packages/next');
+    expect(home).toContain('/docs/packages/overview');
+    expect(home).toContain('/docs/examples');
   });
 });
