@@ -2,6 +2,15 @@
 
 Multi-tenant + multi-market toolkit for TypeScript apps.
 
+### 30-second start
+
+```bash
+npx multitenant init --force
+npx multitenant check
+```
+
+Scaffold writes a valid `tenants.config.json` (and optional framework stubs with `--framework next-app` | `next-pages` | `express`). Then install adapters in your app, e.g. `npm install @multitenant/next next react` or per-package installs — see [Getting started](docs/GETTING-STARTED.md) and [CLI: init](docs/CLI/init.md).
+
 ### What it gives you
 
 - **Config-driven tenants/markets** via `tenants.config.json`

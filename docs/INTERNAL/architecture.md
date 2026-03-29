@@ -39,3 +39,7 @@ Core → config, database, identity, dev-proxy → react, next-app, next, next-p
 - Do not republish a package just because a dependency updated — consumers resolve semver ranges; republish when **that** package’s `src/` changed
 
 See `docs/RELEASE.md` for detailed release instructions.
+
+## CI
+
+GitHub Actions (`.github/workflows/ci.yml`) runs `npm ci`, `npm run build`, and `npm test` on pushes and pull requests to `master` / `main`.

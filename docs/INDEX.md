@@ -9,6 +9,7 @@ Multi-tenant and multi-market management for TypeScript apps.
 - [CLI: init](CLI/init.md) – `multitenant init` (scaffold config + optional framework stubs)
 - [CLI: dev / check / print](CLI/tenantify-dev.md) – `multitenant dev`, `check`, `print`
 - [Frameworks](FRAMEWORKS/overview.md) – Next.js, React, Express, Nest
+- [Next.js App Router checklist](FRAMEWORKS/next-app-router.md) – Edge vs Node, middleware, Server Actions
 
 ## For contributors
 

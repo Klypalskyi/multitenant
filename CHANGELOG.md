@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Each `@multitenant/*` package has its own semver in `packages/<name>/package.json`; only packages with `src/` changes get bumped per release (versions may differ across packages between releases).
 
+## [Unreleased]
+
+### Tooling & docs
+
+- **CI:** GitHub Actions workflow runs `build` + `test` on `master` / `main`.
+- **`@multitenant/next-app`:** Vitest integration tests for middleware + `getTenantFromHeaders` / `requireTenant` (`src/middleware.integration.test.ts`).
+- **Docs:** `docs/FRAMEWORKS/next-app-router.md` (Phase 5.1 checklist); README “30-second start”; `PLAN.md` sprint status refresh.
+
 ## [0.5.2] / coordinated bumps — 2026-03-29
 
 ### Added

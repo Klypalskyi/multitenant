@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — Wave 2: `@multitenant/next`, `next-app/auto` + `auto-node`, `getTenantConfig` / `isTenantFeatureEnabled`, identity session cookie helpers, `@multitenant/database` (8.1 ALS slice); CLI v0.5.2.
+**Last reviewed:** 2026-03-29 — Wave 2 shipped; CI + App Router integration tests + README quickstart + Next checklist doc (quality / polish sprint partial).
 
 ---
 
@@ -26,7 +26,7 @@
 | `export { middleware } from '@multitenant/next-app/auto'` | **Shipped** | v0.5.0 — `auto` (config object) + `auto-node` (project-root JSON load); Edge vs Node documented on subpath |
 | Server helper `getTenantConfig()` (non-React) | **Shipped** | v0.5.0 in `@multitenant/core` — pair with registry + `ResolvedTenant.tenantKey` |
 | `isFeatureEnabled()` / flags server-side | **Shipped** | v0.5.0 — `isTenantFeatureEnabled` in core (flags map) |
-| Package unit tests (core + config + cli init) | **Shipped** | `npm test` / `vitest`; `@multitenant/cli` has `test:coverage`; wire CI separately |
+| Package unit tests + CI | **Shipped** | `npm test` (turbo): core, config, cli, database, identity, **next-app** integration tests; GitHub Actions `build` + `test` on push/PR |
 | Website / landing in repo | **Not shipped** | Optional external |
 | ORM / DB adapters (shared DB + per-tenant DB) | **Partial** | `@multitenant/database` v0.5.0 — ALS scope only (8.1); ORM peers + pools still open |
 
@@ -144,7 +144,7 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 5.1 | Next.js: Edge middleware, Server Actions | Checklist in docs; sample reads tenant in Server Action; note middleware runtime |
+| 5.1 | Next.js: Edge middleware, Server Actions | **Partial:** `docs/FRAMEWORKS/next-app-router.md` — Edge vs Node, middleware headers, Server Actions; copy-paste route sample still optional |
 | 5.2 | Express | `req.tenant` typed (augment or generic) |
 | 5.3 | Nest | Decorator + DI story documented |
 | 5.4 | React | SSR/hydration: `TenantProvider` usage documented for App Router |
@@ -157,8 +157,8 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 6.1 | **Unit tests** | **Partial (v0.4.0):** core + config; add CI + expand adapters when feasible |
-| 6.2 | **Integration tests** | At least one adapter path (e.g. Next middleware + resolution) in CI |
+| 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app; CI runs `npm test`; expand adapters when feasible |
+| 6.2 | **Integration tests** | **Partial:** `@multitenant/next-app` middleware + `NextRequest` / header contract (`src/middleware.integration.test.ts`) in CI |
 | 6.3 | **Examples** | Each `examples/*` documents `install && dev/build` commands; optional CI smoke |
 | 6.4 | **Documentation** | “Why multitenant”, “When not to use”, “Common pitfalls”, one architecture diagram (host → registry → tenant) in `docs/` |
 
@@ -170,7 +170,7 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 7.1 | **README hero** | Headline + 30-second quickstart (copy-paste blocks tested) |
+| 7.1 | **README hero** | **Partial:** README “30-second start” (`npx @multitenant/cli init` + `check`); expand with one copy-paste middleware block if needed |
 | 7.2 | **Brand** | Keep `@multitenant/*` scope; consistent naming in all public docs |
 | 7.3 | **Website / demo** | Optional; if absent, README states “docs + examples” as the demo |
 
@@ -256,25 +256,22 @@ Exit criteria are mandatory; task lists are indicative.
 
 **Exit:** `npm run build` + `npm test` green locally; typed errors documented.
 
-### Sprint B — DX (in progress)
+### Sprint B — DX ✅
 
-- `multitenant init` (Phase 2.1) — **done** (CLI v0.5.0; docs updated).
-- Optional `@multitenant/next` (Phase 2.2) and/or `next-app/auto` (Phase 2.3) — **open**.
+- `multitenant init` (Phase 2.1); `@multitenant/next` (2.2); `next-app/auto` + `auto-node` (2.3) — **shipped** (v0.5.x).
 
-**Exit:** New user can run `init` and `check` succeeds; README updated — **met** for init path; meta-package / auto middleware still outstanding.
+**Exit:** Init + check + meta/auto paths documented — **met**.
 
-### Sprint C — Value + identity
+### Sprint C — Value + identity ✅ (core deliverables)
 
-- `getTenantConfig` server helper + flag story (Phase 3).
-- Session helpers / docs (Phase 4).
+- `getTenantConfig` / `isTenantFeatureEnabled` (Phase 3); identity cookie header helpers (Phase 4.1 partial) — **shipped**.
 
-**Exit:** Documented server/client parity for config.
+**Exit:** Server/client parity for config and flags — **met** for the shipped slice.
 
-### Sprint D — Polish & positioning
+### Sprint D — Polish & positioning (in progress)
 
-- Framework checklist (Phase 5).
-- Docs depth + README hero (Phase 6.4 + 7).
-- Example smoke in CI if feasible.
+- **Done (partial):** GitHub Actions CI (Phase 6.1–6.2); Next App Router checklist doc (Phase 5.1 partial); README 30-second block (Phase 7.1 partial); `next-app` middleware integration tests.
+- **Open:** Phase 5.2–5.4; README full hero + pitfalls diagram (6.4); example smoke in CI.
 
 ### Sprint E — Database / ORM (optional; Phase 8)
 
@@ -290,7 +287,7 @@ Exit criteria are mandatory; task lists are indicative.
 
 1. **Build:** `npm run build` at repo root exits 0.
 2. **Init path (Sprint B partial):** `npx multitenant init` → `npx multitenant check` exits 0; add framework deps and run `npm run dev` on the app port (e.g. 3000), then `multitenant dev --target http://localhost:3000 --port 3100` to hit tenant hosts on **3100** (proxy) while the app listens on **3000**. Defaults from `init` use `main.localhost` in `domains.local` — adjust to match your hosts.
-3. **Tests:** `npm test` runs core + config + **cli (`init`)** unit tests (add CI workflow when ready).
+3. **Tests:** `npm test` runs workspace tests including **next-app** middleware integration tests; **CI** runs `npm ci` → `build` → `test` on push/PR (`.github/workflows/ci.yml`).
 4. **Errors:** `instanceof` / `e.code` distinguish config vs resolution vs missing tenant for core, config, and Next strict paths.
 
 ---
