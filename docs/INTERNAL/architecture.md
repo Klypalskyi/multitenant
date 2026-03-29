@@ -7,7 +7,7 @@
 - **identity** – Encrypt/sign session cookie (AES-256-GCM). Node-only. Re-exports core identity types and guards. See `docs/INTERNAL/session-cookies.md` (cookie attributes) and `docs/INTERNAL/tenant-bound-sessions.md` (session vs host-resolved tenant).
 - **dev-proxy** – HTTP (+ WS upgrade) proxy server; resolves tenant by Host and injects headers. Node-only.
 - **cli** – `multitenant` binary (with deprecated `tenantify` alias): `init`, `dev`, `check`, `print`. Uses config + core + dev-proxy; `dev` optionally spawns `npm run dev`. See `docs/CLI/init.md`, `docs/CLI/tenantify-dev.md`.
-- **database** – Node-only `AsyncLocalStorage` tenant scope (`runWithTenantScope`, `requireTenantScope`). Depends on core. See `docs/INTERNAL/database-scope.md`.
+- **database** – Node-only `AsyncLocalStorage` tenant scope (`runWithTenantScope`, `requireTenantScope`) plus shared-DB helpers (`requireTenantKey`, `assignTenantIdForWrite`, `assertRowTenantColumn`). Depends on core. See `docs/INTERNAL/database-scope.md`, `docs/INTERNAL/shared-db-tenant-id.md`.
 - **react** – `TenantProvider`, hooks. Depends on core.
 - **next-app** – Middleware factory, `getTenantFromHeaders`, `requireTenant`. Depends on core; `auto-node` subpath uses `@multitenant/config`.
 - **next** – Meta-package re-exporting core, config, react, next-app (single install line).

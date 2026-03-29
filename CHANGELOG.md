@@ -4,6 +4,21 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] `@multitenant/database` 0.5.1 — shared-DB `tenant_id` helpers (Phase 8.2)
+
+### Added
+
+- **`requireTenantKey()`** — returns scoped `tenantKey` or throws if ALS has no scope.
+- **`assignTenantIdForWrite(row, column?)`** — merges tenant key into write payloads; throws if the row already carries a different tenant for that column.
+- **`assertRowTenantColumn(row, column?)`** — after reads, asserts the row’s tenant column matches scope.
+- **Vitest:** `src/tenant-id.test.ts` (**11** cases); package total **15** with existing ALS scope tests.
+
+### Documentation
+
+- **`docs/INTERNAL/shared-db-tenant-id.md`** — composite keys, indexes, threat model; linked from `database-scope.md`, `docs/INDEX.md`, `docs/INTERNAL/architecture.md`.
+- **`PLAN.md`** — Phase **8.2** marked **Done (v0.5.1)**; dashboard ORM row; Sprint **E** progress.
+- **`packages/database/README.md`**.
+
 ## [2026-03-29] Docs — PLAN audit (semver + sprint history)
 
 ### Documentation

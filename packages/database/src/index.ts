@@ -37,3 +37,50 @@ export function requireTenantScope(): TenantScopeState {
   }
   return s;
 }
+
+/** Convenience for repository code: current `tenantKey` or throw if no ALS scope. */
+export function requireTenantKey(): string {
+  return requireTenantScope().tenantKey;
+}
+
+/**
+ * Build an INSERT/UPDATE payload with the scoped tenant key on `columnName` (default `tenant_id`).
+ * Throws if the row already sets that column to a different tenant (catch merge / ORM bugs early).
+ */
+export function assignTenantIdForWrite(
+  row: Record<string, unknown>,
+  columnName = 'tenant_id',
+): Record<string, unknown> {
+  if (!columnName) {
+    throw new Error('[multitenant/database] assignTenantIdForWrite: columnName must be non-empty');
+  }
+  const key = requireTenantKey();
+  const existing = row[columnName];
+  if (existing !== undefined && existing !== null && String(existing) !== key) {
+    throw new Error(
+      `[multitenant/database] Row ${columnName} (${String(existing)}) conflicts with current tenant scope (${key})`,
+    );
+  }
+  return { ...row, [columnName]: key };
+}
+
+/**
+ * After a SELECT, assert the row’s tenant column matches ALS scope — defense in depth before returning data.
+ */
+export function assertRowTenantColumn(row: Record<string, unknown>, columnName = 'tenant_id'): void {
+  if (!columnName) {
+    throw new Error('[multitenant/database] assertRowTenantColumn: columnName must be non-empty');
+  }
+  const key = requireTenantKey();
+  const v = row[columnName];
+  if (v === undefined || v === null) {
+    throw new Error(
+      `[multitenant/database] Row missing required column ${columnName} (needed for tenant isolation check)`,
+    );
+  }
+  if (String(v) !== key) {
+    throw new Error(
+      `[multitenant/database] Row ${columnName} (${String(v)}) does not match current tenant scope (${key})`,
+    );
+  }
+}
