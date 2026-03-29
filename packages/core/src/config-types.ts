@@ -44,6 +44,15 @@ export type DomainTarget =
 
 export type DomainMapV2 = Record<string, DomainTarget>;
 
+/**
+ * Per-tenant database DSN **indirection** (Phase 8.5): URL is read from an environment variable at runtime.
+ * Do **not** put raw connection strings in `tenants.config.json`.
+ */
+export interface TenantDatabaseConfig {
+  /** `process.env[envVar]` must hold the full connection URL when using `resolveTenantDatabaseUrl`. */
+  envVar: string;
+}
+
 export interface TenantDefinition {
   label?: string;
   market: string;
@@ -65,6 +74,8 @@ export interface TenantDefinition {
   };
   config?: Record<string, unknown>;
   access?: TenantAccessConfig;
+  /** Optional per-tenant database URL via env (see Phase 8.5). */
+  database?: TenantDatabaseConfig;
 }
 
 export interface ExperimentDefinition {

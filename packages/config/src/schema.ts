@@ -31,6 +31,17 @@ export const tenantAccessConfigSchema = z.object({
   permissions: z.array(z.string()).optional(),
 });
 
+/** Env-only DSN ref — must look like `FOO` or `MY_DSN_1`, never a URL. */
+export const tenantDatabaseConfigSchema = z.object({
+  envVar: z
+    .string()
+    .min(1)
+    .regex(
+      /^[A-Za-z_][A-Za-z0-9_]*$/,
+      'database.envVar must be a valid environment variable name (letters, digits, underscore; no URL)',
+    ),
+});
+
 export const marketDefinitionSchema: z.ZodType<MarketDefinition> = z
   .object({
     label: z.string().optional(),
@@ -105,6 +116,7 @@ export const tenantDefinitionSchema: z.ZodType<TenantDefinition> = z.object({
     .optional(),
   config: z.record(z.unknown()).optional(),
   access: tenantAccessConfigSchema.optional(),
+  database: tenantDatabaseConfigSchema.optional(),
 });
 
 export const experimentDefinitionSchema = z.object({

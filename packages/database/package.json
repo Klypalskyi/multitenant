@@ -1,7 +1,7 @@
 {
   "name": "@multitenant/database",
-  "version": "0.5.3",
-  "description": "Node-only ALS + shared-DB tenant_id + Postgres schema naming + RLS SET LOCAL helpers — Phase 8.1–8.4",
+  "version": "0.5.4",
+  "description": "Node-only ALS + shared-DB + Postgres helpers + per-tenant DSN env resolution — Phase 8.1–8.5",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",

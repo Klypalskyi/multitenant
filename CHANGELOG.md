@@ -4,6 +4,39 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] `@multitenant/database` 0.5.4 — per-tenant DSN resolution (Phase 8.5)
+
+### Added
+
+- **`resolveTenantDatabaseUrl(resolved, tenants, options?)`** — reads **`TenantDefinition.database.envVar`** from validated config, returns `process.env[envVar]` (or custom **`env`** map); optional **`required`** (default `true`).
+- **Vitest:** `src/resolve-tenant-db-url.test.ts`.
+
+### Documentation
+
+- **`docs/INTERNAL/per-tenant-database-url.md`**, **`docs/CONFIG/tenants-config.md`**, **`docs/INTERNAL/database-scope.md`**, **`packages/database/README.md`**, **`PLAN.md`**.
+
+## [2026-03-29] `@multitenant/config` 0.4.2 — optional tenant `database.envVar` (Phase 8.5)
+
+### Added
+
+- **`tenantDatabaseConfigSchema`** — **`envVar`** must match `/^[A-Za-z_][A-Za-z0-9_]*$/` (rejects URL-like values).
+- **`database`** optional on **`tenantDefinitionSchema`**.
+- **Vitest:** `validate.test.ts` — valid **`database.envVar`** + invalid cases.
+
+### Documentation
+
+- **`docs/CONFIG/tenants-config.md`**, **`PLAN.md`**.
+
+## [2026-03-29] `@multitenant/core` 0.5.1 — `TenantDatabaseConfig` type (Phase 8.5)
+
+### Added
+
+- **`TenantDatabaseConfig`** (`envVar: string`); optional **`database?: TenantDatabaseConfig`** on **`TenantDefinition`**.
+
+### Documentation
+
+- **`docs/CONFIG/tenants-config.md`**, **`PLAN.md`**.
+
 ## [2026-03-29] `@multitenant/database` 0.5.3 — Postgres RLS `SET LOCAL` helpers (Phase 8.3)
 
 ### Added

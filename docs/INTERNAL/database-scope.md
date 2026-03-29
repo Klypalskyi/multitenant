@@ -12,6 +12,7 @@ This package does **not** include drivers, pooling, or SQL. It complements `crea
 - **Shared DB (Phase 8.2):** `requireTenantKey`, `assignTenantIdForWrite`, `assertRowTenantColumn` — see [Shared DB `tenant_id`](shared-db-tenant-id.md).
 - **Schema-per-tenant Postgres (Phase 8.4):** `schemaNameForTenant`, `requireSchemaNameForCurrentTenant` — see [Schema-per-tenant Postgres](schema-per-tenant-postgres.md).
 - **Postgres RLS + `SET LOCAL` (Phase 8.3):** `buildSetLocalTenantGucSql`, `buildSetLocalTenantGucSqlFromScope`, literals/GUC validation — see [Postgres RLS tenant GUC](postgres-rls-tenant.md).
+- **Per-tenant DSN env (Phase 8.5):** `resolveTenantDatabaseUrl` — see [Per-tenant database URL](per-tenant-database-url.md).
 
 See package `README` and `packages/database/src/index.ts` for exact types and behavior.
 

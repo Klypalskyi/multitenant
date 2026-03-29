@@ -5,7 +5,6 @@ import {
   buildSetLocalTenantGucSql,
   POSTGRES_RLS_TENANT_GUC_DEFAULT,
 } from './postgres-rls';
-
 export { POSTGRES_MAX_IDENTIFIER_BYTES, schemaNameForTenant } from './schema-name';
 export {
   POSTGRES_RLS_TENANT_GUC_DEFAULT,
@@ -13,6 +12,9 @@ export {
   buildSetLocalTenantGucSql,
   escapePostgresStringLiteral,
 } from './postgres-rls';
+
+export { resolveTenantDatabaseUrl } from './resolve-tenant-db-url';
+export type { ResolveTenantDatabaseUrlOptions } from './resolve-tenant-db-url';
 
 export interface TenantScopeState {
   tenantKey: string;

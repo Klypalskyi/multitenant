@@ -39,6 +39,7 @@ Each key is a tenant id. Value shape:
   - Each env maps **host pattern** → **tenant key** (string) or `{ tenant, basePath? }`
   - Patterns: exact host (`us.example.com`) or wildcard (`*.us.example.com`)
 - `paths.basePath`, `theme`, `flags`, `experiments` (overrides), `seo`, `config` (arbitrary), `access` (defaultRoles, permissions) – optional
+- **`database`** (optional, Phase 8.5) – `{ "envVar": "DATABASE_URL_TENANT_KEY" }` only. Must be a valid environment variable **name** (not a URL). Resolve at runtime with `resolveTenantDatabaseUrl` in `@multitenant/database` — see [Per-tenant database URL](../INTERNAL/per-tenant-database-url.md).
 
 ## Validation (hard errors)
 
