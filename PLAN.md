@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — Wave 2 shipped; CI + App Router integration tests + README quickstart + Next checklist doc (quality / polish sprint partial).
+**Last reviewed:** 2026-03-29 — Express `onMissingTenant` + tests; framework docs (Express, Nest, React SSR); `docs/WHY-MULTITENANT.md` (Phase 6.4 partial).
 
 ---
 
@@ -29,6 +29,7 @@
 | Package unit tests + CI | **Shipped** | `npm test` (turbo): core, config, cli, database, identity, **next-app** integration tests; GitHub Actions `build` + `test` on push/PR |
 | Website / landing in repo | **Not shipped** | Optional external |
 | ORM / DB adapters (shared DB + per-tenant DB) | **Partial** | `@multitenant/database` v0.5.0 — ALS scope only (8.1); ORM peers + pools still open |
+| Orientation: why / pitfalls / diagram | **Partial** | `docs/WHY-MULTITENANT.md` |
 
 **Naming note:** The public API uses `resolveByHost`, `resolveByRequest`, `getTenantFromHeaders`, and `requireTenant`. Do **not** document or implement `resolveTenant()` / `getTenant()` unless adding explicit aliases with a deprecation story.
 
@@ -67,9 +68,9 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 1.1 | **Error taxonomy** | **Done (v0.4.0)** — extend to remaining adapters (Express/Nest/Pages) where plain `Error` remains |
-| 1.2 | **Align docs & PLAN with real API** — no fictional method names | README, PLAN, and init templates (when added) only reference `resolveByHost`, `resolveByRequest`, `getTenantFromHeaders`, `requireTenant` unless aliases are added |
-| 1.3 | **Duplication audit** — types across packages | Grep for duplicate tenant/config interfaces; consolidate or document why duplicated |
+| 1.1 | **Error taxonomy** | **Partial:** Express `onMissingTenant: 'throw'` → `next(TenantNotFoundError)` (**v0.4.2**); Nest/Pages unchanged (null/`notFound`/JSON). |
+| 1.2 | **Align docs & PLAN with real API** — no fictional method names | **Partial:** framework docs use canonical names; periodic grep for `resolveTenant` / `getTenant()` in docs (`PLAN.md` note only). |
+| 1.3 | **Duplication audit** — types across packages | **Done (audit):** `ResolvedTenant` / `TenantsConfig` interfaces only in `@multitenant/core` (`packages/*/src` grep). |
 | 1.4 | **Debug / observability on registry** | **Done (v0.4.0)** — optional structured OTel hook still future (Appendix A) |
 
 **Out of scope for this phase:** Renaming `resolveByHost` to a different public name without a major version and deprecation path.
@@ -145,9 +146,9 @@
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
 | 5.1 | Next.js: Edge middleware, Server Actions | **Partial:** `docs/FRAMEWORKS/next-app-router.md` — Edge vs Node, middleware headers, Server Actions; copy-paste route sample still optional |
-| 5.2 | Express | `req.tenant` typed (augment or generic) |
-| 5.3 | Nest | Decorator + DI story documented |
-| 5.4 | React | SSR/hydration: `TenantProvider` usage documented for App Router |
+| 5.2 | Express | **Shipped (doc + API):** global `req.tenant` augment; `docs/FRAMEWORKS/express.md`; optional `onMissingTenant` (**v0.4.2**) |
+| 5.3 | Nest | **Partial:** `docs/FRAMEWORKS/nestjs.md` — module, `@Tenant()`, null tenant, registry not a default provider |
+| 5.4 | React | **Partial:** `docs/FRAMEWORKS/react-ssr.md` — `TenantProvider` + App Router notes |
 
 ---
 
@@ -157,10 +158,10 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app; CI runs `npm test`; expand adapters when feasible |
+| 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app + **express**; CI runs `npm test` |
 | 6.2 | **Integration tests** | **Partial:** `@multitenant/next-app` middleware + `NextRequest` / header contract (`src/middleware.integration.test.ts`) in CI |
 | 6.3 | **Examples** | Each `examples/*` documents `install && dev/build` commands; optional CI smoke |
-| 6.4 | **Documentation** | “Why multitenant”, “When not to use”, “Common pitfalls”, one architecture diagram (host → registry → tenant) in `docs/` |
+| 6.4 | **Documentation** | **Partial:** `docs/WHY-MULTITENANT.md` — why / when not / pitfalls / mermaid host → registry → tenant |
 
 ---
 
@@ -270,8 +271,8 @@ Exit criteria are mandatory; task lists are indicative.
 
 ### Sprint D — Polish & positioning (in progress)
 
-- **Done (partial):** GitHub Actions CI (Phase 6.1–6.2); Next App Router checklist doc (Phase 5.1 partial); README 30-second block (Phase 7.1 partial); `next-app` middleware integration tests.
-- **Open:** Phase 5.2–5.4; README full hero + pitfalls diagram (6.4); example smoke in CI.
+- **Done (partial):** GitHub Actions CI; Next App Router checklist; Express/Nest/React SSR framework docs; `WHY-MULTITENANT.md`; README 30-second start; `next-app` + **express** tests in `npm test`.
+- **Open:** Pages-adapter error/JSON alignment; README full hero + copy-paste middleware block; example smoke in CI; Nest DI recipe if demand.
 
 ### Sprint E — Database / ORM (optional; Phase 8)
 

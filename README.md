@@ -2,6 +2,8 @@
 
 Multi-tenant + multi-market toolkit for TypeScript apps.
 
+Intro / pitfalls / diagram: [docs/WHY-MULTITENANT.md](docs/WHY-MULTITENANT.md).
+
 ### 30-second start
 
 ```bash

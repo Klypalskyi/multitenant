@@ -25,7 +25,13 @@ async function main() {
   const config = await loadTenantsConfig({ cwd: process.cwd() });
   const registry = createTenantRegistry(config);
 
-  app.use(multitenantExpress({ registry, environment: 'local' }));
+  app.use(
+    multitenantExpress({
+      registry,
+      environment: 'local',
+      // optional: onMissingTenant: 'throw' → next(TenantNotFoundError); add error middleware
+    }),
+  );
 
   app.get('/', (req, res) => {
     if (!req.tenant) return res.status(404).send('no tenant');

@@ -1,5 +1,7 @@
 # Getting started
 
+For scope and pitfalls, see [Why Multitenant](WHY-MULTITENANT.md).
+
 1. **Add config at repo root**
 
    **Option A — scaffold**

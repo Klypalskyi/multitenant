@@ -4,11 +4,15 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+### Added
+
+- **`@multitenant/express` (0.4.2):** optional `onMissingTenant: 'throw'` → `next(TenantNotFoundError)`; Vitest tests (`src/multitenant-express.test.ts`).
+
 ### Tooling & docs
 
-- **CI:** GitHub Actions workflow runs `build` + `test` on `master` / `main`.
+- **CI:** GitHub Actions workflow runs `build` + `test` on `master` / `main` (Node 22).
 - **`@multitenant/next-app`:** Vitest integration tests for middleware + `getTenantFromHeaders` / `requireTenant` (`src/middleware.integration.test.ts`).
-- **Docs:** `docs/FRAMEWORKS/next-app-router.md` (Phase 5.1 checklist); README “30-second start”; `PLAN.md` sprint status refresh.
+- **Docs:** `docs/WHY-MULTITENANT.md`; `docs/FRAMEWORKS/express.md`, `nestjs.md`, `react-ssr.md`; README / GETTING-STARTED links; `PLAN.md` refresh.
 
 ## [0.5.2] / coordinated bumps — 2026-03-29
 

@@ -13,4 +13,4 @@ Scaffold a minimal config and optional stubs: [`multitenant init`](../CLI/init.m
 
 All adapters expect a **TenantRegistry** from `createTenantRegistry(config)` where `config` is your loaded `TenantsConfig` (e.g. from `tenants.config.json` via `@multitenant/config` or from a static import).
 
-**Next.js App Router:** runtime checklist (middleware vs Node, Server Actions) — [next-app-router.md](next-app-router.md).
+**Next.js App Router:** [next-app-router.md](next-app-router.md) · **Express:** [express.md](express.md) · **NestJS:** [nestjs.md](nestjs.md) · **React SSR:** [react-ssr.md](react-ssr.md) · **Product framing:** [Why Multitenant](../WHY-MULTITENANT.md).
