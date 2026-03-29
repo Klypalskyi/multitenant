@@ -4,6 +4,16 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Docs — WHY-MULTITENANT Next flow (Phase 6.4)
+
+### Documentation
+
+- **`docs/WHY-MULTITENANT.md`** — **Typical Next.js App Router path** section: middleware → headers → `getTenantFromHeaders` mermaid; cross-link to `docs/FRAMEWORKS/next-app-router.md` in body and Next steps.
+- **`docs/INDEX.md`** — Why Multitenant blurb mentions Next middleware diagram.
+- **`PLAN.md`** — dashboard + Phase **6.4** row aligned with the above.
+
+_No package `src/` changes — no npm publish._
+
 ## [2026-03-29] Docs — PLAN 1.2 + Nest TenantRequiredGuard (Phase 5.3)
 
 ### Documentation

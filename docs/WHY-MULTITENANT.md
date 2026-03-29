@@ -25,6 +25,26 @@ flowchart LR
 
 Resolution is **not** authentication: knowing the tenant from the hostname does **not** prove who the user is. Use `@multitenant/identity` (or your IdP) for authorization on sensitive data.
 
+## Typical Next.js App Router path
+
+Middleware resolves the tenant on the **Edge** and forwards stable headers; server code re-hydrates a `ResolvedTenant` via `getTenantFromHeaders` (same registry module as middleware). Details and copy-paste samples: [Next.js App Router](FRAMEWORKS/next-app-router.md).
+
+```mermaid
+flowchart TD
+  REQ[HTTP request]
+  MW[Edge middleware]
+  H[x-tenant-key / market headers]
+  SRV[Server: RSC / Route Handler / Server Action]
+  GTH[getTenantFromHeaders]
+  RES[ResolvedTenant]
+
+  REQ --> MW
+  MW --> H
+  H --> SRV
+  SRV --> GTH
+  GTH --> RES
+```
+
 ## When not to use
 
 - **Tenant is purely from JWT / session**, never from host — you may still use `TenantsConfig` for markets, but forced routing from `Host` is the wrong mental model.
@@ -41,5 +61,12 @@ Resolution is **not** authentication: knowing the tenant from the hostname does 
 ## Next steps
 
 - [Getting started](GETTING-STARTED.md)
+- [Next.js App Router](FRAMEWORKS/next-app-router.md) — middleware, headers, Route Handlers, Server Actions
 - [Errors](INTERNAL/errors.md)
 - [Tenant-bound sessions](INTERNAL/tenant-bound-sessions.md) — `assertAccess` + resolved tenant
+
+</think>
+
+
+<｜tool▁calls▁begin｜><｜tool▁call▁begin｜>
+Read

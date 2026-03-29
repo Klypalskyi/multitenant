@@ -4,7 +4,7 @@ Multi-tenant and multi-market management for TypeScript apps.
 
 ## For integrators
 
-- [Why Multitenant / pitfalls](WHY-MULTITENANT.md) – mental model, mermaid flow, when not to use
+- [Why Multitenant / pitfalls](WHY-MULTITENANT.md) – mental model, resolution + Next middleware mermaid, when not to use
 - [Getting started](GETTING-STARTED.md) – install, config, first tenant
 - [Configuration reference](CONFIG/tenants-config.md) – `tenants.config.json` schema
 - [CLI: init](CLI/init.md) – `multitenant init` (scaffold config + optional framework stubs)

@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — Phase 1.2 doc API grep done; Nest **TenantRequiredGuard** copy-paste in `nestjs.md` (Phase 5.3).
+**Last reviewed:** 2026-03-29 — `WHY-MULTITENANT.md`: Next App Router flow mermaid + `next-app-router.md` link (Phase 6.4).
 
 ---
 
@@ -29,7 +29,7 @@
 | Package unit tests + CI | **Shipped** | `npm test` (turbo): core, config, cli, database, identity, **next-app** integration tests; GitHub Actions `build` + `test` + **`npm run examples:smoke`** on push/PR |
 | Website / landing in repo | **Not shipped** | Optional external |
 | ORM / DB adapters (shared DB + per-tenant DB) | **Partial** | `@multitenant/database` v0.5.0 — ALS scope only (8.1); ORM peers + pools still open |
-| Orientation: why / pitfalls / diagram | **Partial** | `docs/WHY-MULTITENANT.md`; `docs/INTERNAL/tenant-bound-sessions.md` |
+| Orientation: why / pitfalls / diagram | **Partial** | `docs/WHY-MULTITENANT.md` — host→registry + **Next middleware→headers→`getTenantFromHeaders`** mermaid; `docs/INTERNAL/tenant-bound-sessions.md` |
 
 **Naming note:** The public API uses `resolveByHost`, `resolveByRequest`, `getTenantFromHeaders`, and `requireTenant`. Do **not** document or implement `resolveTenant()` / `getTenant()` unless adding explicit aliases with a deprecation story.
 
@@ -161,7 +161,7 @@
 | 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app + **next-pages** + **express** + **nest** + **react**; CI runs `npm test` |
 | 6.2 | **Integration tests** | **Partial:** `@multitenant/next-app` middleware + `NextRequest` / header contract (`src/middleware.integration.test.ts`) in CI |
 | 6.3 | **Examples** | **Partial:** `examples/README.md`; **`examples/config-smoke`** — workspace + CI step `npm run examples:smoke` (root config + resolution); full Next/Express runnable examples still open |
-| 6.4 | **Documentation** | **Partial:** `docs/WHY-MULTITENANT.md` — why / when not / pitfalls / mermaid; links to tenant-bound sessions + getting started |
+| 6.4 | **Documentation** | **Partial:** `docs/WHY-MULTITENANT.md` — why / when not / pitfalls; **two** mermaid diagrams (core resolution + Next header path); links to getting started, errors, sessions, `docs/FRAMEWORKS/next-app-router.md` |
 
 ---
 
