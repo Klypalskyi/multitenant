@@ -1,5 +1,7 @@
 # Framework integrations
 
+Scaffold a minimal config and optional stubs: [`multitenant init`](../CLI/init.md).
+
 | Package | Use case |
 |---------|----------|
 | `@multitenant/next-app` | Next.js 13+ App Router – middleware, `getTenantFromHeaders`, `requireTenant` |

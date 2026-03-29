@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - A **config-driven** tenant/market model via `tenants.config.json`
 - **Core** resolution engine (`createTenantRegistry`) with typed errors
 - **Framework adapters** (React, Next.js App/Pages Router, Express, Nest)
-- **CLI** for local development (`multitenant dev`), validation, and printing config
+- **CLI** for scaffolding (`multitenant init`), local development (`multitenant dev`), validation, and printing config
 - **Identity** layer with encrypted session cookies (AES-256-GCM)
 
 ## Monorepo Structure
@@ -19,7 +19,7 @@ packages/
 ├── config/         # Load/validate tenants.config.json (Zod + cross-field checks)
 ├── identity/       # Cookie encryption/decryption, re-exports identity types
 ├── dev-proxy/      # HTTP proxy + WebSocket upgrade, tenant-by-host resolution
-├── cli/            # multitenant binary: check, print, dev (proxy mode)
+├── cli/            # multitenant binary: init, check, print, dev (proxy mode)
 ├── react/          # TenantProvider, hooks (useTenant, useMarket, etc.)
 ├── next-app/       # Next.js App Router: middleware, getTenantFromHeaders, requireTenant
 ├── next-paages/    # Next.js Pages Router: withTenantGSSP, withTenantApi (folder name is a typo)

@@ -2,6 +2,7 @@
 
 CLI for working with `@multitenant/*` multi-tenant packages. It exposes a `multitenant` binary (with a deprecated `tenantify` alias) with:
 
+- `multitenant init` – scaffold `tenants.config.json` and optional framework stubs (Next App Router, Next Pages registry, Express example)
 - `multitenant check` – validate `tenants.config.json`
 - `multitenant print` – print tenants/markets summary
 - `multitenant dev` – start a local dev proxy with per-tenant subdomains
@@ -23,6 +24,14 @@ Add a script:
 ```
 
 ## Commands
+
+### `multitenant init`
+
+```bash
+npx multitenant init [--framework next-app|next-pages|express|none] [--force]
+```
+
+Writes a minimal valid `tenants.config.json` at `--cwd` (default: current directory). Full reference: [docs/CLI/init.md](https://github.com/klypalskyi/multitenant/blob/main/docs/CLI/init.md).
 
 ### `multitenant check`
 

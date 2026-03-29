@@ -6,7 +6,7 @@
 - **config** – Load/validate `tenants.config.json` (Zod), cross-field validation. Node-only.
 - **identity** – Encrypt/sign session cookie (AES-256-GCM). Node-only. Re-exports core identity types and guards.
 - **dev-proxy** – HTTP (+ WS upgrade) proxy server; resolves tenant by Host and injects headers. Node-only.
-- **cli** – `multitenant` binary (with deprecated `tenantify` alias): `dev`, `check`, `print`. Uses config + core + dev-proxy; optionally spawns `npm run dev`.
+- **cli** – `multitenant` binary (with deprecated `tenantify` alias): `init`, `dev`, `check`, `print`. Uses config + core + dev-proxy; `dev` optionally spawns `npm run dev`. See `docs/CLI/init.md`, `docs/CLI/tenantify-dev.md`.
 - **react** – `TenantProvider`, hooks. Depends on core.
 - **next-app** – Middleware factory, `getTenantFromHeaders`, `requireTenant`. Depends on core.
 - **next-pages** – `withTenantGSSP`, `withTenantApi`. Depends on core.

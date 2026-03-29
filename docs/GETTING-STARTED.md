@@ -2,6 +2,16 @@
 
 1. **Add config at repo root**
 
+   **Option A — scaffold**
+
+   ```bash
+   npx multitenant init
+   # optional: --framework next-app | next-pages | express
+   npx multitenant check
+   ```
+
+   **Option B — hand-write**
+
    Create `tenants.config.json`:
 
    ```json

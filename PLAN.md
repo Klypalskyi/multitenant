@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-21 (Sprint A: v0.4.0; Phase 8 ORM/DB plan added).
+**Last reviewed:** 2026-03-29 (Sprint B partial: `multitenant init` shipped in `@multitenant/cli` v0.5.0; `@multitenant/next` / `next-app/auto` still open).
 
 ---
 
@@ -13,7 +13,7 @@
 |------------|--------|--------|
 | Core: `createTenantRegistry`, types, `resolveByHost` / `resolveByRequest` | **Shipped** | `packages/core` |
 | Config: Zod + `loadTenantsConfig`, overlap validation | **Shipped** | `packages/config` |
-| CLI: `check`, `print`, `dev` (+ `tenantify` alias) | **Shipped** | No `init` |
+| CLI: `check`, `print`, `dev`, `init` (+ `tenantify` alias) | **Shipped** | v0.5.0: `init` scaffolds config + optional framework stubs; see `docs/CLI/init.md` |
 | Dev proxy + config hot-reload (`chokidar` on `tenants.config.json`) | **Shipped** | `multitenant dev` |
 | Adapters: React, Next App/Pages, Express, Nest | **Shipped** | |
 | React: `useTenantConfig`, `useTenantFlag`, experiments | **Shipped** | `tenant.flags` map — not a separate `features` block |
@@ -21,7 +21,7 @@
 | Examples: `examples/next-app-router`, `next-pages`, `express` | **Shipped** | |
 | Typed error classes (`TenantNotFoundError`, etc.) | **Shipped** | v0.4.0 — `MultitenantError` + `code`; see `docs/INTERNAL/errors.md` |
 | `createTenantRegistry(_, { debug: true })` + custom `log` | **Shipped** | v0.4.0 |
-| `npx multitenant init` | **Not shipped** | |
+| `npx multitenant init` | **Shipped** | `@multitenant/cli` v0.5.0 — `docs/CLI/init.md` |
 | Meta-package `@multitenant/next` | **Not shipped** | Install per-package |
 | `export { middleware } from '@multitenant/next-app/auto'` | **Not shipped** | |
 | Server helper `getTenantConfig()` (non-React) | **Not shipped** | Hook exists only |
@@ -91,7 +91,7 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 2.1 | **`multitenant init`** | Interactive or flags; writes minimal `tenants.config.json` + framework stubs (`middleware.ts` / Express / etc.); `multitenant check` passes; does not overwrite without confirmation |
+| 2.1 | **`multitenant init`** | **Shipped (v0.5.0)** — flags + TTY prompt; minimal `tenants.config.json`; stubs for `next-app` (`middleware.ts`), `next-pages` (`lib/tenant-registry.ts`), `express` (`multitenant.server.example.ts`); `validateTenantsConfig` before write; overwrite requires confirmation or `--force` |
 | 2.2 | **Optional `@multitenant/next`** | Thin package: re-exports compatible versions of `next-app`, `react`, `config` (and pins); documented single install line |
 | 2.3 | **Zero-config Next entry** | e.g. `@multitenant/next-app/auto` exporting middleware that loads default config path in Node middleware only; Edge limitations documented |
 | 2.4 | **Dev proxy UX** | Already: auto-detect config path, hot reload. Stretch: TTY summary (tenants, listen port, upstream) — not a full web dashboard unless scoped |
@@ -256,12 +256,12 @@ Exit criteria are mandatory; task lists are indicative.
 
 **Exit:** `npm run build` + `npm test` green locally; typed errors documented.
 
-### Sprint B — DX
+### Sprint B — DX (in progress)
 
-- `multitenant init` (Phase 2.1).
-- Optional `@multitenant/next` (Phase 2.2) and/or `next-app/auto` (Phase 2.3).
+- `multitenant init` (Phase 2.1) — **done** (CLI v0.5.0; docs updated).
+- Optional `@multitenant/next` (Phase 2.2) and/or `next-app/auto` (Phase 2.3) — **open**.
 
-**Exit:** New user can run `init` and `check` succeeds; README updated.
+**Exit:** New user can run `init` and `check` succeeds; README updated — **met** for init path; meta-package / auto middleware still outstanding.
 
 ### Sprint C — Value + identity
 
@@ -289,7 +289,7 @@ Exit criteria are mandatory; task lists are indicative.
 ## Success criteria (measurable)
 
 1. **Build:** `npm run build` at repo root exits 0.
-2. **Init path (after Sprint B):** From empty folder, documented flow produces valid config and running app — e.g. `npx multitenant init` → install deps → `npm run dev` (and optionally `multitenant dev -t http://localhost:3000 -p 3100`) resolves a tenant for a host defined in generated `tenants.config.json` (e.g. `us.localhost` on port 3000 **or** tenant subdomain via proxy on 3100 — **document which port matches which command**).
+2. **Init path (Sprint B partial):** `npx multitenant init` → `npx multitenant check` exits 0; add framework deps and run `npm run dev` on the app port (e.g. 3000), then `multitenant dev --target http://localhost:3000 --port 3100` to hit tenant hosts on **3100** (proxy) while the app listens on **3000**. Defaults from `init` use `main.localhost` in `domains.local` — adjust to match your hosts.
 3. **Tests:** `npm test` runs core + config unit tests (add CI workflow when ready).
 4. **Errors:** `instanceof` / `e.code` distinguish config vs resolution vs missing tenant for core, config, and Next strict paths.
 

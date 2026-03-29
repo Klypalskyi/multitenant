@@ -7,13 +7,54 @@ import { loadTenantsConfig, resolveConfigPath } from '@multitenant/config';
 import { createTenantRegistry } from '@multitenant/core';
 import { startDevProxy } from '@multitenant/dev-proxy';
 import chokidar from 'chokidar';
+import { runInit, type InitFramework } from './init';
 
 const program = new Command();
 
 program
   .name('multitenant')
   .description('Multi-tenant dev proxy and config tools')
-  .version('0.4.0');
+  .version('0.5.0');
+
+program
+  .command('init')
+  .description('Create tenants.config.json and optional framework stubs')
+  .option('--cwd <dir>', 'Working directory', process.cwd())
+  .option('--tenant <key>', 'Tenant id', 'main')
+  .option('--market <key>', 'Market id', 'default')
+  .option('--local-host <pattern>', 'Host pattern for domains.local', 'main.localhost')
+  .option(
+    '--framework <name>',
+    'none | next-app | next-pages | express',
+    'none',
+  )
+  .option('--force', 'overwrite existing files without prompting')
+  .action(
+    async (opts: {
+      cwd: string;
+      tenant: string;
+      market: string;
+      localHost: string;
+      framework: string;
+      force?: boolean;
+    }) => {
+      const allowed: InitFramework[] = ['none', 'next-app', 'next-pages', 'express'];
+      if (!allowed.includes(opts.framework as InitFramework)) {
+        console.error(
+          `Invalid --framework "${opts.framework}". Use: ${allowed.join(', ')}`,
+        );
+        process.exit(1);
+      }
+      await runInit({
+        cwd: path.resolve(opts.cwd),
+        tenantKey: opts.tenant,
+        marketKey: opts.market,
+        localHostPattern: opts.localHost,
+        framework: opts.framework as InitFramework,
+        force: Boolean(opts.force),
+      });
+    },
+  );
 
 program
   .command('check')

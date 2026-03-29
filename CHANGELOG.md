@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here. Each `@multitenant/*` package has its own semver in `packages/<name>/package.json`; only packages with `src/` changes get bumped per release (versions may differ across packages between releases).
 
+## [0.5.0] - 2026-03-29
+
+### Added
+
+- **`@multitenant/cli`:** `multitenant init` — writes a minimal valid `tenants.config.json` and optional framework stubs (`--framework next-app` \| `next-pages` \| `express`). `--force` / interactive overwrite rules for existing files.
+
+### Documentation
+
+- `docs/CLI/init.md`, `docs/GETTING-STARTED.md`, `docs/INDEX.md`, `packages/cli/README.md` — init flow and options.
+
 ## [0.4.0] - 2026-03-21
 
 ### Added

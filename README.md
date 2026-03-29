@@ -13,6 +13,7 @@ Multi-tenant + multi-market toolkit for TypeScript apps.
   - `@multitenant/express` – Express middleware
   - `@multitenant/nest` – Nest module + `@Tenant()` decorator
 - **CLI**:
+  - `multitenant init` – scaffold `tenants.config.json` (+ optional Next/Express stubs)
   - `multitenant check` – validate `tenants.config.json`
   - `multitenant print` – print tenants/markets summary
   - `multitenant dev` – local proxy with per-tenant subdomains
