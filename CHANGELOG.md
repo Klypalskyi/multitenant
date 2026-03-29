@@ -4,6 +4,10 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+### Removed
+
+- **`.github/workflows/deploy-site.yml`** — site deploy is handled by **Vercel** Git integration only (see **`apps/site/vercel.json`**).
+
 ## [2026-03-29] Docs site (`apps/site`) + CI (Vercel, npm)
 
 ### Added

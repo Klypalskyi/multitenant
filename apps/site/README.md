@@ -20,4 +20,4 @@ If you see a **duplicate React** / `useContext` error after changing dependencie
 1. Import the repo, set **Root Directory** to `apps/site`.
 2. Install / build commands are in [`vercel.json`](./vercel.json) (`npm ci` + `npm run build -w @multitenant/site` from the monorepo root).
 
-GitHub Action: [`.github/workflows/deploy-site.yml`](../../.github/workflows/deploy-site.yml) — set `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, or rely on Vercel’s Git integration only.
+Deploy by connecting this repo in **Vercel** (Git integration); **Root Directory** `apps/site` picks up [`vercel.json`](./vercel.json).
