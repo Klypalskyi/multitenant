@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **`@multitenant/typeorm` 0.1.0** (Phase 8.7): Postgres **`DataSource`** helpers + bounded cache wiring; **Phase 8.7 ORM adapters complete** (Drizzle, Kysely, Prisma, TypeORM @ v0.1.0); dashboard ORM row **Shipped**.
+**Last reviewed:** 2026-03-29 — **`@multitenant/typeorm` 0.1.0** (Phase 8.7) + publish script **`npm view pkg@version`** skip; **8.7** ORM set complete (Drizzle, Kysely, Prisma, TypeORM @ v0.1.0); dashboard ORM row **Shipped**.
 
 ---
 
