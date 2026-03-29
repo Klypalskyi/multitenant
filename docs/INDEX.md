@@ -23,6 +23,7 @@ Multi-tenant and multi-market management for TypeScript apps.
 - [Database tenant scope (ALS)](INTERNAL/database-scope.md) – `@multitenant/database` for Node request context
 - [Shared DB `tenant_id` helpers](INTERNAL/shared-db-tenant-id.md) – `assignTenantIdForWrite` / `assertRowTenantColumn` (Phase 8.2)
 - [Schema-per-tenant Postgres](INTERNAL/schema-per-tenant-postgres.md) – `schemaNameForTenant`, `search_path`, pooling (Phase 8.4)
+- [Postgres RLS tenant GUC](INTERNAL/postgres-rls-tenant.md) – `SET LOCAL`, policies, poolers (Phase 8.3)
 - [Session cookies & cross-domain](INTERNAL/session-cookies.md) – SameSite, `Domain`, `@multitenant/identity` attributes
 - [Tenant-bound sessions](INTERNAL/tenant-bound-sessions.md) – `assertAccess` vs host-resolved tenant
 - [Release (tag, push, npm)](RELEASE.md) – versioning, git tag, publish order

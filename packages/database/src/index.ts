@@ -1,8 +1,18 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 import type { ResolvedTenant } from '@multitenant/core';
 import { schemaNameForTenant } from './schema-name';
+import {
+  buildSetLocalTenantGucSql,
+  POSTGRES_RLS_TENANT_GUC_DEFAULT,
+} from './postgres-rls';
 
 export { POSTGRES_MAX_IDENTIFIER_BYTES, schemaNameForTenant } from './schema-name';
+export {
+  POSTGRES_RLS_TENANT_GUC_DEFAULT,
+  assertSafePostgresCustomGucName,
+  buildSetLocalTenantGucSql,
+  escapePostgresStringLiteral,
+} from './postgres-rls';
 
 export interface TenantScopeState {
   tenantKey: string;
@@ -51,6 +61,13 @@ export function requireSchemaNameForCurrentTenant(
   options?: Parameters<typeof schemaNameForTenant>[1],
 ): string {
   return schemaNameForTenant(requireTenantKey(), options);
+}
+
+/** `SET LOCAL` SQL for `current_setting` used in RLS — uses `requireTenantKey()`. */
+export function buildSetLocalTenantGucSqlFromScope(
+  gucName: string = POSTGRES_RLS_TENANT_GUC_DEFAULT,
+): string {
+  return buildSetLocalTenantGucSql(gucName, requireTenantKey());
 }
 
 /**

@@ -4,6 +4,21 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] `@multitenant/database` 0.5.3 — Postgres RLS `SET LOCAL` helpers (Phase 8.3)
+
+### Added
+
+- **`POSTGRES_RLS_TENANT_GUC_DEFAULT`** — `'app.tenant_id'`.
+- **`assertSafePostgresCustomGucName`**, **`escapePostgresStringLiteral`** — safe `SET LOCAL` / policy wiring.
+- **`buildSetLocalTenantGucSql`**, **`buildSetLocalTenantGucSqlFromScope`** — transaction-level tenant GUC SQL text.
+- **Vitest:** `src/postgres-rls.test.ts` (**9** cases; **34** tests in package).
+
+### Documentation
+
+- **`docs/INTERNAL/postgres-rls-tenant.md`** — RLS policies, `SET LOCAL`, poolers, `FORCE ROW LEVEL SECURITY`; cross-links.
+- **`PLAN.md`** — Phase **8.3** **Done (v0.5.3)**; dashboard; Sprint **E**.
+- **`packages/database/README.md`** — Phase 8.3 blurb.
+
 ## [2026-03-29] `@multitenant/database` 0.5.2 — schema-per-tenant Postgres (Phase 8.4)
 
 ### Added

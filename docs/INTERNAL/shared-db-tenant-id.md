@@ -27,6 +27,7 @@ Host / header resolution **does not** authenticate the user. `tenant_id` in the 
 
 ## See also
 
+- [Postgres RLS tenant GUC](postgres-rls-tenant.md) — `SET LOCAL` + policies (Phase 8.3)
 - [Schema-per-tenant Postgres](schema-per-tenant-postgres.md) — one cluster, one schema per tenant (Phase 8.4)
 - [Database scope / ALS](database-scope.md)
 - [Tenant-bound sessions](tenant-bound-sessions.md)

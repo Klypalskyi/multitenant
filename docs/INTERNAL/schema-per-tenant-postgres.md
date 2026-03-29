@@ -32,5 +32,6 @@ Each tenant schema needs the same object set: run migrations **per schema** (loo
 
 ## See also
 
+- [Postgres RLS tenant GUC](postgres-rls-tenant.md) — alternative: column + RLS instead of schemas
 - [Database scope / ALS](database-scope.md) — `requireSchemaNameForCurrentTenant`
 - [PLAN Phase 8](../../PLAN.md)
