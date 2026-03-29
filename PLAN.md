@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 (Sprint B: `@multitenant/cli` v0.5.0 `init`, v0.5.1 init tests; `@multitenant/next` / `next-app/auto` still open).
+**Last reviewed:** 2026-03-29 — Wave 2: `@multitenant/next`, `next-app/auto` + `auto-node`, `getTenantConfig` / `isTenantFeatureEnabled`, identity session cookie helpers, `@multitenant/database` (8.1 ALS slice); CLI v0.5.2.
 
 ---
 
@@ -22,13 +22,13 @@
 | Typed error classes (`TenantNotFoundError`, etc.) | **Shipped** | v0.4.0 — `MultitenantError` + `code`; see `docs/INTERNAL/errors.md` |
 | `createTenantRegistry(_, { debug: true })` + custom `log` | **Shipped** | v0.4.0 |
 | `npx multitenant init` | **Shipped** | `@multitenant/cli` v0.5.0 — `docs/CLI/init.md` |
-| Meta-package `@multitenant/next` | **Not shipped** | Install per-package |
-| `export { middleware } from '@multitenant/next-app/auto'` | **Not shipped** | |
-| Server helper `getTenantConfig()` (non-React) | **Not shipped** | Hook exists only |
-| `isFeatureEnabled()` | **Not shipped** | Use `useTenantFlag` / `resolved.flags` |
+| Meta-package `@multitenant/next` | **Shipped** | v0.5.0 — single install line; see package README |
+| `export { middleware } from '@multitenant/next-app/auto'` | **Shipped** | v0.5.0 — `auto` (config object) + `auto-node` (project-root JSON load); Edge vs Node documented on subpath |
+| Server helper `getTenantConfig()` (non-React) | **Shipped** | v0.5.0 in `@multitenant/core` — pair with registry + `ResolvedTenant.tenantKey` |
+| `isFeatureEnabled()` / flags server-side | **Shipped** | v0.5.0 — `isTenantFeatureEnabled` in core (flags map) |
 | Package unit tests (core + config + cli init) | **Shipped** | `npm test` / `vitest`; `@multitenant/cli` has `test:coverage`; wire CI separately |
 | Website / landing in repo | **Not shipped** | Optional external |
-| ORM / DB adapters (shared DB + per-tenant DB) | **Not shipped** | Phase 8 — `@multitenant/database` + thin ORM peers |
+| ORM / DB adapters (shared DB + per-tenant DB) | **Partial** | `@multitenant/database` v0.5.0 — ALS scope only (8.1); ORM peers + pools still open |
 
 **Naming note:** The public API uses `resolveByHost`, `resolveByRequest`, `getTenantFromHeaders`, and `requireTenant`. Do **not** document or implement `resolveTenant()` / `getTenant()` unless adding explicit aliases with a deprecation story.
 
@@ -92,8 +92,8 @@
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
 | 2.1 | **`multitenant init`** | **Shipped (v0.5.0)** — flags + TTY prompt; minimal `tenants.config.json`; stubs for `next-app` (`middleware.ts`), `next-pages` (`lib/tenant-registry.ts`), `express` (`multitenant.server.example.ts`); `validateTenantsConfig` before write; overwrite requires confirmation or `--force` |
-| 2.2 | **Optional `@multitenant/next`** | Thin package: re-exports compatible versions of `next-app`, `react`, `config` (and pins); documented single install line |
-| 2.3 | **Zero-config Next entry** | e.g. `@multitenant/next-app/auto` exporting middleware that loads default config path in Node middleware only; Edge limitations documented |
+| 2.2 | **Optional `@multitenant/next`** | **Shipped (v0.5.0)** — meta-package; single install line; see `packages/next/README.md` |
+| 2.3 | **Zero-config Next entry** | **Shipped (v0.5.0)** — `@multitenant/next-app/auto` + `auto-node`; Node vs Edge split documented on subpaths |
 | 2.4 | **Dev proxy UX** | Already: auto-detect config path, hot reload. Stretch: TTY summary (tenants, listen port, upstream) — not a full web dashboard unless scoped |
 
 **Dependencies:** 2.1 should reference stable API names (Phase 1.2). 2.3 depends on clear Node vs Edge split.
@@ -113,8 +113,8 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 3.1 | **Server + client parity for config** | Export `getTenantConfig(registry, tenantKey)` or equivalent for RSC/route handlers; behavior matches `useTenantConfig` |
-| 3.2 | **Feature surface** | Either document `flags` as canonical OR add `features` + migration; if `isFeatureEnabled(name)` is added, it must work in server and client with documented SSR story |
+| 3.1 | **Server + client parity for config** | **Shipped (v0.5.0)** — `getTenantConfig` in `@multitenant/core` |
+| 3.2 | **Feature surface** | **Partial (v0.5.0)** — `isTenantFeatureEnabled` (flags map); separate `features` block + migration still optional |
 | 3.3 | **Environment merge (if still needed)** | Explicit merge order (market → tenant → env override); tests; `multitenant check` validates conflicts |
 | 3.4 | **Async config (optional)** | Factory pattern documented: `createTenantRegistry` stays sync; async loading at app bootstrap only |
 
@@ -132,7 +132,7 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 4.1 | **Session helpers** | Thin `getSession`/`setSession` (or documented recipe) built on existing cookie primitives |
+| 4.1 | **Session helpers** | **Partial (v0.5.0)** — `getSessionFromCookieHeader`, `buildSessionSetCookieHeader` in `@multitenant/identity`; full get/set wrappers optional |
 | 4.2 | **Tenant-bound sessions** | Session payload includes tenant id; `assertAccess` used on sensitive routes; docs for threat model (header trust) |
 | 4.3 | **Cross-domain** | Document patterns: shared vs isolated cookies (Domain, SameSite table); code only where generic |
 
@@ -203,7 +203,7 @@
 
 | ID | Task | Dependencies | Acceptance criteria |
 |----|------|--------------|---------------------|
-| 8.1 | **Tenant DB context (async-safe)** | Phase 1 stable types | API yields current `ResolvedTenant` / `tenantKey` for the in-flight request; **no** global mutable singleton; unit tests for nested async + missing context (deny or throw in strict mode). |
+| 8.1 | **Tenant DB context (async-safe)** | Phase 1 stable types | **Partial (v0.5.0):** `@multitenant/database` — ALS `runWithTenantScope*` + `getTenantScope` / `requireTenantScope`; nested async + strict missing-scope tests. Full `ResolvedTenant` in scope optional follow-up. |
 | 8.2 | **Shared DB — `tenant_id` + scoping helpers** | 8.1 | Helpers or thin package: enforce `WHERE tenant_id = …` from context; default scope for repository-style code; docs for composite keys + indexes. |
 | 8.3 | **Shared DB — Postgres RLS recipe** | 8.1; Phase 4 **recommended** for identity-bound RLS | Docs + minimal helpers: `SET LOCAL` / session vars per transaction; pool + pooler caveats; optional **dockerized** integration test in CI. |
 | 8.4 | **Shared DB — schema-per-tenant (same cluster)** | 8.1 | Docs: `search_path` / schema name from config convention; warnings for pooling + prepared statements; optional helper `schemaNameForTenant(tenantKey)`. |

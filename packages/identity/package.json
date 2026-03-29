@@ -1,6 +1,6 @@
 {
   "name": "@multitenant/identity",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -8,10 +8,14 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts"
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@multitenant/core": "^0.4.0"
+    "@multitenant/core": "^0.5.0"
+  },
+  "devDependencies": {
+    "vitest": "^3.0.5"
   },
   "publishConfig": {
     "access": "public"

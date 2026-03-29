@@ -7,15 +7,17 @@
 - **identity** – Encrypt/sign session cookie (AES-256-GCM). Node-only. Re-exports core identity types and guards.
 - **dev-proxy** – HTTP (+ WS upgrade) proxy server; resolves tenant by Host and injects headers. Node-only.
 - **cli** – `multitenant` binary (with deprecated `tenantify` alias): `init`, `dev`, `check`, `print`. Uses config + core + dev-proxy; `dev` optionally spawns `npm run dev`. See `docs/CLI/init.md`, `docs/CLI/tenantify-dev.md`.
+- **database** – Node-only `AsyncLocalStorage` tenant scope (`runWithTenantScope`, `requireTenantScope`). Depends on core. See `docs/INTERNAL/database-scope.md`.
 - **react** – `TenantProvider`, hooks. Depends on core.
-- **next-app** – Middleware factory, `getTenantFromHeaders`, `requireTenant`. Depends on core.
+- **next-app** – Middleware factory, `getTenantFromHeaders`, `requireTenant`. Depends on core; `auto-node` subpath uses `@multitenant/config`.
+- **next** – Meta-package re-exporting core, config, react, next-app (single install line).
 - **next-pages** – `withTenantGSSP`, `withTenantApi`. Depends on core.
 - **express** – Single middleware attaching `req.tenant`. Depends on core.
 - **nest** – Dynamic module + middleware + `@Tenant()` decorator. Depends on core.
 
 ## Build order
 
-Core → config, identity, dev-proxy → react, next-app, next-pages, express, nest, cli.
+Core → config, database, identity, dev-proxy → react, next-app, next, next-pages, express, nest, cli.
 
 ## Adding an adapter
 

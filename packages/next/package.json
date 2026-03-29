@@ -1,0 +1,25 @@
+{
+  "name": "@multitenant/next",
+  "version": "0.5.0",
+  "description": "Meta-package: re-exports @multitenant/core, config, react, next-app for a single install line",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --external @multitenant/core --external @multitenant/config --external @multitenant/react --external @multitenant/next-app"
+  },
+  "dependencies": {
+    "@multitenant/config": "^0.4.0",
+    "@multitenant/core": "^0.5.0",
+    "@multitenant/next-app": "^0.5.0",
+    "@multitenant/react": "^0.5.0"
+  },
+  "peerDependencies": {
+    "next": ">=13.0.0",
+    "react": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

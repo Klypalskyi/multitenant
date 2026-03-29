@@ -15,4 +15,5 @@ Multi-tenant and multi-market management for TypeScript apps.
 - [CODEMAP: CLI](CODEMAPS/cli.md) – `multitenant` command layout
 - [Architecture](INTERNAL/architecture.md) – packages, build, adding adapters
 - [Errors](INTERNAL/errors.md) – `MultitenantError` classes and codes
+- [Database tenant scope (ALS)](INTERNAL/database-scope.md) – `@multitenant/database` for Node request context
 - [Release (tag, push, npm)](RELEASE.md) – versioning, git tag, publish order

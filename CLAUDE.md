@@ -15,13 +15,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```
 packages/
-├── core/           # Types, TenantRegistry, typed errors, identity guards
+├── core/           # Types, TenantRegistry, typed errors, identity guards, getTenantConfig helpers
 ├── config/         # Load/validate tenants.config.json (Zod + cross-field checks)
-├── identity/       # Cookie encryption/decryption, re-exports identity types
+├── database/       # Node ALS tenant scope (runWithTenantScope) — no drivers/ORM
+├── identity/       # Cookie encryption/decryption, session header helpers, re-exports identity types
 ├── dev-proxy/      # HTTP proxy + WebSocket upgrade, tenant-by-host resolution
 ├── cli/            # multitenant binary: init, check, print, dev (proxy mode)
 ├── react/          # TenantProvider, hooks (useTenant, useMarket, etc.)
-├── next-app/       # Next.js App Router: middleware, getTenantFromHeaders, requireTenant
+├── next-app/       # App Router middleware, getTenantFromHeaders; subpaths /auto, /auto-node
+├── next/           # Meta-package: core + config + react + next-app
 ├── next-paages/    # Next.js Pages Router: withTenantGSSP, withTenantApi (folder name is a typo)
 ├── express/        # Express middleware: multitenantExpress() → req.tenant
 └── nest/           # Nest module, @Tenant() decorator, middleware
@@ -171,8 +173,10 @@ git diff main --name-only | grep 'packages/.*/src/'
 - **identity**: `@multitenant/core` (Node-only, AES-256-GCM encryption)
 - **dev-proxy**: `http-proxy`, `@multitenant/core` (Node-only)
 - **cli**: `commander`, `chokidar`, `@multitenant/config`, `@multitenant/core`, `@multitenant/dev-proxy`
+- **database**: `@multitenant/core` (Node-only ALS)
 - **react**: `@multitenant/core` (peer: `react`)
-- **next-app**: `@multitenant/core` (peer: `next`)
+- **next-app**: `@multitenant/core`, `@multitenant/config` (peer: `next`) — config used by `auto-node`
+- **next**: `@multitenant/core`, `@multitenant/config`, `@multitenant/react`, `@multitenant/next-app` (peers: `next`, `react`)
 - **next-paages**: `@multitenant/core` (peer: `next`) — note: folder is `next-paages`, npm package is `next-pages`
 - **express**: `@multitenant/core` (peer: `express`)
 - **nest**: `@multitenant/core` (peer: `@nestjs/common`, `@nestjs/core`)

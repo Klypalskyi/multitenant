@@ -2,6 +2,25 @@
 
 All notable changes to this project are documented here. Each `@multitenant/*` package has its own semver in `packages/<name>/package.json`; only packages with `src/` changes get bumped per release (versions may differ across packages between releases).
 
+## [0.5.2] / coordinated bumps — 2026-03-29
+
+### Added
+
+- **`@multitenant/core` (0.5.0):** `getTenantConfig`, `isTenantFeatureEnabled` for server / non-React parity with `useTenantConfig` / flags.
+- **`@multitenant/next-app` (0.5.0):** `@multitenant/next-app/auto` — `createTenantMiddlewareFromConfig`; `@multitenant/next-app/auto-node` — `createNodeTenantMiddlewareFromProjectRoot` (Node middleware: loads default `tenants.config.json` via `@multitenant/config`).
+- **`@multitenant/next` (0.5.0, new):** Meta-package re-exporting `core`, `config`, `react`, `next-app` for a single install line.
+- **`@multitenant/database` (0.5.0, new):** Node `AsyncLocalStorage` helpers — `runWithTenantScope`, `getTenantScope`, `requireTenantScope` (Phase 8.1 slice).
+- **`@multitenant/identity` (0.5.0):** `getSessionFromCookieHeader`, `buildSessionSetCookieHeader` for thin session wiring on top of existing cookie primitives.
+
+### Changed
+
+- **`@multitenant/cli` (0.5.2):** Depends on `@multitenant/core` ^0.5.0.
+- **Adapters (patch bumps):** `@multitenant/config`, `react`, `dev-proxy`, `express`, `nest`, `next-pages` — dependency alignment on core ^0.5.0 where applicable.
+
+### Documentation
+
+- `docs/INTERNAL/database-scope.md`, `PLAN.md` dashboard, `docs/RELEASE.md` publish order (database + next).
+
 ## [0.5.1] - 2026-03-29
 
 ### Added

@@ -5,8 +5,12 @@ Next.js **App Router** integration for `@multitenant/core`.
 It provides:
 
 - `createTenantMiddleware(registry, options)` – Next.js `middleware.ts` factory
+- `createTenantMiddlewareFromConfig(config, options)` – **from `@multitenant/next-app/auto`** when you already have a loaded `TenantsConfig` object
+- `createNodeTenantMiddlewareFromProjectRoot(options?)` – **from `@multitenant/next-app/auto-node`** (Node only): loads `./tenants.config.json` from `process.cwd()` via `@multitenant/config`
 - `getTenantFromHeaders(headers, registry, options?)` – read `ResolvedTenant` in route handlers / server components
 - `requireTenant(headers, registry, options?)` – same but throws if missing
+
+**Runtime:** `auto-node` uses `fs` and must not run on Edge. Use `auto` with a static import or bundled JSON if middleware must run on Edge.
 
 ## Install
 

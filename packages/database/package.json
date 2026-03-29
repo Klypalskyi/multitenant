@@ -1,18 +1,16 @@
 {
-  "name": "@multitenant/config",
-  "version": "0.4.1",
+  "name": "@multitenant/database",
+  "version": "0.5.0",
+  "description": "Node-only async tenant scope (ALS) for request-bound tenant context — Phase 8.1",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "test": "vitest run"
   },
   "dependencies": {
-    "zod": "^3.23.8",
     "@multitenant/core": "^0.5.0"
   },
   "publishConfig": {

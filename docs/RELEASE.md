@@ -93,13 +93,15 @@ git push origin v0.4.0
 ```
 core
   ├── config
+  ├── database  (depends on core)
   ├── identity
   ├── dev-proxy
   └── (cli depends on all of the above)
 
 Adapters (all depend on core):
   ├── react
-  ├── next-app
+  ├── next-app  (also depends on config for auto-node)
+  ├── next      (meta: core + config + react + next-app)
   ├── next-pages
   ├── express
   ├── nest
@@ -119,10 +121,12 @@ npm publish -w @multitenant/react --access public
 ```bash
 npm publish -w @multitenant/core --access public
 npm publish -w @multitenant/config --access public
+npm publish -w @multitenant/database --access public
 npm publish -w @multitenant/identity --access public
 npm publish -w @multitenant/dev-proxy --access public
 npm publish -w @multitenant/react --access public
 npm publish -w @multitenant/next-app --access public
+npm publish -w @multitenant/next --access public
 npm publish -w @multitenant/next-pages --access public
 npm publish -w @multitenant/express --access public
 npm publish -w @multitenant/nest --access public

@@ -7,10 +7,12 @@ set -euo pipefail
 pkgs=(
   @multitenant/core
   @multitenant/config
+  @multitenant/database
   @multitenant/identity
   @multitenant/dev-proxy
   @multitenant/react
   @multitenant/next-app
+  @multitenant/next
   @multitenant/next-pages
   @multitenant/express
   @multitenant/nest
