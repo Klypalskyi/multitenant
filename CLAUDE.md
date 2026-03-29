@@ -13,6 +13,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Monorepo Structure
 
+**Examples:** `examples/` — runnable **`express-minimal`**, **`next-minimal`**, **`config-smoke`** (see `examples/README.md`); copy-paste refs under `next-app-router`, etc.
+
 ```
 packages/
 ├── core/           # Types, TenantRegistry, typed errors, identity guards, getTenantConfig helpers
