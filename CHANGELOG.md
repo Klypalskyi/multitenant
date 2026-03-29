@@ -4,6 +4,24 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Phase 6.1 — Vitest coverage gates (monorepo)
+
+### Added
+
+- Root **`npm run test:coverage`** (`turbo run test:coverage`); **`configs/vitest-coverage-base.ts`** — shared v8 **`thresholds`** + **`exclude`**; per-package **`test:coverage`** scripts.
+- **`package.json`** **`overrides`** — **`vitest`** + **`@vitest/coverage-v8`** @ **3.2.4** (aligned tooling).
+- **CI** — **`Test coverage (thresholds)`** after **`npm test`** (`.github/workflows/ci.yml`).
+
+### Changed
+
+- **`@multitenant/next-app`** — **`test`** / **`test:coverage`** invoke **repo-root** `vitest` (no direct **`vitest`** devDependency — avoids nested Vitest 4 vs **`@vitest/coverage-v8`** 3 mismatch).
+- **`packages/cli`** — drop duplicate **`@vitest/coverage-v8`** (use root).
+- Per-package **`vitest.config.ts`** — merge shared coverage; overrides for **core**, **config**, **database**, **identity**, **react**, **nest**, **next-app**, **next-pages**, **prisma** where needed.
+
+### Documentation
+
+- **`PLAN.md`** — Phase **6.1** **Done**; dashboard + Sprint D + success criteria **#3**.
+
 ## [2026-03-29] Phase 7.1 — README hero complete
 
 ### Documentation

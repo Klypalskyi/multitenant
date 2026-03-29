@@ -32,6 +32,9 @@ jobs:
       - name: Test
         run: npm test
 
+      - name: Test coverage (thresholds)
+        run: npm run test:coverage
+
       - name: Example smoke (root tenants.config)
         run: npm run examples:smoke
 

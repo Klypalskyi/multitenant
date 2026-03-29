@@ -11,6 +11,10 @@
     "url": "https://github.com/klypalskyi/multitenant/issues"
   },
   "private": true,
+  "overrides": {
+    "vitest": "3.2.4",
+    "@vitest/coverage-v8": "3.2.4"
+  },
   "packageManager": "npm@10.9.0",
   "workspaces": [
     "packages/*",
@@ -20,6 +24,7 @@
     "build": "turbo run build",
     "dev": "turbo dev",
     "test": "turbo run test",
+    "test:coverage": "turbo run test:coverage",
     "examples:smoke": "npm run smoke -w @multitenant/example-config-smoke",
     "examples:express-smoke": "npm run smoke -w @multitenant/example-express-minimal",
     "clean": "rm -rf node_modules packages/*/dist",
@@ -27,9 +32,10 @@
     "release:publish": "npm run build && bash scripts/publish-packages.sh"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "3.2.4",
     "typescript": "^5.4.0",
     "tsup": "^8.0.0",
     "turbo": "^2.0.0",
-    "vitest": "^3.0.5"
+    "vitest": "3.2.4"
   }
 }

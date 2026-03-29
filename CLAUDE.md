@@ -67,6 +67,7 @@ npm run clean                           # rm -rf node_modules packages/*/dist
 
 # Testing
 npm test                                # Run all tests (turbo run test)
+npm run test:coverage                   # Vitest v8 coverage + thresholds (turbo)
 npm test -w @multitenant/core          # Test single package
 npm run test -- --watch                # Watch mode (from repo root)
 

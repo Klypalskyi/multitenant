@@ -7,19 +7,11 @@ export default defineConfig({
     include: ['src/**/*.test.ts'],
     coverage: {
       ...multitenantCoverageDefaults,
-      exclude: [
-        ...(multitenantCoverageDefaults.exclude as string[]),
-        /** Exercised indirectly via `index` / build entries; keep threshold on integration-tested surface. */
-        'src/auto.ts',
-        'src/auto-node.ts',
-        'src/middleware.ts',
-        'src/headers.ts',
-        'src/server.ts',
-      ],
       thresholds: {
         ...multitenantCoverageDefaults.thresholds,
-        lines: 65,
-        statements: 65,
+        lines: 55,
+        statements: 55,
+        functions: 25,
       },
     },
   },

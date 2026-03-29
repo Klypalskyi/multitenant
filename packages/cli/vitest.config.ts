@@ -1,3 +1,4 @@
+import { multitenantCoverageDefaults } from '../../configs/vitest-coverage-base';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -5,9 +6,10 @@ export default defineConfig({
     environment: 'node',
     include: ['src/**/*.test.ts'],
     coverage: {
-      provider: 'v8',
+      ...multitenantCoverageDefaults,
       include: ['src/init.ts'],
       thresholds: {
+        ...multitenantCoverageDefaults.thresholds,
         lines: 80,
         functions: 80,
         branches: 75,
