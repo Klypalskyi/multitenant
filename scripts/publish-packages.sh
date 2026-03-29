@@ -9,6 +9,7 @@ pkgs=(
   @multitenant/config
   @multitenant/database
   @multitenant/drizzle
+  @multitenant/kysely
   @multitenant/prisma
   @multitenant/identity
   @multitenant/dev-proxy

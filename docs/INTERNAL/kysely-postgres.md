@@ -1,26 +1,28 @@
-# Drizzle + Postgres reference (`@multitenant/drizzle`)
+# Kysely + Postgres reference (`@multitenant/kysely`)
 
-**Phase 8.7** — thin helpers over **`drizzle-orm/node-postgres`** and **`pg`**, wired to **`@multitenant/database`** (ALS, `assignTenantIdForWrite`, bounded pool cache, per-tenant DSN).
+**Phase 8.7** — thin helpers over **`kysely`** **`PostgresDialect`** + **`pg`**, wired to **`@multitenant/database`** (ALS, bounded pool cache, per-tenant DSN).
 
-This is a **reference adapter**, not a second ORM: install **`drizzle-orm`** and **`pg`** in your app; this package only standardizes pool + Drizzle construction.
+This is a **reference adapter**, not a second query builder: install **`kysely`** and **`pg`** in your app; this package only standardizes pool + `Kysely` construction.
 
 ## Install
 
 ```bash
-npm install @multitenant/drizzle @multitenant/database @multitenant/core drizzle-orm pg
+npm install @multitenant/kysely @multitenant/database @multitenant/core kysely pg
 ```
+
+Define your **`Database`** interface (or codegen from schema) as usual for Kysely.
 
 ## Topology A — shared database
 
-One `Pool` (or serverless-friendly client) for all tenants; enforce isolation with **`tenant_id`** (`assignTenantIdForWrite`, `assertRowTenantColumn`) and optionally Postgres RLS ([postgres-rls-tenant.md](postgres-rls-tenant.md)).
+One `Pool`; enforce isolation with **`tenant_id`** (`assignTenantIdForWrite`, `assertRowTenantColumn`) and optionally Postgres RLS ([postgres-rls-tenant.md](postgres-rls-tenant.md)).
 
 ```ts
 import { Pool } from 'pg';
-import { createNodePgDrizzle } from '@multitenant/drizzle';
-import * as schema from './schema';
+import { createNodePgKysely } from '@multitenant/kysely';
+import type { Database } from './types';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL! });
-export const db = createNodePgDrizzle(pool, schema);
+export const db = createNodePgKysely<Database>(pool);
 ```
 
 Inside `runWithTenantScope`, use **`assignTenantIdForWrite`** on inserts/updates and **`assertRowTenantColumn`** after reads.
@@ -31,9 +33,9 @@ Configure `tenants[*].database.envVar` ([per-tenant-database-url.md](per-tenant-
 
 ```ts
 import { BoundedTenantDbResourceCache } from '@multitenant/database';
-import { getTenantNodePgDrizzle } from '@multitenant/drizzle';
+import { getTenantNodePgKysely } from '@multitenant/kysely';
 import type { ResolvedTenant } from '@multitenant/core';
-import * as schema from './schema';
+import type { Database } from './types';
 
 const poolCache = new BoundedTenantDbResourceCache<import('pg').Pool>({
   maxPools: 32,
@@ -47,13 +49,13 @@ export function dbForTenant(
   resolved: ResolvedTenant,
   tenants: Record<string, import('@multitenant/core').TenantDefinition>,
 ) {
-  return getTenantNodePgDrizzle(poolCache, resolved, tenants, schema);
+  return getTenantNodePgKysely<Database>(poolCache, resolved, tenants);
 }
 ```
 
-Each call returns a **new** Drizzle instance over a **cached** pool; that is intentional and cheap.
+Each call returns a **new** `Kysely` over a **cached** pool; pooling is on `Pool`.
 
-Lower-level: **`getOrCreateTenantNodePgPool`** + **`createNodePgDrizzle(pool, schema)`** if you need the `Pool` for non-Drizzle code paths.
+Lower-level: **`getOrCreateTenantNodePgPool`** + **`createNodePgKysely(pool)`** if you need the `Pool` for non-Kysely code paths.
 
 ## Threat model
 
@@ -61,9 +63,9 @@ Same as [database-scope.md](database-scope.md) and [per-tenant-database-url.md](
 
 ## See also
 
-- [Kysely + Postgres](kysely-postgres.md) — `@multitenant/kysely`
+- [Drizzle + Postgres](drizzle-postgres.md) — `@multitenant/drizzle`
 - [Prisma + Postgres](prisma-postgres.md) — `@multitenant/prisma`
-- Package README — `packages/drizzle/README.md`
+- Package README — `packages/kysely/README.md`
 - [Shared DB `tenant_id`](shared-db-tenant-id.md)
 - [Migrations (multi-tenant)](database-migrations-multitenant.md)
 - [PLAN Phase 8](../../PLAN.md)

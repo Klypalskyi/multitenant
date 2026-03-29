@@ -4,6 +4,17 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] `@multitenant/kysely` 0.1.0 — Kysely + node-postgres reference (Phase 8.7)
+
+### Added
+
+- New package **`@multitenant/kysely`**: **`getOrCreateTenantNodePgPool`**, **`createNodePgKysely`**, **`getTenantNodePgKysely`** (peers: **`kysely`**, **`pg`**; deps: core, database).
+- **Vitest:** `packages/kysely/src/node-pg.test.ts` (mocked `pg`).
+
+### Documentation
+
+- **`docs/INTERNAL/kysely-postgres.md`**, **`packages/kysely/README.md`**, cross-links from Drizzle/Prisma/internal INDEX, **`docs/FRAMEWORKS/overview.md`**, **`docs/INTERNAL/architecture.md`**, **`CLAUDE.md`**, **`scripts/publish-packages.sh`**, **`PLAN.md`** (Phase 8.7 + dashboard).
+
 ## [2026-03-29] Phase 6.4 + 7.3 — orientation & README demo pointers
 
 ### Documentation

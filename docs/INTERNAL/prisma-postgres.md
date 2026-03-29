@@ -56,5 +56,6 @@ Same guidance as [database-migrations-multitenant.md](database-migrations-multit
 ## See also
 
 - [Drizzle + Postgres](drizzle-postgres.md) (`@multitenant/drizzle`)
+- [Kysely + Postgres](kysely-postgres.md) (`@multitenant/kysely`)
 - [Bounded per-tenant DB pools](bounded-tenant-db-pools.md)
 - [PLAN Phase 8](../../PLAN.md)
