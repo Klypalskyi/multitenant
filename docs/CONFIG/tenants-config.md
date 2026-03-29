@@ -43,6 +43,12 @@ Each key is a tenant id. Value shape:
 - `access` (optional) – `defaultRoles`, `permissions`
 - **`database`** (optional, Phase 8.5) – `{ "envVar": "DATABASE_URL_TENANT_KEY" }` only. Must be a valid environment variable **name** (not a URL). Resolve at runtime with `resolveTenantDatabaseUrl` in `@multitenant/database` — see [Per-tenant database URL](../INTERNAL/per-tenant-database-url.md).
 
+### Feature flags (`flags`)
+
+The schema exposes **boolean toggles** only on **`tenants[*].flags`** (`Record<string, boolean>`). Server code uses **`isTenantFeatureEnabled(registry, tenantKey, name)`** in `@multitenant/core`; React uses **`useTenantFlag(name)`** on the resolved tenant.
+
+There is **no** separate **`features`** field on **`TenantDefinition`** — avoid duplicating the same concept under two names. If a CMS or remote JSON uses the word “features”, **map** that object into **`flags`** in your bootstrap (before **`validateTenantsConfig`**) so the file still matches this schema. A future aliased top-level block would need a **config version bump** and migration story (see **Appendix B** in `PLAN.md`).
+
 ## Config merge (Phase 3.3)
 
 **Order:** `markets[*].config` → `tenants[*].config` → `tenants[*].configByEnvironment[environment]` (when an environment key is applied).

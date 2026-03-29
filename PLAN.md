@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **Phase 4** **Done** (`@multitenant/identity` **v0.5.1**, tag **v0.6.16**): **`CookieConfig.domain`** on **`buildSessionSetCookieHeader`** + **`__Host-`** guard; session tests; **4.1–4.3** checklist closed (helpers + **tenant-bound-sessions** + **session-cookies** docs). *(Prior: **3.4** **v0.6.15**.)*
+**Last reviewed:** 2026-03-29 — **Phase 3** **Done** for listed tasks (tag **v0.6.18**): **3.2** **`tenant.flags`** + **`isTenantFeatureEnabled`** / **`useTenantFlag`**; **no** separate **`features`** schema field (**`docs/CONFIG/tenants-config.md`** + **Appendix B**). *(Prior: **Phase 4** **v0.6.16**.)*
 
 ---
 
@@ -107,20 +107,21 @@
 
 ## Phase 3 — Value layer (P1)
 
-**Goal:** Tenant-scoped product behavior beyond host resolution.
+**Goal:** Tenant-scoped product behavior beyond host resolution.  
+**Status:** **Done** for listed scope (see table).
 
-### Shipped (partial)
+### Shipped
 
-- `flags` on tenant + `useTenantFlag`.
+- **`tenant.flags`** + **`useTenantFlag`** / **`isTenantFeatureEnabled`** (see **3.2**).
 - Per-environment domain maps (`local`, `development`, `staging`, `production`).
 - **3.3:** merged **`config`** stack + `multitenant check` validation (see table).
 
-### Remaining work
+### Task checklist (all Done)
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
 | 3.1 | **Server + client parity for config** | **Shipped (v0.5.0)** — `getTenantConfig` in `@multitenant/core` |
-| 3.2 | **Feature surface** | **Partial (v0.5.0)** — `isTenantFeatureEnabled` (flags map); separate `features` block + migration still optional |
+| 3.2 | **Feature surface** | **Done (v0.5.0+):** **`tenant.flags`** only — **`isTenantFeatureEnabled`**, **`useTenantFlag`**; **no** distinct **`features`** key on **`TenantDefinition`** (decision: **Appendix B**); CMS/remote may map into **`flags`** before **`validateTenantsConfig`**; **`docs/CONFIG/tenants-config.md`** **Feature flags (`flags`)** |
 | 3.3 | **Environment merge** | **Done (v0.5.2 / config 0.4.3 / react 0.5.2):** merge order **market `config`** → **tenant `config`** → **`configByEnvironment[env]`**; deep merge + object/scalar conflict errors; **`validateTenantsConfig`** + **`getTenantConfig`**, **`useTenantConfig`**; **`docs/CONFIG/tenants-config.md`**. |
 | 3.4 | **Async config (optional)** | **Done:** **`docs/GETTING-STARTED.md`** — **`loadTenantsConfig`** (disk **`cwd`**), **`validateTenantsConfig`** after **`fetch`**/remote JSON; **`createTenantRegistry`** only after validated config; Next **`instrumentation.ts`** / server-only lazy init note; **refresh / hot reload** explicitly **out of scope** (app-defined) |
 
@@ -276,6 +277,7 @@ Exit criteria are mandatory; task lists are indicative.
 - `getTenantConfig` / `isTenantFeatureEnabled` (Phase 3); identity cookie header helpers — **shipped**.
 - **Done (2026-03):** Phase **3.4** — **`GETTING-STARTED.md`** async config bootstrap (**`loadTenantsConfig`**, remote **`validateTenantsConfig`**).
 - **Done (2026-03):** Phase **4** — **`@multitenant/identity` v0.5.1** (**`CookieConfig.domain`**, **`__Host-`** guard); **4.1–4.3** docs + checklist.
+- **Done (2026-03):** Phase **3** — **3.2** feature surface (**`flags`** only); **`tenants-config.md`**; **Appendix B** unchanged decision.
 
 **Exit:** Server/client parity for config and flags — **met** for the shipped slice.
 

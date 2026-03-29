@@ -4,6 +4,13 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Phase 3.2 / Phase 3 — feature flags documented (`flags` only)
+
+### Documentation
+
+- **`docs/CONFIG/tenants-config.md`** — **Feature flags (`flags`)**: **`isTenantFeatureEnabled`**, **`useTenantFlag`**, no separate **`features`** field; CMS → map into **`flags`**.
+- **`PLAN.md`** — Phase **3** **Done** for listed tasks; **3.2** **Done**; Sprint **C**; **Last reviewed** (tag **v0.6.18**).
+
 ## [2026-03-29] `@multitenant/identity` 0.5.1 — Phase 4 complete (`CookieConfig.domain`)
 
 ### Added
