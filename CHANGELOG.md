@@ -6,6 +6,14 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 - _(nothing yet)_
 
+## [2026-03-29] Docs — React SSR / App Router RSC boundary
+
+### Documentation
+
+- **`docs/FRAMEWORKS/react-ssr.md`** — why `TenantRegistry` is not a serializable RSC prop; shared `tenant-registry` + client `TenantProvider` shell + async `layout`; Pages Router note; links.
+
+_No package `src/` changes — no npm publish._
+
 ## [2026-03-29] Docs — tenant-bound sessions + async config bootstrap
 
 ### Documentation

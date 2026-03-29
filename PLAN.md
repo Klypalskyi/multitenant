@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — Phase 4.2 / 3.4 docs: `docs/INTERNAL/tenant-bound-sessions.md`; async config bootstrap in `GETTING-STARTED.md`; WHY pitfalls + links.
+**Last reviewed:** 2026-03-29 — Phase 5.4: `docs/FRAMEWORKS/react-ssr.md` — App Router RSC boundary, copy-paste `providers` + `layout`; Pages Router note.
 
 ---
 
@@ -148,7 +148,7 @@
 | 5.1 | Next.js: Edge middleware, Server Actions | **Partial:** `docs/FRAMEWORKS/next-app-router.md` — Edge vs Node, middleware headers, Server Actions, **copy-paste** route handler + server action + shared registry |
 | 5.2 | Express | **Shipped (doc + API):** global `req.tenant` augment; `docs/FRAMEWORKS/express.md`; optional `onMissingTenant` (**v0.4.2**) |
 | 5.3 | Nest | **Partial:** `docs/FRAMEWORKS/nestjs.md` — module, `@Tenant()`, null tenant; **DI recipe** (singleton `TenantRegistry` + `MultitenantModuleForRoot`, inject in services); guards left to app |
-| 5.4 | React | **Partial:** `docs/FRAMEWORKS/react-ssr.md` — `TenantProvider` + App Router notes |
+| 5.4 | React | **Partial:** `docs/FRAMEWORKS/react-ssr.md` — `TenantProvider`; **App Router** copy-paste (`MultitenantClientProviders` + root `layout`); registry import in client shell; hydration note; Pages Router GSSP |
 
 ---
 
