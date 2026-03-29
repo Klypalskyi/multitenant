@@ -13,7 +13,7 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ### Documentation
 
-- **`docs/INTERNAL/typeorm-postgres.md`**, **`packages/typeorm/README.md`**, cross-links from Drizzle/Kysely/Prisma/INDEX/frameworks overview, **`docs/INTERNAL/architecture.md`**, **`docs/INTERNAL/database-migrations-multitenant.md`** (TypeORM mention), **`CLAUDE.md`**, **`scripts/publish-packages.sh`**, **`PLAN.md`** — Phase **8.7** ORM set complete; dashboard ORM **Shipped**.
+- **`docs/INTERNAL/typeorm-postgres.md`**, **`packages/typeorm/README.md`**, cross-links from Drizzle/Kysely/Prisma/INDEX/frameworks overview, **`docs/INTERNAL/architecture.md`**, **`docs/INTERNAL/database-migrations-multitenant.md`** (TypeORM mention), **`CLAUDE.md`**, **`scripts/publish-packages.sh`** (publish-order slot + **`npm view pkg@version`** skip for idempotency), **`PLAN.md`** — Phase **8.7** ORM set complete; dashboard ORM **Shipped**.
 
 ## [2026-03-29] `@multitenant/kysely` 0.1.0 — Kysely + node-postgres reference (Phase 8.7)
 
