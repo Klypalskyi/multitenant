@@ -51,7 +51,7 @@ See [Next App Router checklist](docs/FRAMEWORKS/next-app-router.md) for Edge vs 
 - `@multitenant/config`: `loadTenantsConfig`, `validateTenantsConfig`, `resolveConfigPath`
 - `@multitenant/identity`: cookie encode/decode (AES-256-GCM), re-exports identity types and guards
 - `@multitenant/dev-proxy`: low-level dev proxy (`startDevProxy`)
-- `@multitenant/cli`: `tenantify` binary
+- `@multitenant/cli`: `multitenant` binary (deprecated `tenantify` alias)
 - `@multitenant/react`, `@multitenant/next-app`, `@multitenant/next-pages`, `@multitenant/express`, `@multitenant/nest`: framework adapters
 
 ### Errors
