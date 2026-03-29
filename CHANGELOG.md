@@ -4,6 +4,19 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Phase 1.1 — Error taxonomy closed (Next Pages GSSP tests + docs)
+
+### Added
+
+- **`@multitenant/next-pages`** — **`src/with-tenant-gssp.test.ts`** — **`withTenantGSSP`** returns **`{ notFound: true }`** when host unresolved; happy path + **`x-forwarded-host`**.
+
+### Documentation
+
+- **`PLAN.md`** — Phase **1** task table **1.1** **Done**; Phase **1** checklist complete for listed scope; **Last reviewed**; Sprint **D** next-pages tests bullet.
+- **`docs/INTERNAL/errors.md`** — Next Pages table: **`withTenantApi`** vs **`withTenantGSSP`** outcomes.
+- **`packages/next-pages/README.md`** — GSSP **`notFound`** behavior.
+- **`docs/INTERNAL/architecture.md`** — list **GSSP** test file.
+
 ## [2026-03-29] Phase 6.2 — Integration tests (next-app + express package)
 
 ### Added

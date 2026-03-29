@@ -4,7 +4,7 @@ Next.js **Pages Router** integration for `@multitenant/core`.
 
 It provides:
 
-- `withTenantGSSP(gssp, { registry, environment? })` – wraps `getServerSideProps` and injects `tenant` into props
+- `withTenantGSSP(gssp, { registry, environment? })` – wraps `getServerSideProps` and injects `tenant` into props. If the host does not resolve, returns **`{ notFound: true }`** (Next **`notFound()`** — not a **`TenantNotFoundError`**).
 - `withTenantApi(handler, { registry, environment? })` – wraps API route handlers and attaches `req.tenant`. If the host does not resolve, responds **404** with JSON `{ error: string, code: 'MULTITENANT_TENANT_NOT_FOUND' }` (same stable code as `TenantNotFoundError` in `@multitenant/core`).
 
 ## Install

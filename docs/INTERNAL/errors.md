@@ -28,3 +28,10 @@ No secrets are logged; payloads are host, environment, matched `tenantKey`, and 
 `requireTenant()` throws **`TenantNotFoundError`** when headers do not yield a tenant.
 
 **Migration (0.3 → 0.4):** Code that relied on `error.message` substrings still works; prefer `instanceof TenantNotFoundError` or `e.code === 'MULTITENANT_TENANT_NOT_FOUND'` for branching.
+
+## Next.js Pages Router (`@multitenant/next-pages`)
+
+| API | When host does not resolve |
+|-----|-----------------------------|
+| **`withTenantApi`** | **404** response body `{ error: string, code: 'MULTITENANT_TENANT_NOT_FOUND' }` — stable `code` matches **`TenantNotFoundError`**. |
+| **`withTenantGSSP`** | Result **`{ notFound: true }`** — Next.js **`notFound()`** behavior; **no** thrown **`TenantNotFoundError`** (use this in **`getServerSideProps`** instead of try/catch on resolution). |

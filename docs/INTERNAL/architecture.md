@@ -52,4 +52,4 @@ See `docs/RELEASE.md` for detailed release instructions.
 
 GitHub Actions (`.github/workflows/ci.yml`) runs `npm ci`, `npm run build`, `npm test`, **`npm run test:coverage`** (Vitest v8 thresholds), **`npm run examples:smoke`**, and **`npm run examples:express-smoke`** on pushes and pull requests to `master` / `main` (Node 22).
 
-Workspace packages with tests today: `core`, `config`, `cli`, `database`, `drizzle`, `kysely`, `prisma`, `typeorm`, `identity`, `next-app` (**`middleware.integration.test.ts`**), `next-pages`, `express` (unit + **`express.integration.test.ts`** with supertest), `nest`, `react`.
+Workspace packages with tests today: `core`, `config`, `cli`, `database`, `drizzle`, `kysely`, `prisma`, `typeorm`, `identity`, `next-app` (**`middleware.integration.test.ts`**), `next-pages` (**`with-tenant-api.test.ts`**, **`with-tenant-gssp.test.ts`**), `express` (unit + **`express.integration.test.ts`** with supertest), `nest`, `react`.

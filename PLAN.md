@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **Phase 6.2** **Done** (release tag **v0.6.12**): **next-app** expanded **`middleware.integration.test.ts`**; **express** **`express.integration.test.ts`** (**supertest**). **Phase 6.1** (coverage + CI) unchanged **Done**.
+**Last reviewed:** 2026-03-29 — **Phase 1.1** error taxonomy **Done** (tag **v0.6.13**): per-surface **missing-tenant** behavior is **defined, documented, and tested** — Express **`onMissingTenant: 'throw'`**; Next App middleware / **`requireTenant`** (**`TenantNotFoundError`**); Pages **`withTenantApi`** → 404 JSON; **`withTenantGSSP`** → **`notFound: true`** (**`with-tenant-gssp.test.ts`**); Nest **`null` `req.tenant`** + **`TenantRequiredGuard`** (docs). *(Prior: **6.2** **v0.6.12**.)*
 
 ---
 
@@ -60,23 +60,26 @@
 
 **Goal:** Stability, predictable errors, one mental model for resolution.
 
-### Shipped (partial)
+### Shipped
 
 - Shared types in `@multitenant/core`; adapters import from core.
 - **v0.4.0:** Error taxonomy in core; config throws `InvalidTenantsConfigError`; Next `requireTenant` / strict middleware throw `TenantNotFoundError`; registry `debug` + `log`; docs in `docs/INTERNAL/errors.md`.
+- **Phase 1.1 (closed):** Each adapter exposes a **predictable** outcome when the host does not resolve — see **`docs/INTERNAL/errors.md`** (Next Pages) and package tests: **`next-app`**, **`express`**, **`next-pages`** (`with-tenant-api.test.ts`, **`with-tenant-gssp.test.ts`**).
 
-### Remaining work
+### Task checklist (all Done for listed scope)
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 1.1 | **Error taxonomy** | **Partial:** Express `onMissingTenant: 'throw'` → `next(TenantNotFoundError)`; Next Pages `withTenantApi` → 404 JSON with `MULTITENANT_TENANT_NOT_FOUND` (**next-pages v0.4.2**); GSSP still `notFound`; Nest middleware still **`null` tenant** when unresolved — strict routes use app guard (**`TenantRequiredGuard`** in `docs/FRAMEWORKS/nestjs.md`). |
+| 1.1 | **Error taxonomy** | **Done:** Express **`onMissingTenant: 'throw'`** → `next(TenantNotFoundError)`; Next App **`requireTenant`** / middleware **`throw`** → **`TenantNotFoundError`**; Next Pages **`withTenantApi`** → **404** JSON **`MULTITENANT_TENANT_NOT_FOUND`**; **`withTenantGSSP`** → **`{ notFound: true }`** (Next `notFound()`); Nest middleware leaves **`null` tenant** — strict routes use **`TenantRequiredGuard`** (`docs/FRAMEWORKS/nestjs.md`). |
 | 1.2 | **Align docs & PLAN with real API** — no fictional method names | **Done:** `*.md` grep — no stray `resolveTenant` / `getTenant()` except intentional notes in `PLAN.md` / Appendix B. |
 | 1.3 | **Duplication audit** — types across packages | **Done (audit):** `ResolvedTenant` / `TenantsConfig` interfaces only in `@multitenant/core` (`packages/*/src` grep). |
 | 1.4 | **Debug / observability on registry** | **Done (v0.4.0)** — optional structured OTel hook still future (Appendix A) |
 
 **Out of scope for this phase:** Renaming `resolveByHost` to a different public name without a major version and deprecation path.
 
-**Dependencies:** 1.1 before relying on errors in tests; 1.4 should use same logging interface as future OTel hook (see product ideas).
+**Note:** 1.1 does **not** require every surface to throw **`MultitenantError`** — Pages GSSP uses Next’s **`notFound`** contract; identity **`assertAccess`** remains a generic **`Error`** (403 mapping) until a future optional **`code`**.
+
+**Dependencies:** 1.4 should use same logging interface as future OTel hook (see product ideas).
 
 ---
 
@@ -254,7 +257,7 @@ Exit criteria are mandatory; task lists are indicative.
 
 ### Sprint A — Contract & core quality ✅ (v0.4.0)
 
-- Error taxonomy (Phase 1.1) + debug/logger (Phase 1.4) shipped.
+- Error taxonomy (Phase **1.1** **Done** — per-adapter contracts + **`with-tenant-gssp.test.ts`**) + debug/logger (Phase 1.4) shipped.
 - Test harness: Vitest + `turbo run test` (+ **`test:coverage`** — see Phase **6.1** **Done**).
 - **Follow-up (done later):** Phase **1.2** doc API grep + **1.3** type duplication audit — see Phase 1 table (**Done**).
 
@@ -274,7 +277,7 @@ Exit criteria are mandatory; task lists are indicative.
 
 ### Sprint D — Polish & positioning ✅ (exit met for listed items)
 
-- **Done:** GitHub Actions CI (Node 22); framework docs; `WHY-MULTITENANT.md`; README 30-second start + **copy-paste `middleware.ts`**; per-package READMEs + `package.json` `repository` / `license` / `homepage`; `next-app` + **express** + **next-pages** (`withTenantApi`) tests in `npm test`.
+- **Done:** GitHub Actions CI (Node 22); framework docs; `WHY-MULTITENANT.md`; README 30-second start + **copy-paste `middleware.ts`**; per-package READMEs + `package.json` `repository` / `license` / `homepage`; `next-app` + **express** + **next-pages** (**`withTenantApi`** + **`withTenantGSSP`**) tests in `npm test`.
 - **Done (Pages):** `withTenantApi` 404 JSON includes `code: MULTITENANT_TENANT_NOT_FOUND` (`@multitenant/next-pages` **v0.4.2**).
 - **Done:** `examples/config-smoke` + CI `npm run examples:smoke`; Nest DI recipe in `docs/FRAMEWORKS/nestjs.md`.
 - **Done (docs follow-through, 2026-03):** `react-ssr.md` SSR/RSC-first + Next subsections (**5.4 Done**); Nest **`TenantRequiredGuard`** + **`TenantNotFoundFilter`** (**5.3 Done**); `WHY-MULTITENANT.md` second mermaid + App Router link (6.4); `next-app-router.md` full checklist + RSC page + **`marketKey`** fix (5.1 **Done** 2026-03); `@multitenant/react` hook tests (6.1).
