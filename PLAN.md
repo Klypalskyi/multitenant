@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — Express `onMissingTenant` + tests; framework docs (Express, Nest, React SSR); `docs/WHY-MULTITENANT.md` (Phase 6.4 partial).
+**Last reviewed:** 2026-03-29 — Sprint D: package README + npm `repository` metadata; `next-pages` `withTenantApi` typed 404 JSON; root README middleware snippet.
 
 ---
 
@@ -68,7 +68,7 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 1.1 | **Error taxonomy** | **Partial:** Express `onMissingTenant: 'throw'` → `next(TenantNotFoundError)` (**v0.4.2**); Nest/Pages unchanged (null/`notFound`/JSON). |
+| 1.1 | **Error taxonomy** | **Partial:** Express `onMissingTenant: 'throw'` → `next(TenantNotFoundError)`; Next Pages `withTenantApi` → 404 JSON with `MULTITENANT_TENANT_NOT_FOUND` (**next-pages v0.4.2**); GSSP still `notFound`; Nest null. |
 | 1.2 | **Align docs & PLAN with real API** — no fictional method names | **Partial:** framework docs use canonical names; periodic grep for `resolveTenant` / `getTenant()` in docs (`PLAN.md` note only). |
 | 1.3 | **Duplication audit** — types across packages | **Done (audit):** `ResolvedTenant` / `TenantsConfig` interfaces only in `@multitenant/core` (`packages/*/src` grep). |
 | 1.4 | **Debug / observability on registry** | **Done (v0.4.0)** — optional structured OTel hook still future (Appendix A) |
@@ -158,7 +158,7 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app + **express**; CI runs `npm test` |
+| 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app + **next-pages** + **express**; CI runs `npm test` |
 | 6.2 | **Integration tests** | **Partial:** `@multitenant/next-app` middleware + `NextRequest` / header contract (`src/middleware.integration.test.ts`) in CI |
 | 6.3 | **Examples** | Each `examples/*` documents `install && dev/build` commands; optional CI smoke |
 | 6.4 | **Documentation** | **Partial:** `docs/WHY-MULTITENANT.md` — why / when not / pitfalls / mermaid host → registry → tenant |
@@ -171,7 +171,7 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 7.1 | **README hero** | **Partial:** README “30-second start” (`npx @multitenant/cli init` + `check`); expand with one copy-paste middleware block if needed |
+| 7.1 | **README hero** | **Shipped (partial):** 30-second start + copy-paste Next `middleware.ts` + open-source links |
 | 7.2 | **Brand** | Keep `@multitenant/*` scope; consistent naming in all public docs |
 | 7.3 | **Website / demo** | Optional; if absent, README states “docs + examples” as the demo |
 
@@ -269,10 +269,11 @@ Exit criteria are mandatory; task lists are indicative.
 
 **Exit:** Server/client parity for config and flags — **met** for the shipped slice.
 
-### Sprint D — Polish & positioning (in progress)
+### Sprint D — Polish & positioning ✅ (exit met for listed items)
 
-- **Done (partial):** GitHub Actions CI; Next App Router checklist; Express/Nest/React SSR framework docs; `WHY-MULTITENANT.md`; README 30-second start; `next-app` + **express** tests in `npm test`.
-- **Open:** Pages-adapter error/JSON alignment; README full hero + copy-paste middleware block; example smoke in CI; Nest DI recipe if demand.
+- **Done:** GitHub Actions CI (Node 22); framework docs; `WHY-MULTITENANT.md`; README 30-second start + **copy-paste `middleware.ts`**; per-package READMEs + `package.json` `repository` / `license` / `homepage`; `next-app` + **express** + **next-pages** (`withTenantApi`) tests in `npm test`.
+- **Done (Pages):** `withTenantApi` 404 JSON includes `code: MULTITENANT_TENANT_NOT_FOUND` (`@multitenant/next-pages` **v0.4.2**).
+- **Open:** example smoke in CI; Nest DI recipe if demand; optional global coverage thresholds.
 
 ### Sprint E — Database / ORM (optional; Phase 8)
 

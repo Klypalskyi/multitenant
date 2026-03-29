@@ -17,6 +17,16 @@
   "devDependencies": {
     "@types/http-proxy": "^1.17.14"
   },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klypalskyi/multitenant.git",
+    "directory": "packages/dev-proxy"
+  },
+  "bugs": {
+    "url": "https://github.com/klypalskyi/multitenant/issues"
+  },
+  "homepage": "https://github.com/klypalskyi/multitenant/tree/master/packages/dev-proxy",
   "publishConfig": {
     "access": "public"
   }

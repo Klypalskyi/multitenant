@@ -19,6 +19,16 @@
     "next": ">=13.0.0",
     "react": ">=18.0.0"
   },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klypalskyi/multitenant.git",
+    "directory": "packages/next"
+  },
+  "bugs": {
+    "url": "https://github.com/klypalskyi/multitenant/issues"
+  },
+  "homepage": "https://github.com/klypalskyi/multitenant/tree/master/packages/next",
   "publishConfig": {
     "access": "public"
   }

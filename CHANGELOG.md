@@ -4,15 +4,23 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+- _(nothing yet)_
+
+## [2026-03-29] Sprint D — README + npm metadata + next-pages API
+
+### Changed
+
+- **`@multitenant/next-pages` (0.4.2):** `withTenantApi` returns **404** JSON `{ error, code: 'MULTITENANT_TENANT_NOT_FOUND' }` when host resolution fails; Vitest (`src/with-tenant-api.test.ts`).
+
 ### Added
 
-- **`@multitenant/express` (0.4.2):** optional `onMissingTenant: 'throw'` → `next(TenantNotFoundError)`; Vitest tests (`src/multitenant-express.test.ts`).
+- **`@multitenant/express` (0.4.2):** optional `onMissingTenant: 'throw'` → `next(TenantNotFoundError)`; Vitest (`src/multitenant-express.test.ts`).
 
-### Tooling & docs
+### Housekeeping
 
-- **CI:** GitHub Actions workflow runs `build` + `test` on `master` / `main` (Node 22).
-- **`@multitenant/next-app`:** Vitest integration tests for middleware + `getTenantFromHeaders` / `requireTenant` (`src/middleware.integration.test.ts`).
-- **Docs:** `docs/WHY-MULTITENANT.md`; `docs/FRAMEWORKS/express.md`, `nestjs.md`, `react-ssr.md`; README / GETTING-STARTED links; `PLAN.md` refresh.
+- **All published workspaces:** `package.json` fields `license` (MIT), `repository` (monorepo + `directory`), `bugs`, `homepage`.
+- **Package READMEs:** open-source footer (GitHub, Issues, npm); core/nest/identity/next README corrections; root README copy-paste Next `middleware.ts` + open-source section.
+- **Tooling:** CI on Node 22; **`@multitenant/next-app`** middleware integration tests (from earlier in sprint).
 
 ## [0.5.2] / coordinated bumps — 2026-03-29
 

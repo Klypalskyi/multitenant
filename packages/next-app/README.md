@@ -56,3 +56,11 @@ export async function GET() {
 }
 ```
 
+Full App Router checklist: [next-app-router.md](https://github.com/klypalskyi/multitenant/blob/master/docs/FRAMEWORKS/next-app-router.md).
+
+---
+
+## Open source
+
+MIT licensed — [**github.com/klypalskyi/multitenant**](https://github.com/klypalskyi/multitenant) · [Issues](https://github.com/klypalskyi/multitenant/issues) · [npm](https://www.npmjs.com/package/@multitenant/next-app)
+

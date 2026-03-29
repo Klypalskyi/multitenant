@@ -21,4 +21,10 @@ await runWithTenantScopeAsync({ tenantKey: 'acme', resolved }, async () => {
 });
 ```
 
-Docs: [`docs/INTERNAL/database-scope.md`](../../docs/INTERNAL/database-scope.md).
+Docs: [database-scope.md](https://github.com/klypalskyi/multitenant/blob/master/docs/INTERNAL/database-scope.md).
+
+---
+
+## Open source
+
+MIT licensed — [**github.com/klypalskyi/multitenant**](https://github.com/klypalskyi/multitenant) · [Issues](https://github.com/klypalskyi/multitenant/issues) · [npm](https://www.npmjs.com/package/@multitenant/database)

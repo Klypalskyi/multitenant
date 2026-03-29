@@ -38,7 +38,7 @@ Add a script:
 npx multitenant init [--framework next-app|next-pages|express|none] [--force]
 ```
 
-Writes a minimal valid `tenants.config.json` at `--cwd` (default: current directory). Full reference: [docs/CLI/init.md](https://github.com/klypalskyi/multitenant/blob/main/docs/CLI/init.md).
+Writes a minimal valid `tenants.config.json` at `--cwd` (default: current directory). Full reference: [docs/CLI/init.md](https://github.com/klypalskyi/multitenant/blob/master/docs/CLI/init.md).
 
 ### `multitenant check`
 
@@ -61,4 +61,10 @@ npx multitenant dev --target http://localhost:3000 --port 3100
 Optional:
 
 - `--run-dev` – automatically run `npm|pnpm|yarn run dev` in your app before starting the proxy.
+
+---
+
+## Open source
+
+MIT licensed — [**github.com/klypalskyi/multitenant**](https://github.com/klypalskyi/multitenant) · [Issues](https://github.com/klypalskyi/multitenant/issues) · [npm](https://www.npmjs.com/package/@multitenant/cli)
 

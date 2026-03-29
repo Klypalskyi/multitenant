@@ -6,6 +6,7 @@ It provides:
 
 - `encodeSessionToCookie(session, secret)` → encrypted+signed cookie value
 - `decodeSessionFromCookie(value, secret)` → `EncodedSession | null`
+- `getSessionFromCookieHeader(...)`, `buildSessionSetCookieHeader(...)` — thin wiring on top of cookie primitives
 - Re-exports from `@multitenant/core`:
   - `Identity`
   - `EncodedSession`
@@ -43,3 +44,8 @@ const cookieValue = encodeSessionToCookie(
 const session: EncodedSession | null = decodeSessionFromCookie(cookieValue, secret);
 ```
 
+---
+
+## Open source
+
+MIT licensed — [**github.com/klypalskyi/multitenant**](https://github.com/klypalskyi/multitenant) · [Issues](https://github.com/klypalskyi/multitenant/issues) · [npm](https://www.npmjs.com/package/@multitenant/identity)

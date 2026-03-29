@@ -25,6 +25,10 @@ Core → config, database, identity, dev-proxy → react, next-app, next, next-p
 2. Export a thin wrapper: accept `TenantRegistry` (+ optional `environment`), resolve via `registry.resolveByRequest(req, { environment })`, attach result to framework context (req, locals, etc.).
 3. Document in `docs/FRAMEWORKS/overview.md` and add a short framework-specific doc under `docs/FRAMEWORKS/`.
 
+## npm metadata
+
+Published workspaces include **`license`**, **`repository`** (monorepo URL + `directory`), **`bugs`**, and **`homepage`** pointing at the package folder on GitHub so npmjs.com links back to the open-source repo.
+
 ## Versioning
 
 **Bump only what changed:** `packages/<name>/package.json` **only if** `packages/<name>/src/` changed. Unchanged packages keep their previous semver until they next ship — versions **may differ across packages** (e.g. core `0.4.0`, express `0.5.0`). The root `package.json` is not versioned for npm.
@@ -44,4 +48,4 @@ See `docs/RELEASE.md` for detailed release instructions.
 
 GitHub Actions (`.github/workflows/ci.yml`) runs `npm ci`, `npm run build`, and `npm test` on pushes and pull requests to `master` / `main` (Node 22).
 
-Workspace packages with tests today: `core`, `config`, `cli`, `database`, `identity`, `next-app`, `express`.
+Workspace packages with tests today: `core`, `config`, `cli`, `database`, `identity`, `next-app`, `next-pages`, `express`.

@@ -50,3 +50,11 @@ Available hooks:
 - `useExperiment(key)` – experiment variant
 - `useTenantConfig<T>()` – typed arbitrary config blob per tenant
 
+SSR / App Router notes: [react-ssr.md](https://github.com/klypalskyi/multitenant/blob/master/docs/FRAMEWORKS/react-ssr.md).
+
+---
+
+## Open source
+
+MIT licensed — [**github.com/klypalskyi/multitenant**](https://github.com/klypalskyi/multitenant) · [Issues](https://github.com/klypalskyi/multitenant/issues) · [npm](https://www.npmjs.com/package/@multitenant/react)
+

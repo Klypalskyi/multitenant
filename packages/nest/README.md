@@ -2,7 +2,7 @@
 
 NestJS integration for `@multitenant/core`. Provides:
 
-- `TenantifyModuleForRoot({ registry, environment? })` – global module wiring tenant resolution middleware
+- `MultitenantModuleForRoot({ registry, environment? })` — registers tenant-resolution middleware on all routes
 - `@Tenant()` param decorator – injects the current `ResolvedTenant | null` into controller handlers
 
 ## Install
@@ -21,7 +21,7 @@ Peer dependencies:
 ```ts
 // app.module.ts
 import { Module } from '@nestjs/common';
-import { TenantifyModuleForRoot } from '@multitenant/nest';
+import { MultitenantModuleForRoot } from '@multitenant/nest';
 import { loadTenantsConfig } from '@multitenant/config';
 import { createTenantRegistry } from '@multitenant/core';
 
@@ -30,7 +30,7 @@ const registry = createTenantRegistry(config);
 
 @Module({
   imports: [
-    TenantifyModuleForRoot({
+    MultitenantModuleForRoot({
       registry,
       environment: 'local',
     }),
@@ -54,4 +54,12 @@ export class AppController {
   }
 }
 ```
+
+More detail in the repo: [docs/FRAMEWORKS/nestjs.md](https://github.com/klypalskyi/multitenant/blob/master/docs/FRAMEWORKS/nestjs.md).
+
+---
+
+## Open source
+
+MIT licensed — [**github.com/klypalskyi/multitenant**](https://github.com/klypalskyi/multitenant) · [Issues](https://github.com/klypalskyi/multitenant/issues) · [npm](https://www.npmjs.com/package/@multitenant/nest)
 

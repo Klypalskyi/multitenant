@@ -13,6 +13,22 @@ npx multitenant check
 
 Scaffold writes a valid `tenants.config.json` (and optional framework stubs with `--framework next-app` | `next-pages` | `express`). Then install adapters in your app, e.g. `npm install @multitenant/next next react` or per-package installs — see [Getting started](docs/GETTING-STARTED.md) and [CLI: init](docs/CLI/init.md).
 
+### Copy-paste: Next.js App Router (`middleware.ts`)
+
+```ts
+import type { EnvironmentName } from '@multitenant/core';
+import { createTenantRegistry } from '@multitenant/core';
+import { createTenantMiddleware } from '@multitenant/next-app';
+import tenantsConfig from './tenants.config.json';
+
+const registry = createTenantRegistry(tenantsConfig as any);
+const env = (process.env.MULTITENANT_ENV ?? 'local') as EnvironmentName;
+
+export const middleware = createTenantMiddleware(registry, { environment: env });
+```
+
+See [Next App Router checklist](docs/FRAMEWORKS/next-app-router.md) for Edge vs Node and `onMissingTenant`.
+
 ### What it gives you
 
 - **Config-driven tenants/markets** via `tenants.config.json`
@@ -282,9 +298,14 @@ npx multitenant dev --target http://localhost:3000 --port 3100
 npx multitenant dev --run-dev
 ```
 
+### Open source
+
+MIT — [**github.com/klypalskyi/multitenant**](https://github.com/klypalskyi/multitenant) · [Issues](https://github.com/klypalskyi/multitenant/issues) · [packages on npm](https://www.npmjs.com/package/@multitenant/core) (`@multitenant/*`)
+
 ### Local development (this repo)
 
 ```bash
 npm install
 npm run build
-npm run dev    # if/when turbo dev is wired to examples\n```
+npm run dev    # if/when turbo dev is wired to examples
+```

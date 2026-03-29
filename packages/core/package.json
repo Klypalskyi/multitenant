@@ -11,6 +11,16 @@
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "test": "vitest run"
   },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klypalskyi/multitenant.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/klypalskyi/multitenant/issues"
+  },
+  "homepage": "https://github.com/klypalskyi/multitenant/tree/master/packages/core",
   "publishConfig": {
     "access": "public"
   },

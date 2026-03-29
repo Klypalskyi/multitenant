@@ -24,6 +24,16 @@
     "chokidar": "^3.6.0",
     "commander": "^12.0.0"
   },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klypalskyi/multitenant.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/klypalskyi/multitenant/issues"
+  },
+  "homepage": "https://github.com/klypalskyi/multitenant/tree/master/packages/cli",
   "publishConfig": {
     "access": "public"
   }

@@ -9,6 +9,7 @@ import type {
   ResolvedTenant,
   EnvironmentName,
 } from '@multitenant/core';
+import { TenantNotFoundError } from '@multitenant/core';
 
 export interface WithTenantOptions {
   registry: TenantRegistry;
@@ -60,7 +61,7 @@ export interface NextApiRequestWithTenant extends NextApiRequest {
 
 /**
  * Wraps an API route handler to resolve tenant and attach to req.tenant.
- * Throws (404) if tenant cannot be resolved (throw-early).
+ * If resolution fails, responds **404** with JSON `{ error, code: 'MULTITENANT_TENANT_NOT_FOUND' }` and does not call `handler`.
  */
 export function withTenantApi<P = unknown>(
   handler: (
@@ -81,7 +82,10 @@ export function withTenantApi<P = unknown>(
       { environment },
     );
     if (!tenant) {
-      res.status(404).json({ error: 'Tenant not resolved' } as P);
+      const err = new TenantNotFoundError(
+        `[multitenant] Unable to resolve tenant for Pages API route (host: ${host ?? '<missing>'})`,
+      );
+      res.status(404).json({ error: err.message, code: err.code } as P);
       return;
     }
     req.tenant = tenant;

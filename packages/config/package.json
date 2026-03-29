@@ -15,6 +15,16 @@
     "zod": "^3.23.8",
     "@multitenant/core": "^0.5.0"
   },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klypalskyi/multitenant.git",
+    "directory": "packages/config"
+  },
+  "bugs": {
+    "url": "https://github.com/klypalskyi/multitenant/issues"
+  },
+  "homepage": "https://github.com/klypalskyi/multitenant/tree/master/packages/config",
   "publishConfig": {
     "access": "public"
   },

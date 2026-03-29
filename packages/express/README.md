@@ -44,3 +44,11 @@ async function main() {
 main();
 ```
 
+Framework doc: [express.md](https://github.com/klypalskyi/multitenant/blob/master/docs/FRAMEWORKS/express.md).
+
+---
+
+## Open source
+
+MIT licensed — [**github.com/klypalskyi/multitenant**](https://github.com/klypalskyi/multitenant) · [Issues](https://github.com/klypalskyi/multitenant/issues) · [npm](https://www.npmjs.com/package/@multitenant/express)
+

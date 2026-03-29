@@ -35,6 +35,16 @@
     "build": "tsup src/index.ts src/auto.ts src/auto-node.ts --format cjs,esm --dts",
     "test": "vitest run"
   },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klypalskyi/multitenant.git",
+    "directory": "packages/next-app"
+  },
+  "bugs": {
+    "url": "https://github.com/klypalskyi/multitenant/issues"
+  },
+  "homepage": "https://github.com/klypalskyi/multitenant/tree/master/packages/next-app",
   "publishConfig": {
     "access": "public"
   },
