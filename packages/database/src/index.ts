@@ -1,5 +1,8 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 import type { ResolvedTenant } from '@multitenant/core';
+import { schemaNameForTenant } from './schema-name';
+
+export { POSTGRES_MAX_IDENTIFIER_BYTES, schemaNameForTenant } from './schema-name';
 
 export interface TenantScopeState {
   tenantKey: string;
@@ -41,6 +44,13 @@ export function requireTenantScope(): TenantScopeState {
 /** Convenience for repository code: current `tenantKey` or throw if no ALS scope. */
 export function requireTenantKey(): string {
   return requireTenantScope().tenantKey;
+}
+
+/** `schemaNameForTenant(requireTenantKey(), options)` — for `SET search_path` / qualified names inside ALS scope. */
+export function requireSchemaNameForCurrentTenant(
+  options?: Parameters<typeof schemaNameForTenant>[1],
+): string {
+  return schemaNameForTenant(requireTenantKey(), options);
 }
 
 /**

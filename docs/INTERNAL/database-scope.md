@@ -10,6 +10,7 @@ This package does **not** include drivers, pooling, or SQL. It complements `crea
 - `getTenantScope()` — read `tenantKey` or `undefined` if outside a scope.
 - `requireTenantScope()` — returns scope or throws if missing (strict mode for DB code paths).
 - **Shared DB (Phase 8.2):** `requireTenantKey`, `assignTenantIdForWrite`, `assertRowTenantColumn` — see [Shared DB `tenant_id`](shared-db-tenant-id.md).
+- **Schema-per-tenant Postgres (Phase 8.4):** `schemaNameForTenant`, `requireSchemaNameForCurrentTenant` — see [Schema-per-tenant Postgres](schema-per-tenant-postgres.md).
 
 See package `README` and `packages/database/src/index.ts` for exact types and behavior.
 

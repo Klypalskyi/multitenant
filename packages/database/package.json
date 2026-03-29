@@ -1,7 +1,7 @@
 {
   "name": "@multitenant/database",
-  "version": "0.5.1",
-  "description": "Node-only async tenant scope (ALS) + shared-DB tenant_id helpers — Phase 8.1–8.2",
+  "version": "0.5.2",
+  "description": "Node-only ALS tenant scope + shared-DB tenant_id + Postgres schema naming — Phase 8.1–8.2, 8.4",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",

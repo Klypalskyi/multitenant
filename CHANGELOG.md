@@ -4,6 +4,21 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] `@multitenant/database` 0.5.2 — schema-per-tenant Postgres (Phase 8.4)
+
+### Added
+
+- **`schemaNameForTenant(tenantKey, options?)`** — PostgreSQL-safe unquoted schema name (normalize, optional `prefix`, UTF-8 byte cap default **63**).
+- **`POSTGRES_MAX_IDENTIFIER_BYTES`** — `63`.
+- **`requireSchemaNameForCurrentTenant(options?)`** — `schemaNameForTenant(requireTenantKey(), …)`.
+- **Vitest:** `src/schema-name.test.ts` (**10** cases; **25** tests total in package).
+
+### Documentation
+
+- **`docs/INTERNAL/schema-per-tenant-postgres.md`** — `SET LOCAL search_path`, PgBouncer / prepared statements, migrations; cross-links from `shared-db-tenant-id.md`, `database-scope.md`, `INDEX.md`, `architecture.md`.
+- **`PLAN.md`** — Phase **8.4** **Done (v0.5.2)**; dashboard; Sprint **E**.
+- **`packages/database/README.md`**.
+
 ## [2026-03-29] `@multitenant/database` 0.5.1 — shared-DB `tenant_id` helpers (Phase 8.2)
 
 ### Added

@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **`@multitenant/database` v0.5.1:** Phase **8.2** shared-DB `tenant_id` helpers + docs (**complete** for 8.2 slice); PLAN audit + framework docs state unchanged below.
+**Last reviewed:** 2026-03-29 — **`@multitenant/database` v0.5.2:** Phase **8.4** schema-per-tenant Postgres (`schemaNameForTenant`, docs) **complete**; **8.2** in v0.5.1.
 
 ---
 
@@ -28,7 +28,7 @@
 | `isFeatureEnabled()` / flags server-side | **Shipped** | v0.5.0 — `isTenantFeatureEnabled` in core (flags map) |
 | Package unit tests + CI | **Shipped** | `npm test` (turbo): core, config, cli, database, identity, **next-app** integration tests; GitHub Actions `build` + `test` + **`npm run examples:smoke`** on push/PR |
 | Website / landing in repo | **Not shipped** | Optional external |
-| ORM / DB adapters (shared DB + per-tenant DB) | **Partial** | `@multitenant/database` **v0.5.1** — ALS (8.1) + **`tenant_id` write/read helpers** (8.2); ORM peers, RLS recipes, per-tenant URLs (8.3–8.6) still open |
+| ORM / DB adapters (shared DB + per-tenant DB) | **Partial** | `@multitenant/database` **v0.5.2** — ALS (8.1) + **`tenant_id` helpers** (8.2) + **Postgres schema naming** (8.4); RLS (8.3), per-tenant URLs/pools (8.5–8.6), ORM peers still open |
 | Orientation: why / pitfalls / diagram | **Partial** | `docs/WHY-MULTITENANT.md` — host→registry + **Next middleware→headers→`getTenantFromHeaders`** mermaid; `docs/INTERNAL/tenant-bound-sessions.md` |
 
 **Naming note:** The public API uses `resolveByHost`, `resolveByRequest`, `getTenantFromHeaders`, and `requireTenant`. Do **not** document or implement `resolveTenant()` / `getTenant()` unless adding explicit aliases with a deprecation story.
@@ -207,7 +207,7 @@
 | 8.1 | **Tenant DB context (async-safe)** | Phase 1 stable types | **Partial (v0.5.0):** `@multitenant/database` — ALS `runWithTenantScope*` + `getTenantScope` / `requireTenantScope`; nested async + strict missing-scope tests. Full `ResolvedTenant` in scope optional follow-up. |
 | 8.2 | **Shared DB — `tenant_id` + scoping helpers** | 8.1 | **Done (v0.5.1):** `requireTenantKey`, `assignTenantIdForWrite`, `assertRowTenantColumn`; `docs/INTERNAL/shared-db-tenant-id.md` (composite keys, indexes, threat model). *Query building stays app/ORM; helpers enforce row/column invariants + ALS scope.* |
 | 8.3 | **Shared DB — Postgres RLS recipe** | 8.1; Phase 4 **recommended** for identity-bound RLS | Docs + minimal helpers: `SET LOCAL` / session vars per transaction; pool + pooler caveats; optional **dockerized** integration test in CI. |
-| 8.4 | **Shared DB — schema-per-tenant (same cluster)** | 8.1 | Docs: `search_path` / schema name from config convention; warnings for pooling + prepared statements; optional helper `schemaNameForTenant(tenantKey)`. |
+| 8.4 | **Shared DB — schema-per-tenant (same cluster)** | 8.1 | **Done (v0.5.2):** `schemaNameForTenant`, `POSTGRES_MAX_IDENTIFIER_BYTES`, `requireSchemaNameForCurrentTenant`; `docs/INTERNAL/schema-per-tenant-postgres.md` (`SET LOCAL search_path`, pooling, prepared statements, migrations note). |
 | 8.5 | **Per-tenant DB — connection resolution** | 8.1 | Extend **validated** tenant config (optional `database` / DSN key refs): resolve URL from `ResolvedTenant` + env; **no secrets in git** — indirection via env/secret manager. |
 | 8.6 | **Per-tenant DB — pool / client manager** | 8.5 | Bounded pools (per-URL or per-tenant with **max** tenants / max connections, LRU idle eviction); **no** unbounded `Map` of pools; docs: long-lived Node vs serverless. |
 | 8.7 | **ORM reference adapter (one first)** | 8.2, 8.5–8.6 | One of Drizzle **or** Prisma end-to-end: shared-DB + per-tenant URL examples; second ORM = follow-up minor. |
@@ -281,8 +281,9 @@ Exit criteria are mandatory; task lists are indicative.
 
 - Ship **8.1** (`@multitenant/database` scope + ALS/hybrid) before any ORM-specific package. **✅ Shipped (v0.5.0).**
 - **8.2** shared-DB `tenant_id` helpers — **✅ Shipped (`@multitenant/database` v0.5.1).**
-- Next: **8.3**/**8.4** recipes, **8.5**–**8.6** per-tenant resolution + bounded pools, **8.7** ORM reference.
-- Pick **one** ORM for **8.7**; **8.3**/**8.4**/**8.8** as docs + recipes in same milestone or follow-up.
+- **8.4** schema-per-tenant Postgres — **✅ Shipped (`@multitenant/database` v0.5.2).**
+- Next: **8.3** (RLS recipe), **8.5**–**8.6** per-tenant URLs + bounded pools, **8.7** ORM reference.
+- Pick **one** ORM for **8.7**; **8.3** / **8.8** as docs + recipes in same milestone or follow-up.
 
 **Exit:** DoD items 1–4 satisfied for one vertical slice (e.g. Drizzle + Postgres shared + one per-tenant URL mock).
 
