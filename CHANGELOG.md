@@ -4,6 +4,17 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] `@multitenant/database` 0.5.6 — Phase 8.1 ResolvedTenant in ALS scope
+
+### Added
+
+- **`getResolvedTenantFromScope()`** — returns **`TenantScopeState.resolved`** if set.
+- **`requireResolvedTenantFromScope()`** — throws when scope or **`resolved`** is missing (for code paths that need full **`ResolvedTenant`**).
+
+### Documentation
+
+- **`docs/INTERNAL/database-scope.md`**, **`packages/database/README.md`**, **`PLAN.md`** (8.1 **Done**, dashboard **database** version, Sprint **E**); **`CHANGELOG.md`**.
+
 ## [2026-03-29] Phase 1.1 — Error taxonomy closed (Next Pages GSSP tests + docs)
 
 ### Added

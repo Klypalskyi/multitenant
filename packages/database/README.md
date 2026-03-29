@@ -25,7 +25,8 @@ import { runWithTenantScopeAsync, requireTenantScope } from '@multitenant/databa
 
 await runWithTenantScopeAsync({ tenantKey: 'acme', resolved }, async () => {
   const scope = requireTenantScope();
-  // use scope.tenantKey in repositories
+  // use scope.tenantKey in repositories; scope.resolved when you passed it
+  // or: requireResolvedTenantFromScope() when you always attach full ResolvedTenant
 });
 ```
 

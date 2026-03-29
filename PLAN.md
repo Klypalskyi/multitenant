@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **Phase 1.1** error taxonomy **Done** (tag **v0.6.13**): per-surface **missing-tenant** behavior is **defined, documented, and tested** — Express **`onMissingTenant: 'throw'`**; Next App middleware / **`requireTenant`** (**`TenantNotFoundError`**); Pages **`withTenantApi`** → 404 JSON; **`withTenantGSSP`** → **`notFound: true`** (**`with-tenant-gssp.test.ts`**); Nest **`null` `req.tenant`** + **`TenantRequiredGuard`** (docs). *(Prior: **6.2** **v0.6.12**.)*
+**Last reviewed:** 2026-03-29 — **Phase 8.1** **Done** (`@multitenant/database` **v0.5.6**, tag **v0.6.14**): **`getResolvedTenantFromScope`**, **`requireResolvedTenantFromScope`**; **`TenantScopeState.resolved`** documented; scope tests. *(Prior: **1.1** **v0.6.13**.)*
 
 ---
 
@@ -28,7 +28,7 @@
 | `isFeatureEnabled()` / flags server-side | **Shipped** | v0.5.0 — `isTenantFeatureEnabled` in core (flags map) |
 | Package unit tests + CI | **Shipped** | `npm test` + **`npm run test:coverage`** (turbo, v8 thresholds); **next-app** + **express** integration suites (**`*.integration.test.ts`**); other packages unit tests; GitHub Actions **`build`** → **`test`** → **`test:coverage`** → **`examples:smoke`** → **`examples:express-smoke`** |
 | Website / landing in repo | **Not shipped** | Optional external |
-| ORM / DB adapters (shared DB + per-tenant DB) | **Shipped** | **`@multitenant/database` v0.5.5** + thin ORM peers **`drizzle` / `kysely` / `prisma` / `typeorm`** @ **v0.1.0**; **8.8** migrations doc; further drivers/ORMs only on demand |
+| ORM / DB adapters (shared DB + per-tenant DB) | **Shipped** | **`@multitenant/database` v0.5.6** + thin ORM peers **`drizzle` / `kysely` / `prisma` / `typeorm`** @ **v0.1.0**; **8.8** migrations doc; further drivers/ORMs only on demand |
 | Orientation: why / pitfalls / diagram | **Shipped** | `docs/WHY-MULTITENANT.md` — two mermaid diagrams + pitfalls + **Next steps** (examples, INDEX, frameworks, DB scope); links to errors & sessions |
 | README hero (10-second pitch) | **Shipped** | root **`README.md`** — Phase **7.1**: value line, npm badge, quick links, **`requireTenant`** layout |
 
@@ -210,7 +210,7 @@
 
 | ID | Task | Dependencies | Acceptance criteria |
 |----|------|--------------|---------------------|
-| 8.1 | **Tenant DB context (async-safe)** | Phase 1 stable types | **Partial (v0.5.0):** `@multitenant/database` — ALS `runWithTenantScope*` + `getTenantScope` / `requireTenantScope`; nested async + strict missing-scope tests. Full `ResolvedTenant` in scope optional follow-up. |
+| 8.1 | **Tenant DB context (async-safe)** | Phase 1 stable types | **Done (v0.5.6):** `@multitenant/database` — ALS `runWithTenantScope*` + `getTenantScope` / `requireTenantScope`; **`getResolvedTenantFromScope`** / **`requireResolvedTenantFromScope`** for optional **`ResolvedTenant`** on **`TenantScopeState`**; nested async + strict missing-scope + **`resolved`** tests (`src/scope.test.ts`). |
 | 8.2 | **Shared DB — `tenant_id` + scoping helpers** | 8.1 | **Done (v0.5.1):** `requireTenantKey`, `assignTenantIdForWrite`, `assertRowTenantColumn`; `docs/INTERNAL/shared-db-tenant-id.md` (composite keys, indexes, threat model). *Query building stays app/ORM; helpers enforce row/column invariants + ALS scope.* |
 | 8.3 | **Shared DB — Postgres RLS recipe** | 8.1; Phase 4 **recommended** for identity-bound RLS | **Done (v0.5.3):** `buildSetLocalTenantGucSql`, `buildSetLocalTenantGucSqlFromScope`, `escapePostgresStringLiteral`, `assertSafePostgresCustomGucName`, `POSTGRES_RLS_TENANT_GUC_DEFAULT`; `docs/INTERNAL/postgres-rls-tenant.md` (policies, `SET LOCAL`, PgBouncer, `FORCE RLS`). *Dockerized PG e2e in CI remains optional / not in repo.* |
 | 8.4 | **Shared DB — schema-per-tenant (same cluster)** | 8.1 | **Done (v0.5.2):** `schemaNameForTenant`, `POSTGRES_MAX_IDENTIFIER_BYTES`, `requireSchemaNameForCurrentTenant`; `docs/INTERNAL/schema-per-tenant-postgres.md` (`SET LOCAL search_path`, pooling, prepared statements, migrations note). |
@@ -289,7 +289,7 @@ Exit criteria are mandatory; task lists are indicative.
 
 ### Sprint E — Database / ORM (optional; Phase 8)
 
-- Ship **8.1** (`@multitenant/database` scope + ALS/hybrid) before any ORM-specific package. **✅ Shipped (v0.5.0).**
+- Ship **8.1** (`@multitenant/database` scope + ALS/hybrid) before any ORM-specific package. **✅ Done (v0.5.6):** full **`ResolvedTenant`** in scope + accessors.
 - **8.2** shared-DB `tenant_id` helpers — **✅ Shipped (`@multitenant/database` v0.5.1).**
 - **8.3** Postgres RLS + `SET LOCAL` helpers — **✅ Shipped (`@multitenant/database` v0.5.3).**
 - **8.4** schema-per-tenant Postgres — **✅ Shipped (`@multitenant/database` v0.5.2).**

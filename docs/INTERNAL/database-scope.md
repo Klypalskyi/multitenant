@@ -6,9 +6,11 @@ This package does **not** include drivers or SQL. **Phase 8.6** adds a **driver-
 
 ## API (summary)
 
-- `runWithTenantScope(tenantKey, fn)` / `runWithTenantScopeAsync` — execute synchronous / async work inside the scope.
-- `getTenantScope()` — read `tenantKey` or `undefined` if outside a scope.
+- `runWithTenantScope(scope, fn)` / `runWithTenantScopeAsync` — execute synchronous / async work inside the scope. **`scope`** is `{ tenantKey, resolved?: ResolvedTenant }` — pass **`resolved`** from `registry.resolveByRequest` when downstream code needs market, flags, or `resolveTenantDatabaseUrl`.
+- `getTenantScope()` — read current **`TenantScopeState`** or `undefined` if outside a scope.
 - `requireTenantScope()` — returns scope or throws if missing (strict mode for DB code paths).
+- `getResolvedTenantFromScope()` — `scope?.resolved` or `undefined`.
+- `requireResolvedTenantFromScope()` — **`ResolvedTenant`** or throws if scope missing or **`resolved`** omitted.
 - **Shared DB (Phase 8.2):** `requireTenantKey`, `assignTenantIdForWrite`, `assertRowTenantColumn` — see [Shared DB `tenant_id`](shared-db-tenant-id.md).
 - **Schema-per-tenant Postgres (Phase 8.4):** `schemaNameForTenant`, `requireSchemaNameForCurrentTenant` — see [Schema-per-tenant Postgres](schema-per-tenant-postgres.md).
 - **Postgres RLS + `SET LOCAL` (Phase 8.3):** `buildSetLocalTenantGucSql`, `buildSetLocalTenantGucSqlFromScope`, literals/GUC validation — see [Postgres RLS tenant GUC](postgres-rls-tenant.md).
@@ -22,3 +24,4 @@ See package `README` and `packages/database/src/index.ts` for exact types and be
 - **Edge** — do not use; there is no stable ALS story on all Edge runtimes. Resolve tenant in middleware; pass explicit context into server-only modules.
 - **Workers / jobs** — no ambient scope; call repositories with an explicit `tenantKey` or wrap the job body in `runWithTenantScope`.
 - **Security** — scope must be set only after **trusted** resolution (registry + host / internal headers) or after `assertAccess` on identity.
+- **`resolved` in scope** — optional for **`tenant_id`** / RLS helpers that only need **`tenantKey`**; recommended when calling **`resolveTenantDatabaseUrl`** or reading tenant flags inside repositories without re-resolution.

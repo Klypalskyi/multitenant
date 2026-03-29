@@ -63,6 +63,24 @@ export function requireTenantScope(): TenantScopeState {
   return s;
 }
 
+/** `ResolvedTenant` from scope when the HTTP boundary passed it (e.g. `resolveByRequest`); otherwise `undefined`. */
+export function getResolvedTenantFromScope(): ResolvedTenant | undefined {
+  return getTenantScope()?.resolved;
+}
+
+/**
+ * Like `requireTenantScope` but requires `scope.resolved` — use when DB code needs full **`ResolvedTenant`** (market, flags, …), not only `tenantKey`.
+ */
+export function requireResolvedTenantFromScope(): ResolvedTenant {
+  const s = requireTenantScope();
+  if (!s.resolved) {
+    throw new Error(
+      '[multitenant/database] Tenant scope has no ResolvedTenant; pass `{ tenantKey, resolved }` from `registry.resolveByRequest` into `runWithTenantScope`',
+    );
+  }
+  return s.resolved;
+}
+
 /** Convenience for repository code: current `tenantKey` or throw if no ALS scope. */
 export function requireTenantKey(): string {
   return requireTenantScope().tenantKey;
