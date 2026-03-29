@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — `next-app-router.md`: copy-paste root `middleware.ts` tied to shared `tenantRegistry` (Phase 5.1).
+**Last reviewed:** 2026-03-29 — **PLAN audit:** dashboard semver + Sprint A history synced to repo; Phase rows match shipped/docs state through **5.1** middleware copy-paste, **5.3** Nest guard, **5.4** react-ssr, **6.4** WHY Next mermaid.
 
 ---
 
@@ -13,7 +13,7 @@
 |------------|--------|--------|
 | Core: `createTenantRegistry`, types, `resolveByHost` / `resolveByRequest` | **Shipped** | `packages/core` |
 | Config: Zod + `loadTenantsConfig`, overlap validation | **Shipped** | `packages/config` |
-| CLI: `check`, `print`, `dev`, `init` (+ `tenantify` alias) | **Shipped** | v0.5.0: `init` scaffolds config + optional framework stubs; see `docs/CLI/init.md` |
+| CLI: `check`, `print`, `dev`, `init` (+ `tenantify` alias) | **Shipped** | **v0.5.2** — `init` scaffolds config + optional framework stubs; see `docs/CLI/init.md` |
 | Dev proxy + config hot-reload (`chokidar` on `tenants.config.json`) | **Shipped** | `multitenant dev` |
 | Adapters: React, Next App/Pages, Express, Nest | **Shipped** | |
 | React: `useTenantConfig`, `useTenantFlag`, experiments | **Shipped** | `tenant.flags` map — not a separate `features` block |
@@ -21,7 +21,7 @@
 | Examples: `examples/next-app-router`, `next-pages`, `express` | **Partial** | Reference snippets + `examples/README.md`; no per-example `package.json` yet (Phase 6.3) |
 | Typed error classes (`TenantNotFoundError`, etc.) | **Shipped** | v0.4.0 — `MultitenantError` + `code`; see `docs/INTERNAL/errors.md` |
 | `createTenantRegistry(_, { debug: true })` + custom `log` | **Shipped** | v0.4.0 |
-| `npx multitenant init` | **Shipped** | `@multitenant/cli` v0.5.0 — `docs/CLI/init.md` |
+| `npx multitenant init` | **Shipped** | `@multitenant/cli` **v0.5.2** (binary `.version` aligned) — `docs/CLI/init.md` |
 | Meta-package `@multitenant/next` | **Shipped** | v0.5.0 — single install line; see package README |
 | `export { middleware } from '@multitenant/next-app/auto'` | **Shipped** | v0.5.0 — `auto` (config object) + `auto-node` (project-root JSON load); Edge vs Node documented on subpath |
 | Server helper `getTenantConfig()` (non-React) | **Shipped** | v0.5.0 in `@multitenant/core` — pair with registry + `ResolvedTenant.tenantKey` |
@@ -68,7 +68,7 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 1.1 | **Error taxonomy** | **Partial:** Express `onMissingTenant: 'throw'` → `next(TenantNotFoundError)`; Next Pages `withTenantApi` → 404 JSON with `MULTITENANT_TENANT_NOT_FOUND` (**next-pages v0.4.2**); GSSP still `notFound`; Nest null. |
+| 1.1 | **Error taxonomy** | **Partial:** Express `onMissingTenant: 'throw'` → `next(TenantNotFoundError)`; Next Pages `withTenantApi` → 404 JSON with `MULTITENANT_TENANT_NOT_FOUND` (**next-pages v0.4.2**); GSSP still `notFound`; Nest middleware still **`null` tenant** when unresolved — strict routes use app guard (**`TenantRequiredGuard`** in `docs/FRAMEWORKS/nestjs.md`). |
 | 1.2 | **Align docs & PLAN with real API** — no fictional method names | **Done:** `*.md` grep — no stray `resolveTenant` / `getTenant()` except intentional notes in `PLAN.md` / Appendix B. |
 | 1.3 | **Duplication audit** — types across packages | **Done (audit):** `ResolvedTenant` / `TenantsConfig` interfaces only in `@multitenant/core` (`packages/*/src` grep). |
 | 1.4 | **Debug / observability on registry** | **Done (v0.4.0)** — optional structured OTel hook still future (Appendix A) |
@@ -253,9 +253,9 @@ Exit criteria are mandatory; task lists are indicative.
 
 - Error taxonomy (Phase 1.1) + debug/logger (Phase 1.4) shipped.
 - Test harness: Vitest + `turbo run test` (Phase 6.1 partial — core + config only).
-- Phase 1.2 / 1.3 still open (docs sweep; adapter error consistency).
+- **Follow-up (done later):** Phase **1.2** doc API grep + **1.3** type duplication audit — see Phase 1 table (**Done**).
 
-**Exit:** `npm run build` + `npm test` green locally; typed errors documented.
+**Exit:** `npm run build` + `npm test` green locally; typed errors documented. *(1.2 / 1.3 closed in 2026-03 — Phase 1 table.)*
 
 ### Sprint B — DX ✅
 
@@ -274,6 +274,7 @@ Exit criteria are mandatory; task lists are indicative.
 - **Done:** GitHub Actions CI (Node 22); framework docs; `WHY-MULTITENANT.md`; README 30-second start + **copy-paste `middleware.ts`**; per-package READMEs + `package.json` `repository` / `license` / `homepage`; `next-app` + **express** + **next-pages** (`withTenantApi`) tests in `npm test`.
 - **Done (Pages):** `withTenantApi` 404 JSON includes `code: MULTITENANT_TENANT_NOT_FOUND` (`@multitenant/next-pages` **v0.4.2**).
 - **Done:** `examples/config-smoke` + CI `npm run examples:smoke`; Nest DI recipe in `docs/FRAMEWORKS/nestjs.md`.
+- **Done (docs follow-through, 2026-03):** `react-ssr.md` SSR/RSC-first + Next subsections (5.4); Nest **`TenantRequiredGuard`** copy-paste (5.3); `WHY-MULTITENANT.md` second mermaid + App Router link (6.4); `next-app-router.md` root **`middleware.ts`** shared with `lib/tenant-registry` (5.1); `@multitenant/react` **v0.5.1** hook tests (6.1).
 - **Open:** runnable Next/Express example workspaces; optional global coverage thresholds.
 
 ### Sprint E — Database / ORM (optional; Phase 8)

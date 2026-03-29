@@ -4,6 +4,14 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Docs — PLAN audit (semver + sprint history)
+
+### Documentation
+
+- **`PLAN.md`** — **Last reviewed** snapshot; dashboard **CLI v0.5.2**; Sprint **A** 1.2/1.3 no longer “open”; Sprint **D** docs follow-through bullet (5.1–5.4, 6.1 react tests, 6.4); Phase **1.1** Nest row + guard pointer.
+
+_No package `src/` changes — no npm publish._
+
 ## [2026-03-29] Docs — Next `middleware.ts` + shared registry (Phase 5.1)
 
 ### Documentation
