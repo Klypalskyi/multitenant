@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **Phase 3** **Done** for listed tasks (tag **v0.6.18**): **3.2** **`tenant.flags`** + **`isTenantFeatureEnabled`** / **`useTenantFlag`**; **no** separate **`features`** schema field (**`docs/CONFIG/tenants-config.md`** + **Appendix B**). *(Prior: **Phase 4** **v0.6.16**.)*
+**Last reviewed:** 2026-03-29 — **Phase 2** **Done** for listed tasks (tag **v0.6.19**): **2.1–2.3** init / **`@multitenant/next`** / **`auto`+`auto-node`**; **2.4** base dev proxy (hot reload, config path) — TTY summary stretch → **Appendix A**. Dashboard: **Identity** row reflects **`@multitenant/identity` v0.5.1** session header helpers. *(Prior: **Phase 3** **v0.6.18**.)*
 
 ---
 
@@ -17,7 +17,7 @@
 | Dev proxy + config hot-reload (`chokidar` on `tenants.config.json`) | **Shipped** | `multitenant dev` |
 | Adapters: React, Next App/Pages, Express, Nest | **Shipped** | |
 | React: `useTenantConfig`, `useTenantFlag`, experiments | **Shipped** | `tenant.flags` map — not a separate `features` block |
-| Identity: cookie encode/decode, `canAccessTenant`, `assertAccess` | **Shipped** | No `getSession`/`setSession` helpers |
+| Identity: cookie encode/decode, `getSessionFromCookieHeader` / `buildSessionSetCookieHeader`, `canAccessTenant`, `assertAccess` | **Shipped** | **v0.5.1** — optional **`CookieConfig.domain`**; **`docs/INTERNAL/session-cookies.md`** |
 | Examples | **Shipped** | Runnable **`examples/express-minimal`**, **`examples/next-minimal`** (+ **`config-smoke`**); CI `examples:smoke` + **`examples:express-smoke`**; copy-paste refs `next-app-router` / `next-pages` / `express` |
 | Typed error classes (`TenantNotFoundError`, etc.) | **Shipped** | v0.4.0 — `MultitenantError` + `code`; see `docs/INTERNAL/errors.md` |
 | `createTenantRegistry(_, { debug: true })` + custom `log` | **Shipped** | v0.4.0 |
@@ -85,21 +85,23 @@
 
 ## Phase 2 — Developer experience (P0)
 
-**Goal:** Five-minute setup; minimal copy-paste.
+**Goal:** Five-minute setup; minimal copy-paste.  
+**Status:** **Done** for listed scope (see table).
 
-### Shipped (partial)
+### Shipped
 
 - `useTenantConfig` in `@multitenant/react`.
-- `multitenant dev` with hot reload of config.
+- `multitenant dev` with hot reload of config (**2.4** base).
+- **2.1–2.4** per table (init; meta-package; `auto` / `auto-node`; dev proxy base UX).
 
-### Remaining work
+### Task checklist (all Done)
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
 | 2.1 | **`multitenant init`** | **Shipped (v0.5.0)** — flags + TTY prompt; minimal `tenants.config.json`; stubs for `next-app` (`middleware.ts`), `next-pages` (`lib/tenant-registry.ts`), `express` (`multitenant.server.example.ts`); `validateTenantsConfig` before write; overwrite requires confirmation or `--force` |
 | 2.2 | **Optional `@multitenant/next`** | **Shipped (v0.5.0)** — meta-package; single install line; see `packages/next/README.md` |
 | 2.3 | **Zero-config Next entry** | **Shipped (v0.5.0)** — `@multitenant/next-app/auto` + `auto-node`; Node vs Edge split documented on subpaths |
-| 2.4 | **Dev proxy UX** | Already: auto-detect config path, hot reload. Stretch: TTY summary (tenants, listen port, upstream) — not a full web dashboard unless scoped |
+| 2.4 | **Dev proxy UX** | **Done (base):** auto-detect config path, hot reload (`multitenant dev`). **Stretch (not shipped):** TTY summary (tenants, listen port, upstream) — **Appendix A** item 10; not a web dashboard unless scoped separately |
 
 **Dependencies:** 2.1 should reference stable API names (Phase 1.2). 2.3 depends on clear Node vs Edge split.
 
@@ -268,9 +270,9 @@ Exit criteria are mandatory; task lists are indicative.
 
 ### Sprint B — DX ✅
 
-- `multitenant init` (Phase 2.1); `@multitenant/next` (2.2); `next-app/auto` + `auto-node` (2.3) — **shipped** (v0.5.x).
+- **Phase 2 Done:** `multitenant init` (2.1); `@multitenant/next` (2.2); `next-app/auto` + `auto-node` (2.3) — **shipped** (v0.5.x). **2.4** base: `multitenant dev` (hot reload, config path) — **shipped**; TTY summary stretch — **Appendix A**.
 
-**Exit:** Init + check + meta/auto paths documented — **met**.
+**Exit:** Init + check + meta/auto paths documented — **met**. Dev proxy base — **met**.
 
 ### Sprint C — Value + identity ✅ (core deliverables)
 
@@ -312,7 +314,7 @@ Exit criteria are mandatory; task lists are indicative.
 ## Success criteria (measurable)
 
 1. **Build:** `npm run build` at repo root exits 0.
-2. **Init path (Sprint B partial):** `npx multitenant init` → `npx multitenant check` exits 0; add framework deps and run `npm run dev` on the app port (e.g. 3000), then `multitenant dev --target http://localhost:3000 --port 3100` to hit tenant hosts on **3100** (proxy) while the app listens on **3000**. Defaults from `init` use `main.localhost` in `domains.local` — adjust to match your hosts.
+2. **Init path (Sprint B / Phase 2):** `npx multitenant init` → `npx multitenant check` exits 0; add framework deps and run `npm run dev` on the app port (e.g. 3000), then `multitenant dev --target http://localhost:3000 --port 3100` to hit tenant hosts on **3100** (proxy) while the app listens on **3000**. Defaults from `init` use `main.localhost` in `domains.local` — adjust to match your hosts.
 3. **Tests:** `npm test` runs workspace tests including **next-app** + **express** **`*.integration.test.ts`**; **`npm run test:coverage`** runs Vitest with v8 thresholds per package; **CI** runs `npm ci` → `build` → `test` → **`test:coverage`** → **`examples:smoke`** → **`examples:express-smoke`** on push/PR (`.github/workflows/ci.yml`; **`next-minimal`** is covered by **`npm run build`** / turbo).
 4. **Errors:** `instanceof` / `e.code` distinguish config vs resolution vs missing tenant for core, config, and Next strict paths.
 
@@ -331,6 +333,7 @@ Promote items into phases above when prioritized.
 7. **Editor tooling** — VS Code extension or JSON Schema: validate `tenants.config.json`, go-to-definition for tenant/market keys.
 8. **Compliance-oriented session matrix** — Single doc: isolated vs shared cookies across subdomains with SameSite / Domain / `__Host-` guidance.
 9. **DB connection observability** — Metrics for pool size per tenant/URL, wait time, and eviction — complements Phase 8.
+10. **Dev proxy TTY summary** — On `multitenant dev` startup, print one terminal screen: resolved tenants (from config), proxy listen address/port, upstream target — **stretch** from Phase **2.4** (base proxy already shipped).
 
 ---
 

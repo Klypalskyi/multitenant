@@ -4,6 +4,12 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Phase 2 — DX closure (PLAN + dashboard)
+
+### Documentation
+
+- **`PLAN.md`** — Phase **2** **Done** (no partial); **2.4** base vs TTY stretch (**Appendix A** item 10); **Sprint B** + success criterion **2** aligned; **Identity** dashboard row (**`@multitenant/identity` v0.5.1** session helpers). Tag **v0.6.19** (docs-only).
+
 ## [2026-03-29] Phase 3.2 / Phase 3 — feature flags documented (`flags` only)
 
 ### Documentation
