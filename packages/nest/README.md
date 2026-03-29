@@ -3,6 +3,7 @@
 NestJS integration for `@multitenant/core`. Provides:
 
 - `MultitenantModuleForRoot({ registry, environment? })` — registers tenant-resolution middleware on all routes
+- `createMultitenantNestMiddleware(registry, environment?)` — same handler the module uses; optional for custom `MiddlewareConsumer` paths or tests
 - `@Tenant()` param decorator – injects the current `ResolvedTenant | null` into controller handlers
 
 ## Install

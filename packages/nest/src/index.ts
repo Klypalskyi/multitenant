@@ -15,6 +15,25 @@ export interface MultitenantModuleOptions {
   environment?: EnvironmentName;
 }
 
+/** Connect/Express-style handler: sets `req.tenant` from the registry (Nest middleware uses this internally). */
+export function createMultitenantNestMiddleware(
+  registry: TenantRegistry,
+  environment?: EnvironmentName,
+): (req: any, _res: any, next: () => void) => void {
+  return (req: any, _res: any, next: () => void) => {
+    const host =
+      req.headers['x-forwarded-host'] ?? req.headers.host ?? undefined;
+    req.tenant = registry.resolveByRequest(
+      {
+        host: typeof host === 'string' ? host : Array.isArray(host) ? host[0] : undefined,
+        headers: req.headers,
+      },
+      { environment },
+    );
+    next();
+  };
+}
+
 @Module({})
 export class MultitenantModule implements NestModule {
   constructor(
@@ -23,20 +42,7 @@ export class MultitenantModule implements NestModule {
 
   configure(consumer: MiddlewareConsumer): void {
     const { registry, environment } = this.options;
-    consumer
-      .apply((req: any, _res: any, next: () => void) => {
-        const host =
-          req.headers['x-forwarded-host'] ?? req.headers.host ?? undefined;
-        req.tenant = registry.resolveByRequest(
-          {
-            host: typeof host === 'string' ? host : Array.isArray(host) ? host[0] : undefined,
-            headers: req.headers,
-          },
-          { environment },
-        );
-        next();
-      })
-      .forRoutes('*');
+    consumer.apply(createMultitenantNestMiddleware(registry, environment)).forRoutes('*');
   }
 }
 

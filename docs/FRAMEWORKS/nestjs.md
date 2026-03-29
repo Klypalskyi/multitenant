@@ -4,6 +4,8 @@ Package: `@multitenant/nest`. Registers middleware that resolves the tenant the 
 
 ## Setup
 
+`MultitenantModuleForRoot` applies **`createMultitenantNestMiddleware(registry, environment)`** globally (`forRoutes('*')`). Import the factory yourself only if you need a narrower route set or to compose with other middleware.
+
 ```ts
 import { MultitenantModuleForRoot } from '@multitenant/nest';
 

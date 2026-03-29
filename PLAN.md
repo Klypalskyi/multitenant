@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — Phase 5.4: `docs/FRAMEWORKS/react-ssr.md` — App Router RSC boundary, copy-paste `providers` + `layout`; Pages Router note.
+**Last reviewed:** 2026-03-29 — `@multitenant/nest` **v0.4.2**: `createMultitenantNestMiddleware` + Vitest (`src/multitenant-nest.test.ts`).
 
 ---
 
@@ -158,7 +158,7 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app + **next-pages** + **express**; CI runs `npm test` |
+| 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app + **next-pages** + **express** + **nest**; CI runs `npm test` |
 | 6.2 | **Integration tests** | **Partial:** `@multitenant/next-app` middleware + `NextRequest` / header contract (`src/middleware.integration.test.ts`) in CI |
 | 6.3 | **Examples** | **Partial:** `examples/README.md`; **`examples/config-smoke`** — workspace + CI step `npm run examples:smoke` (root config + resolution); full Next/Express runnable examples still open |
 | 6.4 | **Documentation** | **Partial:** `docs/WHY-MULTITENANT.md` — why / when not / pitfalls / mermaid; links to tenant-bound sessions + getting started |

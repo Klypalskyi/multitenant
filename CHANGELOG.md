@@ -6,6 +6,17 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 - _(nothing yet)_
 
+## [2026-03-29] `@multitenant/nest` 0.4.2 — middleware factory + tests
+
+### Added
+
+- **`createMultitenantNestMiddleware(registry, environment?)`** — public factory used by `MultitenantModule`; sets `req.tenant` like before.
+- **Vitest:** `packages/nest/src/multitenant-nest.test.ts` — forwarded host, match, null tenant, array `x-forwarded-host`.
+
+### Documentation
+
+- `packages/nest/README.md`, `docs/FRAMEWORKS/nestjs.md`, `docs/INTERNAL/architecture.md`, `PLAN.md` (Phase 6.1).
+
 ## [2026-03-29] Docs — React SSR / App Router RSC boundary
 
 ### Documentation

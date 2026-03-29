@@ -1,6 +1,6 @@
 {
   "name": "@multitenant/nest",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -8,11 +8,15 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts"
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "test": "vitest run"
   },
   "peerDependencies": {
     "@nestjs/common": ">=10.0.0",
     "@nestjs/core": ">=10.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^3.0.5"
   },
   "dependencies": {
     "@multitenant/core": "^0.5.0"
