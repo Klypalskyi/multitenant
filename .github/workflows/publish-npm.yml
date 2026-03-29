@@ -3,6 +3,8 @@
 #
 # Triggers: git tag v* (e.g. v0.7.0) or manual workflow_dispatch.
 # Secret: NPM_TOKEN — npm automation token with publish access to @multitenant scope.
+# Must be a Repository secret under Settings → Secrets and variables → Actions (exact name NPM_TOKEN).
+# Environment secrets are NOT available unless you add `environment: <name>` to this job.
 name: Publish npm
 
 on:
@@ -21,6 +23,12 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: read
+    # Match local publishes: root `.npmrc` is `//registry.npmjs.org/:_authToken=${NPM_TOKEN}`.
+    # Do NOT use setup-node `registry-url`: it writes RUNNER_TEMP/.npmrc and sets
+    # NPM_CONFIG_USERCONFIG, which can override npm’s merge with the repo `.npmrc` and yield
+    # HTTP 404 on `npm publish` to @scoped packages (npm hides auth failures as 404).
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - uses: actions/checkout@v6
 
@@ -28,15 +36,20 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Install
         run: npm ci
 
-      - name: Build
-        run: npm run build
+      - name: Build packages (skip apps/site and examples)
+        run: npm run build:packages
+
+      - name: Verify npm token (fail fast)
+        run: |
+          if [ -z "${NPM_TOKEN:-}" ]; then
+            echo "::error::NPM_TOKEN is empty. Add it as a Repository secret: Settings → Secrets and variables → Actions → New repository secret (name exactly NPM_TOKEN). If you created an Environment secret instead, add 'environment: <env-name>' to the publish job. Organization secrets must allow this repository."
+            exit 1
+          fi
+          npm whoami --registry=https://registry.npmjs.org
 
       - name: Publish packages
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: bash scripts/publish-packages.sh

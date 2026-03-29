@@ -35,6 +35,8 @@ npm install
 npm run build
 ```
 
+For **npm publish** only (local **`release:publish`** or CI), **`npm run build:packages`** is enough: it runs **`turbo run build --filter='./packages/*'`** and skips **`apps/site`** and **`examples/*`**.
+
 ## 2. Version
 
 **Important:** Only bump versions for packages with source code changes (modified `src/` directory). This prevents spurious npm updates for unchanged packages.
@@ -156,7 +158,9 @@ Automation tokens usually skip OTP. If you publish with a **user** token or `npm
 
 - **Triggers:** push of a version tag matching `v*` (e.g. `v0.7.0`), or **workflow_dispatch**.
 - **Secret:** `NPM_TOKEN` — npm **Automation** token with publish access to the `@multitenant` scope.
-- **Behaviour:** `npm ci` → `npm run build` → `bash scripts/publish-packages.sh` (same as local **`release:publish`**; only workspaces whose version is **not** already on npm are published).
+- **Auth env:** the job sets **`NPM_TOKEN`** only (same as local **`export NPM_TOKEN=…`**). Root **`.npmrc`** uses `${NPM_TOKEN}` for **`npm publish`**. Do **not** set **`actions/setup-node`** **`registry-url`** for this workflow: that action writes **`NPM_CONFIG_USERCONFIG`** under **`RUNNER_TEMP`** and can break npm’s config merge with the repo **`.npmrc`**, producing **HTTP 404** on publish to **`@multitenant/*`** even with a valid token.
+- **If `NPM_TOKEN` is empty in CI:** create the secret under **Settings → Secrets and variables → Actions** (repository secret, name **`NPM_TOKEN`** exactly). Secrets under **Dependabot** or **Codespaces** tabs are **not** used by this workflow. **Environment** secrets require adding **`environment:`** (with the environment name) to the **`publish`** job in **`.github/workflows/publish-npm.yml`**. For org-level secrets, grant access to this repository.
+- **Behaviour:** `npm ci` → **`npm run build:packages`** → `bash scripts/publish-packages.sh` (same as local **`release:publish`**; only workspaces whose version is **not** already on npm are published; does not build the docs site or examples).
 
 ### Deploy site to Vercel
 
