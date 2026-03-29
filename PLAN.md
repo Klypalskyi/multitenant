@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **`@multitenant/prisma` v0.1.0** (Prisma reference); **`@multitenant/drizzle` v0.1.0**; **8.8** migrations doc; **`@multitenant/database` v0.5.5** through **8.6**.
+**Last reviewed:** 2026-03-29 — **Phase 6.3:** runnable **`examples/express-minimal`** + **`examples/next-minimal`**; CI **`examples:express-smoke`**; ORM refs **drizzle + prisma** `v0.1.0`.
 
 ---
 
@@ -18,7 +18,7 @@
 | Adapters: React, Next App/Pages, Express, Nest | **Shipped** | |
 | React: `useTenantConfig`, `useTenantFlag`, experiments | **Shipped** | `tenant.flags` map — not a separate `features` block |
 | Identity: cookie encode/decode, `canAccessTenant`, `assertAccess` | **Shipped** | No `getSession`/`setSession` helpers |
-| Examples: `examples/next-app-router`, `next-pages`, `express` | **Partial** | Reference snippets + `examples/README.md`; no per-example `package.json` yet (Phase 6.3) |
+| Examples | **Shipped** | Runnable **`examples/express-minimal`**, **`examples/next-minimal`** (+ **`config-smoke`**); CI `examples:smoke` + **`examples:express-smoke`**; copy-paste refs `next-app-router` / `next-pages` / `express` |
 | Typed error classes (`TenantNotFoundError`, etc.) | **Shipped** | v0.4.0 — `MultitenantError` + `code`; see `docs/INTERNAL/errors.md` |
 | `createTenantRegistry(_, { debug: true })` + custom `log` | **Shipped** | v0.4.0 |
 | `npx multitenant init` | **Shipped** | `@multitenant/cli` **v0.5.2** (binary `.version` aligned) — `docs/CLI/init.md` |
@@ -28,7 +28,7 @@
 | `isFeatureEnabled()` / flags server-side | **Shipped** | v0.5.0 — `isTenantFeatureEnabled` in core (flags map) |
 | Package unit tests + CI | **Shipped** | `npm test` (turbo): core, config, cli, database, identity, **next-app** integration tests; GitHub Actions `build` + `test` + **`npm run examples:smoke`** on push/PR |
 | Website / landing in repo | **Not shipped** | Optional external |
-| ORM / DB adapters (shared DB + per-tenant DB) | **Partial** | **`@multitenant/database` v0.5.5** (8.1–8.6) + **`@multitenant/drizzle` v0.1.0** (Phase **8.7**); **8.8** migrations doc; optional Prisma package; runnable examples = **Phase 6.3** |
+| ORM / DB adapters (shared DB + per-tenant DB) | **Partial** | **`@multitenant/database` v0.5.5** + **`@multitenant/drizzle` v0.1.0** + **`@multitenant/prisma` v0.1.0**; **8.8** doc; Kysely / TypeORM incremental |
 | Orientation: why / pitfalls / diagram | **Partial** | `docs/WHY-MULTITENANT.md` — host→registry + **Next middleware→headers→`getTenantFromHeaders`** mermaid; `docs/INTERNAL/tenant-bound-sessions.md` |
 
 **Naming note:** The public API uses `resolveByHost`, `resolveByRequest`, `getTenantFromHeaders`, and `requireTenant`. Do **not** document or implement `resolveTenant()` / `getTenant()` unless adding explicit aliases with a deprecation story.
@@ -160,7 +160,7 @@
 |----|------|---------------------|
 | 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app + **next-pages** + **express** + **nest** + **react**; CI runs `npm test` |
 | 6.2 | **Integration tests** | **Partial:** `@multitenant/next-app` middleware + `NextRequest` / header contract (`src/middleware.integration.test.ts`) in CI |
-| 6.3 | **Examples** | **Partial:** `examples/README.md`; **`examples/config-smoke`** — workspace + CI step `npm run examples:smoke` (root config + resolution); full Next/Express runnable examples still open |
+| 6.3 | **Examples** | **Done:** **`examples/README.md`** — runnable **`express-minimal`** (`supertest` smoke, `npm run examples:express-smoke`) + **`next-minimal`** (`next build` via turbo + RSC + `@multitenant/next-app/auto`); **`config-smoke`** unchanged; reference-only folders retained. |
 | 6.4 | **Documentation** | **Partial:** `docs/WHY-MULTITENANT.md` — why / when not / pitfalls; **two** mermaid diagrams (core resolution + Next header path); links to getting started, errors, sessions, `docs/FRAMEWORKS/next-app-router.md` |
 
 ---
@@ -275,7 +275,8 @@ Exit criteria are mandatory; task lists are indicative.
 - **Done (Pages):** `withTenantApi` 404 JSON includes `code: MULTITENANT_TENANT_NOT_FOUND` (`@multitenant/next-pages` **v0.4.2**).
 - **Done:** `examples/config-smoke` + CI `npm run examples:smoke`; Nest DI recipe in `docs/FRAMEWORKS/nestjs.md`.
 - **Done (docs follow-through, 2026-03):** `react-ssr.md` SSR/RSC-first + Next subsections (5.4); Nest **`TenantRequiredGuard`** copy-paste (5.3); `WHY-MULTITENANT.md` second mermaid + App Router link (6.4); `next-app-router.md` root **`middleware.ts`** shared with `lib/tenant-registry` (5.1); `@multitenant/react` **v0.5.1** hook tests (6.1).
-- **Open:** runnable Next/Express example workspaces; optional global coverage thresholds.
+- **Done (2026-03):** runnable **`examples/express-minimal`**, **`examples/next-minimal`** + CI express smoke.
+- **Open:** optional global coverage thresholds.
 
 ### Sprint E — Database / ORM (optional; Phase 8)
 
@@ -288,7 +289,8 @@ Exit criteria are mandatory; task lists are indicative.
 - **8.7** Drizzle reference — **✅ Shipped (`@multitenant/drizzle` v0.1.0).**
 - **8.8** migrations story — **✅ Shipped (`docs/INTERNAL/database-migrations-multitenant.md`).**
 - **Prisma reference** — **✅ Shipped (`@multitenant/prisma` v0.1.0).**
-- Optional: Kysely / TypeORM; runnable ORM examples (Phase 6.3).
+- Optional: Kysely / TypeORM.
+- **Phase 6.3** runnable examples — **✅ Shipped** (`express-minimal`, `next-minimal`).
 
 **Exit:** DoD items **1–5** met (topologies + pooling + **`@multitenant/drizzle`** + migrations doc + `multitenant check` 8.5 shape).
 
@@ -298,7 +300,7 @@ Exit criteria are mandatory; task lists are indicative.
 
 1. **Build:** `npm run build` at repo root exits 0.
 2. **Init path (Sprint B partial):** `npx multitenant init` → `npx multitenant check` exits 0; add framework deps and run `npm run dev` on the app port (e.g. 3000), then `multitenant dev --target http://localhost:3000 --port 3100` to hit tenant hosts on **3100** (proxy) while the app listens on **3000**. Defaults from `init` use `main.localhost` in `domains.local` — adjust to match your hosts.
-3. **Tests:** `npm test` runs workspace tests including **next-app** middleware integration tests; **CI** runs `npm ci` → `build` → `test` on push/PR (`.github/workflows/ci.yml`).
+3. **Tests:** `npm test` runs workspace tests including **next-app** middleware integration tests; **CI** runs `npm ci` → `build` → `test` → **`examples:smoke`** → **`examples:express-smoke`** on push/PR (`.github/workflows/ci.yml`; **`next-minimal`** is covered by **`npm run build`** / turbo).
 4. **Errors:** `instanceof` / `e.code` distinguish config vs resolution vs missing tenant for core, config, and Next strict paths.
 
 ---

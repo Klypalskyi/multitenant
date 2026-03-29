@@ -1,0 +1,18 @@
+{
+  "name": "@multitenant/example-next-minimal",
+  "private": true,
+  "description": "Runnable Next.js App Router workspace using @multitenant/next (verify = next build)",
+  "scripts": {
+    "dev": "next dev --port 3050",
+    "build": "next build",
+    "start": "next start --port 3050"
+  },
+  "dependencies": {
+    "@multitenant/core": "*",
+    "@multitenant/next-app": "*",
+    "next": "^15.5.14",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "license": "MIT"
+}

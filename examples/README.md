@@ -1,20 +1,33 @@
-# Examples (reference snippets)
+# Examples
 
-These folders are **copy-paste references** for how multitenant middleware and helpers fit into Next.js App Router, Next.js Pages Router, and Express. They are **not** standalone npm workspaces: there is no per-example `package.json`; paths assume this monorepo layout (e.g. `../../tenants.config.json` from `examples/next-app-router/`).
+## Runnable workspaces (`package.json`)
 
-## Layout
+| Workspace | Scripts | Notes |
+|-----------|---------|--------|
+| **`config-smoke/`** | `npm run smoke` | Validates repo root `tenants.config.json` + `resolveByHost` — run from root as **`npm run examples:smoke`** (after `npm run build`). |
+| **`express-minimal/`** | `npm run start`, `npm run smoke` | Express + **`multitenantExpress`**; smoke uses **supertest** (no listening port). Root: **`npm run examples:express-smoke`**. |
+| **`next-minimal/`** | `npm run dev`, `npm run build` | Next.js 15 App Router — middleware via **`@multitenant/next-app/auto`**, RSC page + **`getTenantFromHeaders`**. **`next build`** runs in root **`npm run build`** (turbo). Use Host **`us.localhost`** (e.g. port **3050**). |
+
+From monorepo root (after `npm install`):
+
+```bash
+npm run examples:smoke
+npm run examples:express-smoke
+npm run dev -w @multitenant/example-next-minimal
+npm run start -w @multitenant/example-express-minimal
+```
+
+## Reference-only folders (no `package.json`)
+
+Copy-paste snippets assuming this repo tree (`../../tenants.config.json` from `examples/next-app-router/`):
 
 | Folder | What it shows |
 |--------|----------------|
-| `config-smoke/` | **CI/local script** — validates repo root `tenants.config.json` and `resolveByHost`; run `npm run examples:smoke` from the monorepo root (after `npm run build`) |
-| `next-app-router/` | `middleware.ts`, shared `tenant-registry.ts`, minimal `app/` pages |
-| `next-pages/` | `tenant-registry.ts` + `pages/index.tsx` pattern |
-| `express/` | Express app wiring |
+| `next-app-router/` | `middleware.ts`, `tenant-registry.ts`, minimal `app/` (see **`next-minimal`** for a full build). |
+| `next-pages/` | `tenant-registry.ts` + `pages/index.tsx` |
+| `express/` | Express wiring (see **`express-minimal`** for runnable). |
 
 ## Using in your own app
 
-1. Run **`npx multitenant init`** in your project (or copy `tenants.config.json` from the repo root and adjust domains).
-2. Point imports at **`tenants.config.json`** from your app root (not `../../` unless you keep the same tree).
-3. For local multi-host testing, use **`multitenant dev`** and the `domains.local` (or configured) hosts from your config — see [`docs/CLI/tenantify-dev.md`](../docs/CLI/tenantify-dev.md).
-
-Optional future work: add a runnable example per framework with its own `package.json` and CI smoke (see `PLAN.md` Phase 6.3).
+1. Run **`npx multitenant init`** (or copy root `tenants.config.json` and adjust domains).
+2. For local multi-host testing, use **`multitenant dev`** — see [`docs/CLI/tenantify-dev.md`](../docs/CLI/tenantify-dev.md).

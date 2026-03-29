@@ -1,0 +1,19 @@
+{
+  "name": "@multitenant/example-express-minimal",
+  "private": true,
+  "description": "Runnable Express + multitenantExpress; CI smoke without listening on a port",
+  "scripts": {
+    "start": "node server.cjs",
+    "smoke": "node smoke.cjs"
+  },
+  "dependencies": {
+    "@multitenant/config": "*",
+    "@multitenant/core": "*",
+    "@multitenant/express": "*",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "supertest": "^7.1.0"
+  },
+  "license": "MIT"
+}

@@ -4,6 +4,7 @@ Multi-tenant and multi-market management for TypeScript apps.
 
 ## For integrators
 
+- [Examples (runnable + reference)](../examples/README.md) – `express-minimal`, `next-minimal`, `config-smoke`
 - [Why Multitenant / pitfalls](WHY-MULTITENANT.md) – mental model, resolution + Next middleware mermaid, when not to use
 - [Getting started](GETTING-STARTED.md) – install, config, first tenant
 - [Configuration reference](CONFIG/tenants-config.md) – `tenants.config.json` schema

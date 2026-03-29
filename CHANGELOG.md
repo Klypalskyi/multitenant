@@ -4,6 +4,18 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Phase 6.3 — runnable Express + Next examples
+
+### Added
+
+- **`examples/express-minimal`** — workspace with `app.cjs` / `server.cjs` / **`smoke.cjs`** (supertest); root script **`npm run examples:express-smoke`**.
+- **`examples/next-minimal`** — Next 15 App Router: **`createTenantMiddlewareFromConfig`** (`@multitenant/next-app/auto`), RSC **`getTenantFromHeaders`**, **`next build`** in turbo.
+
+### CI / docs
+
+- **`.github/workflows/ci.yml`** — Express minimal smoke step.
+- **`examples/README.md`**, **`PLAN.md`** (dashboard, Phase 6.3, Sprint D), **`package.json`** scripts.
+
 ## [2026-03-29] `@multitenant/prisma` 0.1.0 — Prisma client helpers (Phase 8.7 follow-up)
 
 ### Added
