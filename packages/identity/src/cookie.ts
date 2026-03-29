@@ -20,6 +20,12 @@ function base64urlDecode(str: string): Buffer {
 
 export interface CookieConfig {
   cookieName?: string;
+  /**
+   * Optional `Domain=` attribute (e.g. `.example.com` for all subdomains). Omit for host-only cookies.
+   * Must not be set together with a `__Host-` cookie name (browser / RFC6265bis rules).
+   */
+  domain?: string;
+  /** Reserved for future use; prefer explicit `domain`. */
   domainStrategy?: 'host' | 'root' | 'market';
   secure?: boolean;
   sameSite?: 'lax' | 'strict' | 'none';

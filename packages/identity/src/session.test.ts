@@ -30,4 +30,20 @@ describe('session cookie helpers', () => {
   it('getSessionFromCookieHeader returns null when missing', () => {
     expect(getSessionFromCookieHeader('foo=bar', secret)).toBeNull();
   });
+
+  it('buildSessionSetCookieHeader adds Domain when config.domain is set', () => {
+    const setCookie = buildSessionSetCookieHeader(session, secret, {
+      domain: '.example.com',
+    });
+    expect(setCookie).toMatch(/;\s*Domain=\.example\.com(;|$)/);
+  });
+
+  it('buildSessionSetCookieHeader rejects Domain with __Host- cookie name', () => {
+    expect(() =>
+      buildSessionSetCookieHeader(session, secret, {
+        cookieName: '__Host-multitenant_session',
+        domain: '.example.com',
+      }),
+    ).toThrow(/Domain must not be set/);
+  });
 });

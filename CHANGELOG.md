@@ -4,6 +4,17 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] `@multitenant/identity` 0.5.1 — Phase 4 complete (`CookieConfig.domain`)
+
+### Added
+
+- **`CookieConfig.domain`** — **`buildSessionSetCookieHeader`** emits **`Domain=`** when set; throws if combined with **`__Host-`** **`cookieName`**.
+- Tests in **`src/session.test.ts`**.
+
+### Documentation
+
+- **`docs/INTERNAL/session-cookies.md`**, **`packages/identity/README.md`**, **`PLAN.md`** (Phase **4** **Done** for **4.1–4.3**; dashboard; Sprint **C**).
+
 ## [2026-03-29] Phase 3.4 — async config bootstrap docs
 
 ### Documentation

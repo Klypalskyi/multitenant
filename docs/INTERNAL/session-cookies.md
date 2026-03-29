@@ -24,7 +24,7 @@
 | **Omit `Domain`** (host-only) | Sent only to the exact host that set it (e.g. `a.example.com`) | Per-subdomain tenants; simplest isolation |
 | `Domain=example.com` | All subdomains of `example.com` | Shared login across `*.example.com` (watch scope: any subdomain can read the cookie) |
 
-Browsers do **not** set `Domain` for host-only cookies. Today’s helper builds `Path`, `HttpOnly`, `SameSite`, optional `Secure` / `Max-Age`; if you need `Domain=`, append it to the returned `Set-Cookie` string or set it via your framework’s cookie API.
+Browsers do **not** set `Domain` for host-only cookies. **`buildSessionSetCookieHeader`** builds `Path`, `HttpOnly`, `SameSite`, optional **`CookieConfig.domain`** (adds `Domain=`), **`Secure`**, and **`Max-Age`**. You can still append extra attributes to the returned string or use your framework’s cookie API if you need nonstandard ordering.
 
 ## `__Host-` prefix
 

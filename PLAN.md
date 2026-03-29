@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **Phase 3.4** **Done** (tag **v0.6.15**): **`docs/GETTING-STARTED.md`** — **`loadTenantsConfig`** / **`validateTenantsConfig`** bootstrap recipes (disk + remote), registry singleton note, Next bootstrap caveat, explicit **refresh out of scope**. *(Prior: **8.1** **v0.6.14**.)*
+**Last reviewed:** 2026-03-29 — **Phase 4** **Done** (`@multitenant/identity` **v0.5.1**, tag **v0.6.16**): **`CookieConfig.domain`** on **`buildSessionSetCookieHeader`** + **`__Host-`** guard; session tests; **4.1–4.3** checklist closed (helpers + **tenant-bound-sessions** + **session-cookies** docs). *(Prior: **3.4** **v0.6.15**.)*
 
 ---
 
@@ -128,19 +128,21 @@
 
 ## Phase 4 — Identity (P1)
 
-**Goal:** Optional, secure tenant-bound sessions.
+**Goal:** Optional, secure tenant-bound sessions.  
+**Status:** **Done** for listed scope (see table).
 
 ### Shipped
 
 - `encodeSessionToCookie` / `decodeSessionFromCookie`, guards.
+- **`@multitenant/identity` v0.5.1:** header helpers + optional **`CookieConfig.domain`**; **`__Host-`** + **`Domain`** rejected at build time.
 
-### Remaining work
+### Task checklist (all Done)
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 4.1 | **Session helpers** | **Partial (v0.5.0)** — `getSessionFromCookieHeader`, `buildSessionSetCookieHeader` in `@multitenant/identity`; full get/set wrappers optional |
-| 4.2 | **Tenant-bound sessions** | **Partial:** `docs/INTERNAL/tenant-bound-sessions.md` — `currentTenantKey`, `assertAccess(session, { tenantKey: resolved.tenantKey })`, header trust, 403 mapping note |
-| 4.3 | **Cross-domain** | **Partial:** `docs/INTERNAL/session-cookies.md` — SameSite, host-only vs `Domain`, `__Host-`, multi-subdomain notes; `buildSessionSetCookieHeader` still omits `Domain` (app may append) |
+| 4.1 | **Session helpers** | **Done (v0.5.1):** **`getSessionFromCookieHeader`**, **`buildSessionSetCookieHeader`** in **`@multitenant/identity`**. Framework-specific “set-cookie on Response” wrappers remain **app-defined** (Express `res.cookie`, Next `cookies()`, Nest `Set-Cookie`, etc.). |
+| 4.2 | **Tenant-bound sessions** | **Done:** **`docs/INTERNAL/tenant-bound-sessions.md`** — **`assertAccess(session, { tenantKey: resolved.tenantKey })`**, header trust, **403** mapping note for generic **`Error`** from **`assertAccess`**. |
+| 4.3 | **Cross-domain** | **Done (v0.5.1):** **`docs/INTERNAL/session-cookies.md`** — SameSite, host-only vs **`Domain`**, **`__Host-`**, multi-subdomain; **`buildSessionSetCookieHeader`** supports **`CookieConfig.domain`** (or append to string); **`Domain`** + **`__Host-`** name throws. |
 
 ---
 
@@ -271,8 +273,9 @@ Exit criteria are mandatory; task lists are indicative.
 
 ### Sprint C — Value + identity ✅ (core deliverables)
 
-- `getTenantConfig` / `isTenantFeatureEnabled` (Phase 3); identity cookie header helpers (Phase 4.1 partial) — **shipped**.
+- `getTenantConfig` / `isTenantFeatureEnabled` (Phase 3); identity cookie header helpers — **shipped**.
 - **Done (2026-03):** Phase **3.4** — **`GETTING-STARTED.md`** async config bootstrap (**`loadTenantsConfig`**, remote **`validateTenantsConfig`**).
+- **Done (2026-03):** Phase **4** — **`@multitenant/identity` v0.5.1** (**`CookieConfig.domain`**, **`__Host-`** guard); **4.1–4.3** docs + checklist.
 
 **Exit:** Server/client parity for config and flags — **met** for the shipped slice.
 

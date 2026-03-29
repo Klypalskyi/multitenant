@@ -33,10 +33,19 @@ export function buildSessionSetCookieHeader(
   config?: CookieConfig,
 ): string {
   const name = config?.cookieName ?? DEFAULT_SESSION_COOKIE;
+  if (config?.domain && name.startsWith('__Host-')) {
+    throw new Error(
+      '[multitenant/identity] Cookie Domain must not be set for __Host- cookie names',
+    );
+  }
   const value = encodeSessionToCookie(session, secret);
   const path = config?.path ?? '/';
   const sameSite = config?.sameSite ?? 'lax';
-  const segments = [`${name}=${value}`, `Path=${path}`, 'HttpOnly', `SameSite=${sameSite}`];
+  const segments = [`${name}=${value}`, `Path=${path}`];
+  if (config?.domain) {
+    segments.push(`Domain=${config.domain}`);
+  }
+  segments.push('HttpOnly', `SameSite=${sameSite}`);
   if (config?.secure) {
     segments.push('Secure');
   }

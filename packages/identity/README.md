@@ -6,7 +6,7 @@ It provides:
 
 - `encodeSessionToCookie(session, secret)` → encrypted+signed cookie value
 - `decodeSessionFromCookie(value, secret)` → `EncodedSession | null`
-- `getSessionFromCookieHeader(...)`, `buildSessionSetCookieHeader(...)` — thin wiring on top of cookie primitives
+- `getSessionFromCookieHeader(...)`, `buildSessionSetCookieHeader(...)` — thin wiring on top of cookie primitives; optional **`CookieConfig.domain`** for `Domain=` (cross-subdomain); **`Domain`** is rejected with **`__Host-`** cookie names
 - Re-exports from `@multitenant/core`:
   - `Identity`
   - `EncodedSession`
