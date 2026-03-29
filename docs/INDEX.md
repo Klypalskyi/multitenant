@@ -13,7 +13,7 @@ Multi-tenant and multi-market management for TypeScript apps.
 - [Next.js App Router checklist](FRAMEWORKS/next-app-router.md) – Edge vs Node, middleware, Server Actions
 - [Express](FRAMEWORKS/express.md) – `multitenantExpress`, `onMissingTenant`, typings
 - [NestJS](FRAMEWORKS/nestjs.md) – module, `@Tenant()`, null tenant
-- [React SSR](FRAMEWORKS/react-ssr.md) – `TenantProvider`, App Router RSC + client shell, Pages Router
+- [React SSR / RSC](FRAMEWORKS/react-ssr.md) – `TenantProvider`, serializable `ResolvedTenant` vs registry, then Next.js examples
 
 ## For contributors
 

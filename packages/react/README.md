@@ -50,7 +50,7 @@ Available hooks:
 - `useExperiment(key)` – experiment variant
 - `useTenantConfig<T>()` – typed arbitrary config blob per tenant
 
-SSR / App Router notes: [react-ssr.md](https://github.com/klypalskyi/multitenant/blob/master/docs/FRAMEWORKS/react-ssr.md).
+SSR, RSC boundary & Next.js examples: [react-ssr.md](https://github.com/klypalskyi/multitenant/blob/master/docs/FRAMEWORKS/react-ssr.md).
 
 ---
 

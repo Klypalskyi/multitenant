@@ -1,12 +1,48 @@
-# React — SSR & App Router
+# React — SSR, server components & `TenantProvider`
 
-Package: `@multitenant/react`. Supplies **`TenantProvider`** (client) and hooks (`useTenant`, `useMarket`, `useTenantConfig`, …).
+Package: `@multitenant/react`. Supplies **`TenantProvider`** (runs in the **client React tree**) and hooks (`useTenant`, `useMarket`, `useTenantConfig`, …).
 
-## App Router — RSC boundary
+This page is about **any** server-first React setup: classic SSR (`renderToString` / stream), **React Server Components** (RSC), or “server routes that render HTML + hydrate a client bundle.” It is **not** Next-specific until the examples at the end.
 
-`TenantProvider` needs a **`TenantRegistry`** (object with methods + normalized maps) and a **`ResolvedTenant`** (plain data). You **cannot** pass `registry` from a Server Component into a Client Component — it is not a serializable prop.
+## Mental model
 
-**Pattern:** resolve tenant on the **server** (`headers()` + `getTenantFromHeaders` / `requireTenant`). Pass only **`tenant`** (and `environment` if needed) into a small **`'use client'`** shell that **imports the same `tenantRegistry` module** as the server uses (static `tenants.config.json` + `createTenantRegistry`).
+| Where | Role |
+|--------|------|
+| **Server** (RSC, SSR request handler, Remix `loader`, etc.) | Resolve `ResolvedTenant` from **host + headers** with `createTenantRegistry` + `resolveByRequest` / your adapter. Output HTML or RSC payload. |
+| **Client** (browser, `'use client'` tree, hydrated root) | `TenantProvider` + hooks; needs **`TenantRegistry`** + **`ResolvedTenant`**. |
+
+`TenantProvider` is implemented as a **client** module: it uses React context and hooks. It does not run inside a pure RSC-only file without a client boundary below it.
+
+## Serializable props vs `TenantRegistry`
+
+- **`ResolvedTenant`** is a **plain object** (serializable) — safe to pass from a server component to a client component, embed in SSR JSON, or send as loader data.
+- **`TenantRegistry`** holds a normalized **merged view** of config (maps, resolution behavior) and is **not** a serializable prop for RSC/Flight or classic `renderToString` hydration — don’t try to pass the registry instance across that boundary.
+
+**Pattern (works for RSC boundaries in general):**
+
+1. On the server: resolve **`tenant: ResolvedTenant`** once per request.
+2. Pass **`tenant`** (and `environment` if you want it explicit) **into** a client subtree.
+3. Inside that client subtree: **import** a shared module that does `createTenantRegistry(staticConfig)` (same config the server used) and render `<TenantProvider registry={…} tenant={tenant}>`.
+
+The client bundle rebuilds the registry from the **same static config** the server used; the **`tenant`** you pass must **match** what the server computed so hooks and hydration stay consistent.
+
+## Classic SSR (no RSC)
+
+Examples: a custom Express/Vite SSR handler, `renderToPipeableStream`, early Remix patterns, etc.
+
+1. On the request, resolve `tenant` on the server with the same host/headers rules as production.
+2. Pass `tenant` into your client entry as `window.__TENANT__`, a `<script type="application/json">`, or your framework’s `initialData`.
+3. On the client bootstrap, **`import` the registry** from a shared module (static JSON + `createTenantRegistry`) and mount `<TenantProvider registry={registry} tenant={initialTenant}>`.
+
+Do not rely on **`window.location`** alone for the **first** paint unless it matches exactly what the server used (same proxy, same host header).
+
+## Hydration (any SSR + client hooks)
+
+The first client render must see the **same** `tenant` the server embedded. Re-resolving from the URL on the client is fine **only** if it cannot diverge from server resolution for that request.
+
+## Next.js — App Router (concrete example)
+
+Next documents this heavily because **`'use client'`** makes the boundary explicit. Resolution in the root layout is just one way to get server-side `headers()` + `requireTenant` / `getTenantFromHeaders`; the **RSC rule** above is the same: pass **`tenant`** into a client shell, **import** `tenantRegistry` inside that shell.
 
 ### `lib/tenant-registry.ts` (shared; Edge-safe if you only static-import JSON)
 
@@ -58,7 +94,6 @@ import { MultitenantClientProviders } from './providers';
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const h = await headers();
-  // Strict: requireTenant; or getTenantFromHeaders + fallback UI if passthrough middleware
   const tenant = requireTenant(h, tenantRegistry, { environment: multitenantEnv() });
 
   return (
@@ -71,23 +106,19 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 }
 ```
 
-Replace `@/` with your TS path alias. **`tenant`** crosses the server → client boundary as serialized props; **`tenantRegistry`** is instantiated only inside the client bundle via import (same module graph the server used for resolution).
+Replace `@/` with your TS path alias. For middleware-injected headers and Edge vs Node details, see [Next.js App Router checklist](next-app-router.md).
 
-## Hydration
+## Next.js — Pages Router
 
-The first client render must see the **same** `tenant` the server embedded. Do not re-resolve from `window.location` on the client for the initial tree unless it matches middleware + server headers exactly.
+In **`getServerSideProps`**, resolve with `registry.resolveByRequest({ host: req.headers.host, headers: req.headers }, { environment })`, pass serializable **`tenant`** into props, and wrap the **client** tree with **`TenantProvider`**. Import **`registry`** inside the client bundle (e.g. `'use client'` shell) rather than passing the registry instance from `getServerSideProps` into client-only code.
 
-## Pages Router
-
-In **`getServerSideProps`**, call `createTenantRegistry(config)` (or reuse a module singleton), resolve with `registry.resolveByRequest({ host: req.headers.host, headers: req.headers }, { environment })`, then pass `tenant` + `registry` into props and wrap the page with **`TenantProvider`** in `_app.tsx` or the page component. `registry` stays on the server bundle; for a **client-only** subtree you still need a client `TenantProvider` — pass serializable `tenant` and import `registry` inside `'use client'` if the hooks run in the browser.
-
-## `TenantProvider`
+## `TenantProvider` recap
 
 - Children that call **`useTenant`** / **`useMarket`** / **`useTenantConfig`** must be under **`TenantProvider`**.
-- **`useMarket`** / **`useTenantConfig`** read from **`registry.markets`** / **`registry.tenants`** — the registry you pass must be the same normalized data your server resolution used.
+- **`useMarket`** / **`useTenantConfig`** read **`registry.markets`** / **`registry.tenants`** — use the **same** config-derived registry your server resolution used.
 
 ## See also
 
-- [Next.js App Router checklist](next-app-router.md) — middleware headers, Route Handlers
+- [Next.js App Router checklist](next-app-router.md) — middleware, headers, Server Actions
 - [Framework overview](overview.md)
-- [Tenant-bound sessions](../INTERNAL/tenant-bound-sessions.md) — identity checks beside React context
+- [Tenant-bound sessions](../INTERNAL/tenant-bound-sessions.md) — identity beside React context

@@ -86,7 +86,7 @@ Replace `@/` paths with your alias or relative imports. Use `requireTenant` inst
 ## See also
 
 - [Framework overview](overview.md)
-- [React SSR / `TenantProvider`](react-ssr.md) — App Router client shell + serializable `tenant`
+- [React SSR / RSC + `TenantProvider`](react-ssr.md) — server/client boundary; Next layout example
 - [CLI: init](../CLI/init.md) — generated `middleware` stub
 - [Internal: database scope](../INTERNAL/database-scope.md) — Node ALS for DB layers
 - [Internal: session cookies](../INTERNAL/session-cookies.md) — SameSite / Domain patterns for identity
