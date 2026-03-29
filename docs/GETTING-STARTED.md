@@ -89,7 +89,28 @@ export const registry = createTenantRegistry(config);
 
 ### Load from a remote URL or arbitrary source
 
-Fetch (or read from your DB), parse JSON, then validate:
+Fetch (or read from your DB). If the response is **already** `tenants.config.json`-shaped JSON, validate it directly. If it comes from a **CMS, GraphQL, or proprietary API** (e.g. Contentful entries), your app **maps** that payload into the **`TenantsConfig`** shape (plain objects), then validates:
+
+```ts
+import { createTenantRegistry } from '@multitenant/core';
+import { validateTenantsConfig } from '@multitenant/config';
+
+/** Your function: SDK types → untyped object that should match the schema. */
+function mapContentfulToTenantsConfig(_sdkPayload: unknown): unknown {
+  return {
+    /* version, defaultEnvironment, markets, tenants, … */
+  };
+}
+
+async function bootstrapRegistryFromCms() {
+  const sdkPayload = await fetchFromYourCms(); // Contentful client, etc.
+  const candidate = mapContentfulToTenantsConfig(sdkPayload);
+  const config = validateTenantsConfig(candidate); // InvalidTenantsConfigError if map is wrong
+  return createTenantRegistry(config);
+}
+```
+
+Same idea with a static URL when the server returns config-shaped JSON:
 
 ```ts
 import { createTenantRegistry } from '@multitenant/core';
@@ -102,10 +123,9 @@ async function bootstrapRegistryFromUrl() {
   const config = validateTenantsConfig(raw);
   return createTenantRegistry(config);
 }
-
-// Plain Node ESM supports top-level await; otherwise call inside async main() and assign to a module let.
-export const registry = await bootstrapRegistryFromUrl();
 ```
+
+Use whichever bootstrap matches your source (`bootstrapRegistryFromCms`, `bootstrapRegistryFromUrl`, …). Plain Node ESM can top-level `await` the result; otherwise call inside `async main()` and assign to a module-level **`let`**.
 
 In **Next.js**, avoid top-level `await` in modules that Edge may load: run bootstrap in **`instrumentation.ts`** (Node), or use a **lazy** server-only module that awaits once on first use (see [Why Multitenant](WHY-MULTITENANT.md) — Edge vs Node).
 
