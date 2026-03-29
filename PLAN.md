@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **Phases 8.7–8.8:** **`@multitenant/drizzle` v0.1.0** (Drizzle + pg reference); **`database-migrations-multitenant.md`**; **`@multitenant/database` v0.5.5** through **8.6**.
+**Last reviewed:** 2026-03-29 — **`@multitenant/prisma` v0.1.0** (Prisma reference); **`@multitenant/drizzle` v0.1.0**; **8.8** migrations doc; **`@multitenant/database` v0.5.5** through **8.6**.
 
 ---
 
@@ -193,7 +193,7 @@
 | Package | Role |
 |---------|------|
 | `@multitenant/database` | **Contracts + small runtime helpers** — optional ALS-style `runWithTenantScope` / `getTenantScope()` for Node; recipes for RLS vs `WHERE tenant_id` vs `search_path`; **no** ORM imports. Peers: `@multitenant/core`. |
-| `@multitenant/prisma`, `@multitenant/drizzle`, `@multitenant/kysely`, `@multitenant/typeorm` (incremental) | **Thin** peers: map `ResolvedTenant` → client/pool; shared-DB scoping (e.g. Prisma `$extends`, Drizzle helpers); per-tenant URL pooling. **Do not** reimplement the tenant registry. |
+| `@multitenant/prisma`, `@multitenant/drizzle`, `@multitenant/kysely`, `@multitenant/typeorm` (incremental) | **Thin** peers: map `ResolvedTenant` → client/pool (**`@multitenant/prisma`**, **`@multitenant/drizzle` v0.1.0** shipped); shared-DB scoping; per-tenant URL pooling. **Do not** reimplement the tenant registry. |
 | `@multitenant/core` | **Minimal:** stable types such as `TenantScope` (`tenantKey`), `TenantDbMode` (`'shared' \| 'per_tenant'`), interfaces like `TenantDbResolver` returning opaque **connection spec** (URL ref, optional `schemaName`, pool hints) — **no** pool implementation, **no** SQL. |
 
 **Async context (default: hybrid):** ALS / `runWithTenantScope` at the **HTTP boundary** (Express/Nest/Next Node) for ergonomics; **explicit `tenantKey`** (or scoped client) on any API used from **jobs, CLI, or workers** — no mutable global “current tenant” without ALS.
@@ -210,8 +210,8 @@
 | 8.4 | **Shared DB — schema-per-tenant (same cluster)** | 8.1 | **Done (v0.5.2):** `schemaNameForTenant`, `POSTGRES_MAX_IDENTIFIER_BYTES`, `requireSchemaNameForCurrentTenant`; `docs/INTERNAL/schema-per-tenant-postgres.md` (`SET LOCAL search_path`, pooling, prepared statements, migrations note). |
 | 8.5 | **Per-tenant DB — connection resolution** | 8.1 | **Done:** **`TenantDatabaseConfig`** on **`TenantDefinition`** (`database.envVar` only); **`@multitenant/config`** Zod + `multitenant check`; **`resolveTenantDatabaseUrl`** in **`@multitenant/database`**; `docs/INTERNAL/per-tenant-database-url.md`, config reference. *Bounded pool manager = 8.6.* |
 | 8.6 | **Per-tenant DB — pool / client manager** | 8.5 | **Done (v0.5.5):** **`BoundedTenantDbResourceCache<T>`** (`maxPools`, **`idleEvictMs`**, **`onEvict`**, LRU eviction, **`destroy()`**), **`makeTenantDatabaseCacheKey`**, **`getOrCreateTenantDatabaseResource`**; driver-agnostic; **`docs/INTERNAL/bounded-tenant-db-pools.md`** (Node vs serverless). *Per-pool connection `max` stays in app/factory (e.g. `pg.Pool`).* |
-| 8.7 | **ORM reference adapter (one first)** | 8.2, 8.5–8.6 | **Done (`@multitenant/drizzle` v0.1.0):** **`getOrCreateTenantNodePgPool`**, **`createNodePgDrizzle`**, **`getTenantNodePgDrizzle`**; Vitest harness with mocked `pg`; **`docs/INTERNAL/drizzle-postgres.md`**, **`packages/drizzle/README.md`**. *Prisma = optional follow-up.* |
-| 8.8 | **Migrations story** | 8.2, 8.5 | **Done:** **`docs/INTERNAL/database-migrations-multitenant.md`** — shared DB vs **N** DNs vs schema-per-tenant; batch/template/provisioner patterns; idempotency; documented npm scripts (no hosted orchestrator). |
+| 8.7 | **ORM reference adapter (one first)** | 8.2, 8.5–8.6 | **Done (Drizzle `v0.1.0` + Prisma `v0.1.0`):** Drizzle — **`getOrCreateTenantNodePgPool`**, **`createNodePgDrizzle`**, **`getTenantNodePgDrizzle`** + **`docs/INTERNAL/drizzle-postgres.md`**. Prisma — **`createSharedPrismaClient`**, **`getOrCreateTenantPrismaClient`** + **`docs/INTERNAL/prisma-postgres.md`**, **`packages/prisma/README.md`**. *Further ORMs (Kysely, TypeORM) incremental.* |
+| 8.8 | **Migrations story** | 8.2, 8.5 | **Done:** **`docs/INTERNAL/database-migrations-multitenant.md`** — shared DB vs **N** DBs vs schema-per-tenant; batch/template/provisioner patterns; idempotency; documented npm scripts (no hosted orchestrator). |
 
 ### Security (non-negotiables)
 
@@ -287,7 +287,8 @@ Exit criteria are mandatory; task lists are indicative.
 - **8.6** bounded per-tenant pool cache — **✅ Shipped (`@multitenant/database` v0.5.5).**
 - **8.7** Drizzle reference — **✅ Shipped (`@multitenant/drizzle` v0.1.0).**
 - **8.8** migrations story — **✅ Shipped (`docs/INTERNAL/database-migrations-multitenant.md`).**
-- Optional: Prisma peer package; runnable ORM examples (Phase 6.3).
+- **Prisma reference** — **✅ Shipped (`@multitenant/prisma` v0.1.0).**
+- Optional: Kysely / TypeORM; runnable ORM examples (Phase 6.3).
 
 **Exit:** DoD items **1–5** met (topologies + pooling + **`@multitenant/drizzle`** + migrations doc + `multitenant check` 8.5 shape).
 

@@ -1,0 +1,15 @@
+// Minimal schema — only so `prisma generate` produces `@prisma/client` for this package's build/tests.
+// Consumers use their own schema; helpers accept the same `PrismaClient` shape from their project.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model MultitenantOrmReference {
+  id String @id
+}

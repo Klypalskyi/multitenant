@@ -19,6 +19,7 @@ packages/
 ├── config/         # Load/validate tenants.config.json (Zod + cross-field checks)
 ├── database/       # Node ALS tenant scope (runWithTenantScope); pool cache; no bundled driver
 ├── drizzle/        # Reference: Drizzle + pg wired to database package (Phase 8.7)
+├── prisma/         # Reference: Prisma Client + database cache / per-tenant DSN (Phase 8.7)
 ├── identity/       # Cookie encryption/decryption, session header helpers, re-exports identity types
 ├── dev-proxy/      # HTTP proxy + WebSocket upgrade, tenant-by-host resolution
 ├── cli/            # multitenant binary: init, check, print, dev (proxy mode)
@@ -176,6 +177,7 @@ git diff main --name-only | grep 'packages/.*/src/'
 - **cli**: `commander`, `chokidar`, `@multitenant/config`, `@multitenant/core`, `@multitenant/dev-proxy`
 - **database**: `@multitenant/core` (Node-only ALS + DB helpers)
 - **drizzle**: `@multitenant/core`, `@multitenant/database` (peers: `drizzle-orm`, `pg`)
+- **prisma**: `@multitenant/core`, `@multitenant/database` (peer: `@prisma/client`)
 - **react**: `@multitenant/core` (peer: `react`)
 - **next-app**: `@multitenant/core`, `@multitenant/config` (peer: `next`) — config used by `auto-node`
 - **next**: `@multitenant/core`, `@multitenant/config`, `@multitenant/react`, `@multitenant/next-app` (peers: `next`, `react`)

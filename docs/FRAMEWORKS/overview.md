@@ -10,7 +10,8 @@ Scaffold a minimal config and optional stubs: [`multitenant init`](../CLI/init.m
 | `@multitenant/react` | React – `TenantProvider`, `useTenant`, `useMarket`, `useTenantFlag`, `useExperiment`, `useTenantTheme`, `useTenantConfig` |
 | `@multitenant/express` | Express – `multitenantExpress({ registry, environment })` → `req.tenant` |
 | `@multitenant/nest` | NestJS – `MultitenantModuleForRoot({ registry, environment })`, `@Tenant()` param decorator |
-| `@multitenant/drizzle` | **Reference** – Drizzle + `pg`: `getOrCreateTenantNodePgPool`, `createNodePgDrizzle`, `getTenantNodePgDrizzle` (pairs with `@multitenant/database`) — [drizzle-postgres.md](../INTERNAL/drizzle-postgres.md) |
+| `@multitenant/drizzle` | **Reference** – Drizzle + `pg`: `getOrCreateTenantNodePgPool`, `createNodePgDrizzle`, `getTenantNodePgDrizzle` — [drizzle-postgres.md](../INTERNAL/drizzle-postgres.md) |
+| `@multitenant/prisma` | **Reference** – Prisma: `createSharedPrismaClient`, `getOrCreateTenantPrismaClient` — [prisma-postgres.md](../INTERNAL/prisma-postgres.md) |
 
 All adapters expect a **TenantRegistry** from `createTenantRegistry(config)` where `config` is your loaded `TenantsConfig` (e.g. from `tenants.config.json` via `@multitenant/config` or from a static import).
 

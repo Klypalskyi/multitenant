@@ -4,6 +4,17 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] `@multitenant/prisma` 0.1.0 — Prisma client helpers (Phase 8.7 follow-up)
+
+### Added
+
+- New package **`@multitenant/prisma`**: **`createSharedPrismaClient`**, **`getOrCreateTenantPrismaClient`** (peer **`@prisma/client`**); minimal `prisma/schema.prisma` + **`prebuild`** `prisma generate` for package CI/build.
+- **Vitest:** `packages/prisma/src/client.test.ts` (mocked client).
+
+### Documentation
+
+- **`docs/INTERNAL/prisma-postgres.md`**, **`packages/prisma/README.md`**, **`docs/INTERNAL/drizzle-postgres.md`** (cross-link), **`docs/FRAMEWORKS/overview.md`**, **`docs/INTERNAL/architecture.md`**, **`docs/INDEX.md`**, **`CLAUDE.md`**, **`scripts/publish-packages.sh`**, **`PLAN.md`** (8.7 row + **8.8** typo **N DBs**).
+
 ## [2026-03-29] `@multitenant/drizzle` 0.1.0 — Drizzle + node-postgres reference (Phase 8.7)
 
 ### Added

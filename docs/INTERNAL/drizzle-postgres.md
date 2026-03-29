@@ -61,6 +61,7 @@ Same as [database-scope.md](database-scope.md) and [per-tenant-database-url.md](
 
 ## See also
 
+- [Prisma + Postgres](prisma-postgres.md) — `@multitenant/prisma`
 - Package README — `packages/drizzle/README.md`
 - [Shared DB `tenant_id`](shared-db-tenant-id.md)
 - [Migrations (multi-tenant)](database-migrations-multitenant.md)

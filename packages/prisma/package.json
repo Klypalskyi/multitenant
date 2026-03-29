@@ -1,0 +1,39 @@
+{
+  "name": "@multitenant/prisma",
+  "version": "0.1.0",
+  "description": "Reference wiring: Prisma + @multitenant/database (shared DB & per-tenant URL) — optional ORM peer",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "prebuild": "DATABASE_URL=\"postgresql://127.0.0.1:5432/_multitenant_pkg_build\" prisma generate",
+    "build": "tsup src/index.ts --format cjs,esm --dts --external @prisma/client",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@multitenant/core": "^0.5.0",
+    "@multitenant/database": "^0.5.5"
+  },
+  "peerDependencies": {
+    "@prisma/client": ">=5.0.0"
+  },
+  "devDependencies": {
+    "@prisma/client": "^6.0.0",
+    "prisma": "^6.0.0",
+    "vitest": "^3.0.5"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klypalskyi/multitenant.git",
+    "directory": "packages/prisma"
+  },
+  "bugs": {
+    "url": "https://github.com/klypalskyi/multitenant/issues"
+  },
+  "homepage": "https://github.com/klypalskyi/multitenant/tree/master/packages/prisma",
+  "publishConfig": {
+    "access": "public"
+  }
+}
