@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — `@multitenant/nest` **v0.4.2**: `createMultitenantNestMiddleware` + Vitest (`src/multitenant-nest.test.ts`).
+**Last reviewed:** 2026-03-29 — `@multitenant/react` **v0.5.1**: Vitest + Testing Library (`src/hooks.test.tsx`); README demo line (Phase 7.3).
 
 ---
 
@@ -158,7 +158,7 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app + **next-pages** + **express** + **nest**; CI runs `npm test` |
+| 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app + **next-pages** + **express** + **nest** + **react**; CI runs `npm test` |
 | 6.2 | **Integration tests** | **Partial:** `@multitenant/next-app` middleware + `NextRequest` / header contract (`src/middleware.integration.test.ts`) in CI |
 | 6.3 | **Examples** | **Partial:** `examples/README.md`; **`examples/config-smoke`** — workspace + CI step `npm run examples:smoke` (root config + resolution); full Next/Express runnable examples still open |
 | 6.4 | **Documentation** | **Partial:** `docs/WHY-MULTITENANT.md` — why / when not / pitfalls / mermaid; links to tenant-bound sessions + getting started |
@@ -173,7 +173,7 @@
 |----|------|---------------------|
 | 7.1 | **README hero** | **Shipped (partial):** 30-second start + copy-paste Next `middleware.ts` + open-source links |
 | 7.2 | **Brand** | Keep `@multitenant/*` scope; consistent naming in all public docs |
-| 7.3 | **Website / demo** | Optional; if absent, README states “docs + examples” as the demo |
+| 7.3 | **Website / demo** | **Partial:** root `README.md` — no hosted demo; points at docs + `examples/` + `multitenant init` |
 
 ---
 

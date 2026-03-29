@@ -6,6 +6,17 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 - _(nothing yet)_
 
+## [2026-03-29] `@multitenant/react` 0.5.1 — hook tests
+
+### Added
+
+- **Vitest + Testing Library** — `src/hooks.test.tsx` (`useTenant`, `useMarket`, `useTenantFlag`, `useTenantConfig`, `useExperiment`, `useTenantTheme`, provider guard).
+
+### Documentation
+
+- Root **README** — Phase 7.3: demo = docs + examples + `init` (no hosted site).
+- `PLAN.md` (6.1, 7.3), `docs/INTERNAL/architecture.md`.
+
 ## [2026-03-29] `@multitenant/nest` 0.4.2 — middleware factory + tests
 
 ### Added

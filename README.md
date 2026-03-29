@@ -4,6 +4,8 @@ Multi-tenant + multi-market toolkit for TypeScript apps.
 
 Intro / pitfalls / diagram: [docs/WHY-MULTITENANT.md](docs/WHY-MULTITENANT.md).
 
+**Demo:** there is no hosted app in this repo — treat [docs/INDEX.md](docs/INDEX.md), [examples/](examples/README.md), and `npx multitenant init` as the hands-on walkthrough.
+
 ### 30-second start
 
 ```bash
