@@ -108,8 +108,7 @@ Throws `TenantNotFoundError` from `@multitenant/core` when `request.tenant` is m
 ```ts
 // tenant-required.guard.ts
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { TenantNotFoundError } from '@multitenant/core';
-import type { ResolvedTenant } from '@multitenant/core';
+import { TenantNotFoundError, type ResolvedTenant } from '@multitenant/core';
 
 type TenantRequest = { tenant?: ResolvedTenant | null };
 
