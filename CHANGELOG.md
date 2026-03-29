@@ -4,7 +4,13 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
-- **Docs:** `docs/FRAMEWORKS/react-ssr.md` reframed — framework-agnostic SSR/RSC + `TenantRegistry` serialization rule; Next.js moved under explicit subsections; INDEX / PLAN / cross-links.
+## [2026-03-29] Docs — react-ssr SSR/RSC-first (Phase 5.4)
+
+### Documentation
+
+- **`docs/FRAMEWORKS/react-ssr.md`** — framework-agnostic SSR/RSC + serializable `ResolvedTenant` vs `TenantRegistry`; classic SSR + hydration; Next.js App Router + Pages as subsections; INDEX / PLAN / cross-links.
+
+_No package `src/` changes — no npm publish._
 
 ## [2026-03-29] `@multitenant/react` 0.5.1 — hook tests
 
