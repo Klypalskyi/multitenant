@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **Phase 6.1** unit-test coverage **Done**: `npm run test:coverage` (turbo) + **`configs/vitest-coverage-base.ts`**; per-package **`test:coverage`** + Vitest v8 thresholds (with justified excludes/overrides); CI **`Test coverage (thresholds)`** after **`npm test`**; **`next-app`** uses root **`vitest@3.2.4`** binary (matches **`@vitest/coverage-v8`**; avoids nested Vitest 4).
+**Last reviewed:** 2026-03-29 — **Phase 6.2** **Done** (release tag **v0.6.12**): **next-app** expanded **`middleware.integration.test.ts`**; **express** **`express.integration.test.ts`** (**supertest**). **Phase 6.1** (coverage + CI) unchanged **Done**.
 
 ---
 
@@ -26,7 +26,7 @@
 | `export { middleware } from '@multitenant/next-app/auto'` | **Shipped** | v0.5.0 — `auto` (config object) + `auto-node` (project-root JSON load); Edge vs Node documented on subpath |
 | Server helper `getTenantConfig()` (non-React) | **Shipped** | v0.5.0 in `@multitenant/core` — pair with registry + `ResolvedTenant.tenantKey` |
 | `isFeatureEnabled()` / flags server-side | **Shipped** | v0.5.0 — `isTenantFeatureEnabled` in core (flags map) |
-| Package unit tests + CI | **Shipped** | `npm test` + **`npm run test:coverage`** (turbo, v8 thresholds); core, config, cli, database, drizzle, kysely, prisma, **typeorm**, identity, **next-app** integration tests; GitHub Actions **`build`** → **`test`** → **`test:coverage`** → **`examples:smoke`** → **`examples:express-smoke`** |
+| Package unit tests + CI | **Shipped** | `npm test` + **`npm run test:coverage`** (turbo, v8 thresholds); **next-app** + **express** integration suites (**`*.integration.test.ts`**); other packages unit tests; GitHub Actions **`build`** → **`test`** → **`test:coverage`** → **`examples:smoke`** → **`examples:express-smoke`** |
 | Website / landing in repo | **Not shipped** | Optional external |
 | ORM / DB adapters (shared DB + per-tenant DB) | **Shipped** | **`@multitenant/database` v0.5.5** + thin ORM peers **`drizzle` / `kysely` / `prisma` / `typeorm`** @ **v0.1.0**; **8.8** migrations doc; further drivers/ORMs only on demand |
 | Orientation: why / pitfalls / diagram | **Shipped** | `docs/WHY-MULTITENANT.md` — two mermaid diagrams + pitfalls + **Next steps** (examples, INDEX, frameworks, DB scope); links to errors & sessions |
@@ -161,7 +161,7 @@
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
 | 6.1 | **Unit tests** | **Done:** package matrix above + **`test:coverage`** with shared preset (**`configs/vitest-coverage-base.ts`**) and per-package overrides (e.g. **nest**, **config**, **next-pages**, **next-app**); CI enforces thresholds; **`package.json`** **`overrides`** pin **`vitest`** / **`@vitest/coverage-v8`** @ **3.2.4** |
-| 6.2 | **Integration tests** | **Partial:** `@multitenant/next-app` middleware + `NextRequest` / header contract (`src/middleware.integration.test.ts`) in CI |
+| 6.2 | **Integration tests** | **Done:** **`@multitenant/next-app`** `src/middleware.integration.test.ts` — middleware (**`NextRequest`**), forwarded host, warn/passthrough/throw, custom header keys, flags on rewritten request; **`getTenantFromHeaders`** / **`requireTenant`**. **`@multitenant/express`** `src/express.integration.test.ts` — **supertest** end-to-end **`express()`** (Host, **`X-Forwarded-Host`**, null tenant, **`TenantNotFoundError`**). Enforced by **`npm test`** / CI. |
 | 6.3 | **Examples** | **Done:** **`examples/README.md`** — runnable **`express-minimal`** (`supertest` smoke, `npm run examples:express-smoke`) + **`next-minimal`** (`next build` via turbo + RSC + `@multitenant/next-app/auto`); **`config-smoke`** unchanged; reference-only folders retained. |
 | 6.4 | **Documentation** | **Done:** `docs/WHY-MULTITENANT.md` — why / when not / pitfalls; **two** mermaid diagrams; **Next steps** — getting started, **examples/README**, INDEX, framework overview, next-app-router, errors, **tenant-bound-sessions**, **database-scope**. |
 
@@ -282,6 +282,7 @@ Exit criteria are mandatory; task lists are indicative.
 - **Done (2026-03):** Phase **6.4** (`WHY-MULTITENANT` next steps) + **7.3** (README runnable examples).
 - **Done (2026-03):** Phase **7.1** README hero (`README.md` — pitch, badge, quick links, modern App Router layout).
 - **Done (2026-03):** Phase **6.1** — `npm run test:coverage`, shared preset, CI gate (`.github/workflows/ci.yml`).
+- **Done (2026-03):** Phase **6.2** — **next-app** middleware + header contract expansion; **express** **supertest** integration in **package** (not only **examples/express-minimal**).
 
 ### Sprint E — Database / ORM (optional; Phase 8)
 
@@ -303,7 +304,7 @@ Exit criteria are mandatory; task lists are indicative.
 
 1. **Build:** `npm run build` at repo root exits 0.
 2. **Init path (Sprint B partial):** `npx multitenant init` → `npx multitenant check` exits 0; add framework deps and run `npm run dev` on the app port (e.g. 3000), then `multitenant dev --target http://localhost:3000 --port 3100` to hit tenant hosts on **3100** (proxy) while the app listens on **3000**. Defaults from `init` use `main.localhost` in `domains.local` — adjust to match your hosts.
-3. **Tests:** `npm test` runs workspace tests including **next-app** middleware integration tests; **`npm run test:coverage`** runs Vitest with v8 thresholds per package; **CI** runs `npm ci` → `build` → `test` → **`test:coverage`** → **`examples:smoke`** → **`examples:express-smoke`** on push/PR (`.github/workflows/ci.yml`; **`next-minimal`** is covered by **`npm run build`** / turbo).
+3. **Tests:** `npm test` runs workspace tests including **next-app** + **express** **`*.integration.test.ts`**; **`npm run test:coverage`** runs Vitest with v8 thresholds per package; **CI** runs `npm ci` → `build` → `test` → **`test:coverage`** → **`examples:smoke`** → **`examples:express-smoke`** on push/PR (`.github/workflows/ci.yml`; **`next-minimal`** is covered by **`npm run build`** / turbo).
 4. **Errors:** `instanceof` / `e.code` distinguish config vs resolution vs missing tenant for core, config, and Next strict paths.
 
 ---

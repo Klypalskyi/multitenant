@@ -4,6 +4,17 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Phase 6.2 — Integration tests (next-app + express package)
+
+### Added
+
+- **`@multitenant/next-app`** — expanded **`src/middleware.integration.test.ts`**: **`x-forwarded-host`** (first list entry), **`onMissingTenant: 'warn'`** (once per host), custom middleware header names, **`x-middleware-request-*`** flags JSON; **`getTenantFromHeaders`** / **`requireTenant`** (**`x-forwarded-host`**, happy **`requireTenant`**).
+- **`@multitenant/express`** — **`src/express.integration.test.ts`** — **supertest** against real **`express()`**: resolved tenant on **`req.tenant`**, **`X-Forwarded-Host`**, null tenant, **`onMissingTenant: 'throw'`** + **`TenantNotFoundError`** error handler (**devDependencies:** **`express`**, **`supertest`**, **`@types/supertest`**).
+
+### Documentation
+
+- **`PLAN.md`** — Phase **6.2** **Done**; dashboard + Sprint D + success criteria **#3**.
+
 ## [2026-03-29] Phase 6.1 — Vitest coverage gates (monorepo)
 
 ### Added

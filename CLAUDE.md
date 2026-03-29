@@ -75,7 +75,7 @@ npm run test -- --watch                # Watch mode (from repo root)
 npm run dev                             # turbo dev (if configured)
 ```
 
-Tests use **Vitest** (configured per package via `vitest.config.ts` or default). Test files follow `src/**/*.test.ts` pattern. Turbo task config: tests depend on `^build` (transitive package builds).
+Tests use **Vitest** (configured per package via `vitest.config.ts` or default). Test files follow `src/**/*.test.ts` (including `*.integration.test.ts` — e.g. **next-app** middleware, **express** + supertest). Turbo task config: tests depend on `^build` (transitive package builds).
 
 ## Key Patterns
 
