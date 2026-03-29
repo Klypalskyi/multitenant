@@ -1,0 +1,34 @@
+# Framework integrations — overview
+
+Every adapter expects a **`TenantRegistry`** from **`createTenantRegistry(config)`** where **`config`** is your validated **`TenantsConfig`** (JSON file, **`loadTenantsConfig`**, or **`validateTenantsConfig`** after a CMS map).
+
+Scaffold stubs: **`npx multitenant init --framework …`**.
+
+## Package map
+
+| Package | Use case |
+|---------|----------|
+| **`@multitenant/next`** | Optional meta-install — re-exports **core**, **config**, **react**, **next-app** |
+| **`@multitenant/next-app`** | **App Router** — middleware, **`getTenantFromHeaders`**, **`requireTenant`**; **`/auto`**, **`/auto-node`** |
+| **`@multitenant/next-pages`** | **Pages Router** — **`withTenantGSSP`**, **`withTenantApi`** |
+| **`@multitenant/react`** | **`TenantProvider`**, hooks (**`useTenant`**, **`useMarket`**, **`useTenantFlag`**, …) |
+| **`@multitenant/express`** | **`multitenantExpress`** → **`req.tenant`** |
+| **`@multitenant/nest`** | **`MultitenantModuleForRoot`**, **`@Tenant()`** |
+| **`@multitenant/drizzle`** / **`kysely`** / **`prisma`** / **`typeorm`** | **Reference** ORM wiring — pools per tenant, shared DB + **`tenant_id`** or N URLs |
+
+## Deep guides on this site
+
+- [Next.js (App Router)](/frameworks/next-app)
+- [Next.js (Pages)](/frameworks/next-pages)
+- [Express](/frameworks/express)
+- [NestJS](/frameworks/nest)
+- [React (SSR / RSC)](/frameworks/react)
+
+## Edge vs Node (App Router)
+
+| Runtime | Resolve tenant | DB / Node APIs |
+|---------|----------------|----------------|
+| **Edge middleware** | Yes — thin, static JSON | **No** |
+| **Node server** | **`getTenantFromHeaders`** / **`requireTenant`** | Yes — e.g. **`@multitenant/database`** ALS |
+
+Details: [Next.js (App Router)](/frameworks/next-app).

@@ -1,21 +1,25 @@
 # Multitenant
 
-**Config-driven** tenant and market resolution for TypeScript: one **`tenants.config.json`**, **`createTenantRegistry`**, and adapters for **Next.js** (App + Pages), **Express**, **Nest**, and **React**.
+**Config-driven** tenant and **market** resolution for TypeScript: one **`tenants.config.json`**, **`createTenantRegistry`**, and adapters for **Next.js** (App + Pages), **Express**, **Nest**, and **React** — with **typed errors** you can branch on in production.
 
-## Why this exists
+## Read next
 
-- Resolve **tenant + market** from **Host** and proxy headers with typed errors (`TenantNotFoundError`, `InvalidTenantsConfigError`, …).
-- Optional **identity** cookies (`@multitenant/identity`), **ALS** DB scope (`@multitenant/database`), and thin **ORM reference** packages (Drizzle, Kysely, Prisma, TypeORM).
+- **[Why Multitenant?](/why-multitenant)** — mental model, when **not** to use this, pitfalls.
+- **[Getting started](/getting-started)** — install, minimal config, validation, async/bootstrap.
+- **[Configuration](/config)** — `tenants.config.json` schema, flags, merge rules.
+- **[Packages](/packages)** — scoped **`@multitenant/*`** installs at a glance.
+- **[Examples](/examples)** — copy-paste from the real **`express-minimal`** and **`next-minimal`** workspaces.
+- **[Errors](/errors)** — `MultitenantError` hierarchy and stable **`code`** strings.
+- **[CLI](/cli/init)** — `init`, `dev` proxy, `check`, `print`.
+- **[Frameworks](/frameworks/overview)** — Next, Express, Nest, React.
 
-## Quick start
+## 30-second bootstrap
 
 ```bash
 npx multitenant init --force
 npx multitenant check
 ```
 
-## npm
+Then wire **`@multitenant/next-app`**, **`@multitenant/express`**, or another adapter — see [Getting started](/getting-started).
 
-Scoped packages are published as **`@multitenant/*`** — see [Packages](/packages) and [Getting started](/getting-started).
-
-The canonical markdown documentation lives in the [GitHub `docs/` tree](https://github.com/klypalskyi/multitenant/tree/master/docs).
+The monorepo also ships **reference** ORM packages (**Drizzle**, **Kysely**, **Prisma**, **TypeORM**) and **`@multitenant/database`** (ALS scope). Deep-dive markdown for contributors remains in the [GitHub `docs/` tree](https://github.com/klypalskyi/multitenant/tree/master/docs).

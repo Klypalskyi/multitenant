@@ -1,0 +1,35 @@
+# React — SSR, RSC, `TenantProvider`
+
+Package: **`@multitenant/react`**. **`TenantProvider`** and hooks run in the **client** React tree ( **`'use client'`** in Next).
+
+## Mental model
+
+| Layer | Responsibility |
+|-------|------------------|
+| **Server** (RSC, SSR handler, etc.) | Resolve **`ResolvedTenant`** with **`createTenantRegistry`** + **`resolveByRequest`** (or adapter). |
+| **Client** | **`TenantProvider`** + **`useTenant`**, **`useMarket`**, **`useTenantConfig`**, … |
+
+## Serializable **`ResolvedTenant`** vs **`TenantRegistry`**
+
+- **`ResolvedTenant`** — plain JSON — safe across RSC / loader boundaries.
+- **`TenantRegistry`** — not serializable — **do not** pass across server→client flight as a prop.
+
+**Pattern:**
+
+1. Server: resolve **`tenant`** once per request.
+2. Pass **`tenant`** into a **client** subtree.
+3. Client subtree: **import** a module that does **`createTenantRegistry(sameStaticConfig)`** and render **`<TenantProvider registry={registry} tenant={tenant}>`**.
+
+The client rebuilds the registry from the **same** config the server used; **`tenant`** must **match** server resolution for hydration.
+
+## Next.js App Router
+
+Resolve in a **Server Component** or layout with **`headers()`** + **`requireTenant`**, then pass **`tenant`** into a **client** shell that mounts **`TenantProvider`**. See [Next.js (App Router)](/frameworks/next-app) for header-based resolution.
+
+## Classic SSR
+
+Embed **`ResolvedTenant`** in HTML/JSON bootstrap data, then on client **`TenantProvider`** + same static config import as server.
+
+---
+
+Hooks: **`useTenant`**, **`useMarket`**, **`useTenantConfig`**, **`useTenantFlag`**, **`useExperiment`**, … (see package README).

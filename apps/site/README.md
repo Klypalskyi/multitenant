@@ -1,6 +1,10 @@
 # `@multitenant/site`
 
-Public docs / landing built with **Nextra 4** + **`nextra-theme-docs`** (same lineage as [shuding/nextra-docs-template](https://github.com/shuding/nextra-docs-template): Next.js + Nextra docs theme; this app uses the App Router + `_meta.global` layout from current Nextra 4).
+Public docs / landing built with **Nextra 4** + **`nextra-theme-docs`** (same lineage as [shuding/nextra-docs-template](https://github.com/shuding/nextra-docs-template): Next.js + docs theme; App Router + `_meta.global`).
+
+**Content:** integrator MDX under **`app/`** — **Getting started**, **Configuration**, **Packages**, **Errors**, **Examples** (snippets from **express-minimal** / **next-minimal**), **CLI**, **Frameworks**. Deep internal docs (ORM, DB scope, …) remain in repo **`docs/`**.
+
+**Tests:** `npm test -w @multitenant/site` (`docs-structure.test.ts`).
 
 ## Develop
 

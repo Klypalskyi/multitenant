@@ -27,7 +27,7 @@
 | Server helper `getTenantConfig()` (non-React) | **Shipped** | v0.5.0 in `@multitenant/core` — pair with registry + `ResolvedTenant.tenantKey` |
 | `isFeatureEnabled()` / flags server-side | **Shipped** | v0.5.0 — `isTenantFeatureEnabled` in core (flags map) |
 | Package unit tests + CI | **Shipped** | `npm test` + **`npm run test:coverage`** (turbo, v8 thresholds); **next-app** + **express** integration suites (**`*.integration.test.ts`**); other packages unit tests; GitHub Actions **`build`** → **`test`** → **`test:coverage`** → **`examples:smoke`** → **`examples:express-smoke`** |
-| Website / landing in repo | **Shipped** | **`apps/site`** — Nextra 4 docs theme; **`npm run site:dev`**; Vercel Git deploy **Root Directory** `apps/site` + **`vercel.json`** install/build from repo root |
+| Website / landing in repo | **Shipped** | **`apps/site`** — Nextra 4; **first-class MDX** (getting started, config, frameworks, CLI, errors, examples); **`npm run site:dev`** + **`npm test -w @multitenant/site`**; Vercel **Root Directory** `apps/site` + **`vercel.json`** |
 | ORM / DB adapters (shared DB + per-tenant DB) | **Shipped** | **`@multitenant/database` v0.5.6** + thin ORM peers **`drizzle` / `kysely` / `prisma` / `typeorm`** @ **v0.1.0**; **8.8** migrations doc; further drivers/ORMs only on demand |
 | Orientation: why / pitfalls / diagram | **Shipped** | `docs/WHY-MULTITENANT.md` — two mermaid diagrams + pitfalls + **Next steps** (examples, INDEX, frameworks, DB scope); links to errors & sessions |
 | README hero (10-second pitch) | **Shipped** | root **`README.md`** — Phase **7.1**: value line, npm badge, quick links, **`requireTenant`** layout |

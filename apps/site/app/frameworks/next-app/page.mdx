@@ -1,0 +1,91 @@
+# Next.js App Router
+
+Use **`@multitenant/next-app`** (or **`@multitenant/next`**). Keep **middleware** Edge-safe (static JSON / small bundle); put **DB** in Route Handlers, Server Actions, or RSC with **`runtime = 'nodejs'`** when needed.
+
+## Resolution vs data access
+
+| Runtime | Tenant resolution | Database / heavy Node |
+|---------|-------------------|----------------------|
+| **Edge middleware** | **`createTenantMiddleware`** + static config | No |
+| **Node server** | **`getTenantFromHeaders`** / **`requireTenant`** | Yes — e.g. **`runWithTenantScope`** |
+
+## Middleware defaults
+
+- **`onMissingTenant: 'passthrough'`** — avoids throwing on raw **`localhost`** during **`next dev`**; use **`multitenant dev`** + **`domains.local`** hosts, or **`'throw'`** when every request must resolve.
+- Prefer **`x-forwarded-host`** behind a reverse proxy (middleware normalizes the left-most host).
+- Headers forwarded to the app: **`x-tenant-key`**, **`x-market-key`**, **`x-tenant-env`**, optional **`x-tenant-flags`** (JSON).
+
+## Shared registry module
+
+**`lib/tenant-registry.ts`**
+
+```ts
+import type { TenantsConfig } from '@multitenant/core';
+import { createTenantRegistry } from '@multitenant/core';
+import tenantsConfig from '../tenants.config.json';
+
+export const tenantRegistry = createTenantRegistry(tenantsConfig as TenantsConfig);
+
+export function multitenantEnv() {
+  return (process.env.MULTITENANT_ENV ?? process.env.TENANTIFY_ENV ?? 'local') as import('@multitenant/core').EnvironmentName;
+}
+```
+
+**`middleware.ts`**
+
+```ts
+import { createTenantMiddleware } from '@multitenant/next-app';
+import { multitenantEnv, tenantRegistry } from '@/lib/tenant-registry';
+
+export const middleware = createTenantMiddleware(tenantRegistry, {
+  environment: multitenantEnv(),
+});
+
+export const config = {
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
+};
+```
+
+## Route Handler
+
+```ts
+import { headers } from 'next/headers';
+import { NextResponse } from 'next/server';
+import { getTenantFromHeaders } from '@multitenant/next-app';
+import { multitenantEnv, tenantRegistry } from '@/lib/tenant-registry';
+
+export async function GET() {
+  const h = await headers();
+  const resolved = getTenantFromHeaders(h, tenantRegistry, { environment: multitenantEnv() });
+  return NextResponse.json({
+    tenantKey: resolved?.tenantKey ?? null,
+    marketKey: resolved?.marketKey ?? null,
+  });
+}
+```
+
+## Server Action
+
+```ts
+'use server';
+
+import { headers } from 'next/headers';
+import { getTenantFromHeaders } from '@multitenant/next-app';
+import { multitenantEnv, tenantRegistry } from '@/lib/tenant-registry';
+
+export async function currentTenantKey(): Promise<string | null> {
+  const h = await headers();
+  const resolved = getTenantFromHeaders(h, tenantRegistry, { environment: multitenantEnv() });
+  return resolved?.tenantKey ?? null;
+}
+```
+
+Use **`requireTenant`** when a missing tenant must hard-fail — it throws **`TenantNotFoundError`**.
+
+## Server Actions & Node-only code
+
+Set **`export const runtime = 'nodejs'`** on routes/layouts that use **`fs`**, native drivers, or **`@multitenant/database`**.
+
+## Zero-config shortcut
+
+**`@multitenant/next-app/auto`** — **`createTenantMiddlewareFromConfig(json, { environment })`** for a single-file middleware (see [Examples](/examples)).

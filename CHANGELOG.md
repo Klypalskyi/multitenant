@@ -4,6 +4,10 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+### Added
+
+- **`apps/site`** — full **integrator** documentation in MDX (not link-only): why / getting started / config / packages / errors / examples / CLI / frameworks; **`docs-structure.test.ts`** (Vitest).
+
 ### Removed
 
 - **`.github/workflows/deploy-site.yml`** — site deploy is handled by **Vercel** Git integration only (see **`apps/site/vercel.json`**).

@@ -1,0 +1,67 @@
+# Configuration (`tenants.config.json`)
+
+Single source of truth for **markets**, **tenants**, **domain → tenant** maps per environment, optional **flags**, **experiments**, and **merged config** blobs.
+
+## Location
+
+- Default: **`tenants.config.json`** at the **repo / app root**.
+- **`@multitenant/config`**: **`loadTenantsConfig({ cwd })`** (default **`process.cwd()`**).
+
+Invalid files throw **`InvalidTenantsConfigError`** — same checks as **`npx multitenant check`**. See [Errors](/errors).
+
+## Top-level fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| **`version`** | **`1`** | Yes | Config version. |
+| **`defaultEnvironment`** | **`local` \| `development` \| `staging` \| `production`** | No | Used when runtime does not pass an environment. |
+| **`markets`** | Record of market definitions | Yes | Currency, locale, timezone, optional **`config`** defaults (see merge below). |
+| **`tenants`** | Record of tenant definitions | Yes | Each references a **`market`** and has per-env **`domains`**. |
+| **`experiments`** | Record | No | A/B definitions; tenant overrides must reference these keys. |
+| **`defaults`** | Object | No | e.g. **`localDomainTemplate`**. |
+
+## Markets
+
+Each key is a market id. Typical fields:
+
+- **`currency`**, **`locale`**, **`timezone`** (required)
+- **`locales`** (optional) — extra BCP 47 tags; must include **`locale`** if set
+- **`config`** (optional) — arbitrary defaults merged into every tenant in this market **before** tenant-level **`config`** (Phase 3.3)
+
+Optional presentation / SEO / theme keys exist in the schema (labels, **`seo`**, **`theme`**) — see the Zod-driven reference in the repo if you need every field.
+
+## Tenants
+
+Each key is a tenant id.
+
+- **`market`** (required) — must exist in **`markets`**
+- **`domains`** (required) — per-environment map: **host pattern** → tenant key **string** or **`{ tenant, basePath? }`**
+  - Patterns: exact host (**`us.example.com`**) or wildcard (**`*.us.example.com`**)
+- **`flags`** — **`Record<string, boolean>`** feature toggles (see below)
+- **`config`**, **`configByEnvironment`** — merged settings (see **Config merge**)
+- **`paths.basePath`**, **`theme`**, **`seo`**, **`access`**, **`experiments`**, **`database`** (per-tenant DB **env var name** only — not a raw URL)
+
+### Feature flags (`flags`)
+
+Server: **`isTenantFeatureEnabled(registry, tenantKey, name)`** in **`@multitenant/core`**.  
+Client: **`useTenantFlag(name)`** when you have a resolved tenant in context.
+
+There is **no** separate **`features`** field — if a CMS says “features”, **map** that object into **`flags`** before **`validateTenantsConfig`**.
+
+## Config merge (Phase 3.3)
+
+**Order:** **`markets[*].config`** → **`tenants[*].config`** → **`tenants[*].configByEnvironment[environment]`** (for the active environment).
+
+- **Deep merge** for nested plain objects; **scalars / arrays** are replaced (**last wins**).
+- **Conflict:** at the same path, one layer has a **plain object** and another a **non-object** → **`InvalidTenantsConfigError`**.
+
+**Effective config** for app code: **`getTenantConfig(registry, tenantKey, environment?)`** or **`useTenantConfig()`** in React.
+
+## Validation (hard errors)
+
+- Every **`tenants[*].market`** exists in **`markets`**
+- **No overlapping** domain patterns **within the same environment**
+- **Config merge** must not hit object vs non-object clashes
+- Tenant **`experiments`** overrides must reference top-level **`experiments`**
+
+Always run **`npx multitenant check`** in CI alongside your JSON edits.
