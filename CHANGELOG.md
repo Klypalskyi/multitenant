@@ -4,9 +4,15 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-30] v0.6.20 — `@multitenant/dev-proxy` 0.4.2 + site docs
+
+### Fixed
+
+- **`@multitenant/dev-proxy`** — tenant resolution tries **`Host` before `x-forwarded-host`**, then sets **`x-forwarded-host`** on the upstream request so a stale **`x-forwarded-host`** (e.g. `localhost`) cannot override **`us.localhost`**. WebSocket upgrades apply the same check; **`xfwd: true`** on proxy; error-page example hosts use **`domains.<env>`** patterns when available.
+
 ### Changed
 
-- **`@multitenant/cli`** — init success output references **`npx @multitenant/cli check`** (npm package is **`@multitenant/cli`**, not **`multitenant`**).
+- **`@multitenant/cli`** — init success output references **`npx @multitenant/cli check`** (npm package is **`@multitenant/cli`**, not **`multitenant`**); depends on **`@multitenant/dev-proxy` ^0.4.2**.
 - **`apps/site`** — docs and README use **`npx @multitenant/cli`** for copy-paste commands; **Mermaid** diagrams render via **`remarkMdxMermaid`** + a **`Mermaid`** MDX component (**`mermaid`** + **`next-themes`**).
 - **`apps/site`** — **Frameworks** section removed: adapter overview lives on **`/docs`** (home); Next/Express/Nest/React guides merged into **`content/docs/packages/*`**. Legacy **`/docs/frameworks/*`** URLs redirect. Sidebar **Tooling** is **CLI** only.
 - **`apps/site`** — **Nextra** replaced by **Fumadocs** (`fumadocs-mdx`, `fumadocs-ui`, Tailwind 4). MDX source is **`content/docs/`** with **`meta.json`** sidebars; routes are **`/`** (landing) and **`/docs/*`**. **`@vercel/analytics`** retained.

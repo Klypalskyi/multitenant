@@ -29,7 +29,9 @@ npx @multitenant/cli dev --target http://localhost:3000 --port 3100
 npx @multitenant/cli dev --run-dev --port 3100
 ```
 
-Then open e.g. **`http://us.localhost:3100`** (match your **`domains.local`** keys).
+Then open e.g. **`http://us.localhost:3100`** — use a **hostname from your config’s** **`domains.local`** (first label is often the tenant subdomain), **not** **`http://localhost:3100`**. **`localhost`** is not a tenant host, so the proxy cannot resolve a tenant (it responds with a short HTML hint listing example hosts).
+
+Browsing **`http://us.localhost:3000`** with **`next dev`** on **3000** is also valid: no proxy, but **`Host`** still matches **`domains.local`**.
 
 ---
 
