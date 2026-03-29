@@ -46,6 +46,6 @@ See `docs/RELEASE.md` for detailed release instructions.
 
 ## CI
 
-GitHub Actions (`.github/workflows/ci.yml`) runs `npm ci`, `npm run build`, and `npm test` on pushes and pull requests to `master` / `main` (Node 22).
+GitHub Actions (`.github/workflows/ci.yml`) runs `npm ci`, `npm run build`, `npm test`, and **`npm run examples:smoke`** (`examples/config-smoke` against the repo root `tenants.config.json`) on pushes and pull requests to `master` / `main` (Node 22).
 
 Workspace packages with tests today: `core`, `config`, `cli`, `database`, `identity`, `next-app`, `next-pages`, `express`.

@@ -1,0 +1,13 @@
+{
+  "name": "@multitenant/example-config-smoke",
+  "private": true,
+  "description": "CI/local smoke: validate repo tenants.config.json and resolve a known host",
+  "scripts": {
+    "smoke": "node ./smoke.cjs"
+  },
+  "dependencies": {
+    "@multitenant/config": "*",
+    "@multitenant/core": "*"
+  },
+  "license": "MIT"
+}

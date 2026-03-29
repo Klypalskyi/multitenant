@@ -6,6 +6,20 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 - _(nothing yet)_
 
+## [2026-03-29] Examples smoke + Nest DI docs
+
+### Added
+
+- **`examples/config-smoke`** — private workspace; `npm run examples:smoke` validates repo root `tenants.config.json` and host resolution (`us.localhost` → `us-main`).
+- **CI:** `.github/workflows/ci.yml` runs `npm run examples:smoke` after tests.
+
+### Documentation
+
+- **`docs/FRAMEWORKS/nestjs.md`** — singleton `TenantRegistry` + `useValue` provider + `MultitenantModuleForRoot`; sample service; guards note.
+- **`examples/README.md`**, **`PLAN.md`**, **`docs/INTERNAL/architecture.md`** — dashboard / CI description updates.
+
+_No `@multitenant/*` package `src/` changes — no npm publish._
+
 ## [2026-03-29] Docs — examples README, session cookies, Next copy-paste
 
 ### Documentation

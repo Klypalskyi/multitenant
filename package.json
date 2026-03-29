@@ -20,6 +20,7 @@
     "build": "turbo run build",
     "dev": "turbo dev",
     "test": "turbo run test",
+    "examples:smoke": "npm run smoke -w @multitenant/example-config-smoke",
     "clean": "rm -rf node_modules packages/*/dist",
     "typecheck": "tsc -b",
     "release:publish": "npm run build && bash scripts/publish-packages.sh"

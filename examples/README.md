@@ -6,6 +6,7 @@ These folders are **copy-paste references** for how multitenant middleware and h
 
 | Folder | What it shows |
 |--------|----------------|
+| `config-smoke/` | **CI/local script** — validates repo root `tenants.config.json` and `resolveByHost`; run `npm run examples:smoke` from the monorepo root (after `npm run build`) |
 | `next-app-router/` | `middleware.ts`, shared `tenant-registry.ts`, minimal `app/` pages |
 | `next-pages/` | `tenant-registry.ts` + `pages/index.tsx` pattern |
 | `express/` | Express app wiring |
