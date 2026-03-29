@@ -4,6 +4,15 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Docs — PLAN 1.2 + Nest TenantRequiredGuard (Phase 5.3)
+
+### Documentation
+
+- **`PLAN.md`** — Phase **1.2** marked **done** (no stray `resolveTenant` / `getTenant()` in `*.md` outside intentional PLAN notes); Phase **5.3** checklist updated.
+- **`docs/FRAMEWORKS/nestjs.md`** — copy-paste **`TenantRequiredGuard`** (`TenantNotFoundError`), `@UseGuards` + controller example; exception-filter note.
+
+_No package `src/` changes — no npm publish._
+
 ## [2026-03-29] Docs — react-ssr SSR/RSC-first (Phase 5.4)
 
 ### Documentation

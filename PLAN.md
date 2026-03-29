@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — `react-ssr.md`: framework-agnostic SSR/RSC first; Next.js as examples (Phase 5.4).
+**Last reviewed:** 2026-03-29 — Phase 1.2 doc API grep done; Nest **TenantRequiredGuard** copy-paste in `nestjs.md` (Phase 5.3).
 
 ---
 
@@ -69,7 +69,7 @@
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
 | 1.1 | **Error taxonomy** | **Partial:** Express `onMissingTenant: 'throw'` → `next(TenantNotFoundError)`; Next Pages `withTenantApi` → 404 JSON with `MULTITENANT_TENANT_NOT_FOUND` (**next-pages v0.4.2**); GSSP still `notFound`; Nest null. |
-| 1.2 | **Align docs & PLAN with real API** — no fictional method names | **Partial:** `*.md` grep: no stray `resolveTenant` / `getTenant()` except intentional notes in `PLAN.md` / Appendix B. |
+| 1.2 | **Align docs & PLAN with real API** — no fictional method names | **Done:** `*.md` grep — no stray `resolveTenant` / `getTenant()` except intentional notes in `PLAN.md` / Appendix B. |
 | 1.3 | **Duplication audit** — types across packages | **Done (audit):** `ResolvedTenant` / `TenantsConfig` interfaces only in `@multitenant/core` (`packages/*/src` grep). |
 | 1.4 | **Debug / observability on registry** | **Done (v0.4.0)** — optional structured OTel hook still future (Appendix A) |
 
@@ -147,7 +147,7 @@
 |----|------|---------------------|
 | 5.1 | Next.js: Edge middleware, Server Actions | **Partial:** `docs/FRAMEWORKS/next-app-router.md` — Edge vs Node, middleware headers, Server Actions, **copy-paste** route handler + server action + shared registry |
 | 5.2 | Express | **Shipped (doc + API):** global `req.tenant` augment; `docs/FRAMEWORKS/express.md`; optional `onMissingTenant` (**v0.4.2**) |
-| 5.3 | Nest | **Partial:** `docs/FRAMEWORKS/nestjs.md` — module, `@Tenant()`, null tenant; **DI recipe** (singleton `TenantRegistry` + `MultitenantModuleForRoot`, inject in services); guards left to app |
+| 5.3 | Nest | **Partial:** `docs/FRAMEWORKS/nestjs.md` — module, `@Tenant()`, null tenant; **DI recipe**; **copy-paste `TenantRequiredGuard`** (`TenantNotFoundError`) + `@UseGuards`; optional global exception filter still app-owned |
 | 5.4 | React | **Partial:** `docs/FRAMEWORKS/react-ssr.md` — RSC/SSR boundary (serializable `ResolvedTenant` vs registry); classic SSR; **Next** App Router + Pages examples |
 
 ---

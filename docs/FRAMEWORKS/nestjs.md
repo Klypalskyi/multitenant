@@ -99,7 +99,50 @@ export class TenantAdminService {
 
 ## Guards (strict tenant)
 
-If a route must not run without a resolved tenant, use a guard that reads `request.tenant` (or the `@Tenant()` value) and throws / returns 404 — same semantics as `requireTenant` on Next. This package does not ship a guard; keep it in your app so you control status codes and logging.
+If a route must not run without a resolved tenant, use a guard that reads `request.tenant` — same semantics as `requireTenant` on Next. This package does not **export** a guard (so you keep status-code / filter policy in your app); the snippet below is a drop-in starting point.
+
+### Example: `TenantRequiredGuard`
+
+Throws `TenantNotFoundError` from `@multitenant/core` when `request.tenant` is missing. Map it to **404** (or JSON `{ code: 'MULTITENANT_TENANT_NOT_FOUND' }`) with a Nest **exception filter** if the default error shape is not what you want.
+
+```ts
+// tenant-required.guard.ts
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { TenantNotFoundError } from '@multitenant/core';
+import type { ResolvedTenant } from '@multitenant/core';
+
+type TenantRequest = { tenant?: ResolvedTenant | null };
+
+@Injectable()
+export class TenantRequiredGuard implements CanActivate {
+  canActivate(context: ExecutionContext): boolean {
+    const req = context.switchToHttp().getRequest<TenantRequest>();
+    if (req.tenant == null) {
+      throw new TenantNotFoundError('No tenant resolved for this host');
+    }
+    return true;
+  }
+}
+```
+
+```ts
+// e.g. on a controller or single handler
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { TenantRequiredGuard } from './tenant-required.guard';
+import { Tenant } from '@multitenant/nest';
+import type { ResolvedTenant } from '@multitenant/core';
+
+@Controller('api')
+@UseGuards(TenantRequiredGuard)
+export class ApiController {
+  @Get('ping')
+  ping(@Tenant() tenant: ResolvedTenant) {
+    return { tenantKey: tenant.tenantKey };
+  }
+}
+```
+
+Register the guard in `providers` if you inject dependencies into it; for the snippet above, `providers: [TenantRequiredGuard]` plus `@UseGuards(TenantRequiredGuard)` is enough.
 
 ## See also
 
