@@ -43,7 +43,7 @@ Pair with **`runWithTenantScope`** at the HTTP boundary so repository code can r
 
 - **Host resolution ≠ authz** — only set DSN after trusted tenant resolution (and identity `assertAccess` when applicable).
 - **Logs** — never print full DSNs; redact passwords in structured logs.
-- **Pool keys** — Phase **8.6** (bounded pools per URL) is still separate; today you wire pooling in app code.
+- **Pool keys** — use **`BoundedTenantDbResourceCache`** / **`getOrCreateTenantDatabaseResource`** (Phase **8.6** — [bounded-tenant-db-pools.md](bounded-tenant-db-pools.md)); cache keys always include **tenant + URL**.
 
 ## See also
 

@@ -4,6 +4,19 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] `@multitenant/database` 0.5.5 — bounded per-tenant pool cache (Phase 8.6)
+
+### Added
+
+- **`BoundedTenantDbResourceCache<T>`** — `maxPools`, optional **`idleEvictMs`**, **`onEvict`**, LRU eviction, **`destroy()`**.
+- **`makeTenantDatabaseCacheKey(tenantKey, databaseUrl)`** — composite cache key (tenant + URL).
+- **`getOrCreateTenantDatabaseResource`** — **`resolveTenantDatabaseUrl`** + cache `getOrCreate`.
+- **Vitest:** `src/bounded-tenant-db-resource-cache.test.ts`.
+
+### Documentation
+
+- **`docs/INTERNAL/bounded-tenant-db-pools.md`**, **`docs/INTERNAL/database-scope.md`**, **`docs/INTERNAL/per-tenant-database-url.md`**, **`docs/INTERNAL/architecture.md`**, **`docs/INDEX.md`**, **`PLAN.md`**, **`packages/database/README.md`**.
+
 ## [2026-03-29] `@multitenant/database` 0.5.4 — per-tenant DSN resolution (Phase 8.5)
 
 ### Added

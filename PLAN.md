@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **Phase 8.5:** `TenantDefinition.database.envVar` + `resolveTenantDatabaseUrl` — **`@multitenant/core` v0.5.1**, **`@multitenant/config` v0.4.2**, **`@multitenant/database` v0.5.4**; **8.3** v0.5.3.
+**Last reviewed:** 2026-03-29 — **Phase 8.6:** **`BoundedTenantDbResourceCache`** + **`getOrCreateTenantDatabaseResource`** — **`@multitenant/database` v0.5.5**; **8.5** (core 0.5.1, config 0.4.2, database 0.5.4); **8.3** v0.5.3.
 
 ---
 
@@ -28,7 +28,7 @@
 | `isFeatureEnabled()` / flags server-side | **Shipped** | v0.5.0 — `isTenantFeatureEnabled` in core (flags map) |
 | Package unit tests + CI | **Shipped** | `npm test` (turbo): core, config, cli, database, identity, **next-app** integration tests; GitHub Actions `build` + `test` + **`npm run examples:smoke`** on push/PR |
 | Website / landing in repo | **Not shipped** | Optional external |
-| ORM / DB adapters (shared DB + per-tenant DB) | **Partial** | **`@multitenant/database` v0.5.4** — through **8.5** (env-backed per-tenant DSN resolution); **bounded pools** (8.6), ORM peers **8.7** still open |
+| ORM / DB adapters (shared DB + per-tenant DB) | **Partial** | **`@multitenant/database` v0.5.5** — through **8.6** (LRU-bounded per-tenant pool cache + 8.5 DSN); ORM **8.7**, migrations **8.8** still open |
 | Orientation: why / pitfalls / diagram | **Partial** | `docs/WHY-MULTITENANT.md` — host→registry + **Next middleware→headers→`getTenantFromHeaders`** mermaid; `docs/INTERNAL/tenant-bound-sessions.md` |
 
 **Naming note:** The public API uses `resolveByHost`, `resolveByRequest`, `getTenantFromHeaders`, and `requireTenant`. Do **not** document or implement `resolveTenant()` / `getTenant()` unless adding explicit aliases with a deprecation story.
@@ -209,7 +209,7 @@
 | 8.3 | **Shared DB — Postgres RLS recipe** | 8.1; Phase 4 **recommended** for identity-bound RLS | **Done (v0.5.3):** `buildSetLocalTenantGucSql`, `buildSetLocalTenantGucSqlFromScope`, `escapePostgresStringLiteral`, `assertSafePostgresCustomGucName`, `POSTGRES_RLS_TENANT_GUC_DEFAULT`; `docs/INTERNAL/postgres-rls-tenant.md` (policies, `SET LOCAL`, PgBouncer, `FORCE RLS`). *Dockerized PG e2e in CI remains optional / not in repo.* |
 | 8.4 | **Shared DB — schema-per-tenant (same cluster)** | 8.1 | **Done (v0.5.2):** `schemaNameForTenant`, `POSTGRES_MAX_IDENTIFIER_BYTES`, `requireSchemaNameForCurrentTenant`; `docs/INTERNAL/schema-per-tenant-postgres.md` (`SET LOCAL search_path`, pooling, prepared statements, migrations note). |
 | 8.5 | **Per-tenant DB — connection resolution** | 8.1 | **Done:** **`TenantDatabaseConfig`** on **`TenantDefinition`** (`database.envVar` only); **`@multitenant/config`** Zod + `multitenant check`; **`resolveTenantDatabaseUrl`** in **`@multitenant/database`**; `docs/INTERNAL/per-tenant-database-url.md`, config reference. *Bounded pool manager = 8.6.* |
-| 8.6 | **Per-tenant DB — pool / client manager** | 8.5 | Bounded pools (per-URL or per-tenant with **max** tenants / max connections, LRU idle eviction); **no** unbounded `Map` of pools; docs: long-lived Node vs serverless. |
+| 8.6 | **Per-tenant DB — pool / client manager** | 8.5 | **Done (v0.5.5):** **`BoundedTenantDbResourceCache<T>`** (`maxPools`, **`idleEvictMs`**, **`onEvict`**, LRU eviction, **`destroy()`**), **`makeTenantDatabaseCacheKey`**, **`getOrCreateTenantDatabaseResource`**; driver-agnostic; **`docs/INTERNAL/bounded-tenant-db-pools.md`** (Node vs serverless). *Per-pool connection `max` stays in app/factory (e.g. `pg.Pool`).* |
 | 8.7 | **ORM reference adapter (one first)** | 8.2, 8.5–8.6 | One of Drizzle **or** Prisma end-to-end: shared-DB + per-tenant URL examples; second ORM = follow-up minor. |
 | 8.8 | **Migrations story** | 8.2, 8.5 | Docs: single migration set (shared DB) vs **N** DBs (batch scripts, template DB, or provisioner); idempotency + ordering; optional `multitenant` subcommand **or** documented npm scripts — not a full hosted orchestrator. |
 
@@ -239,7 +239,7 @@
 
 1. Two **documented topologies** (shared DB + per-tenant URL), each with **threat model** (what host resolution does *not* guarantee).
 2. **8.1** shipped with tests; no reliance on global mutable tenant for correctness.
-3. Per-tenant pooling has **documented** caps and deterministic behavior under load.
+3. Per-tenant pooling has **documented** caps and deterministic behavior under load (**8.6 ✅** — `maxPools` + LRU + optional idle eviction).
 4. **One** ORM reference package works end-to-end in a minimal example or test harness.
 5. **`multitenant check`** rejects invalid DB-related tenant config when schema fields are added (**8.5 ✅** for `database.envVar` shape).
 
@@ -284,7 +284,8 @@ Exit criteria are mandatory; task lists are indicative.
 - **8.3** Postgres RLS + `SET LOCAL` helpers — **✅ Shipped (`@multitenant/database` v0.5.3).**
 - **8.4** schema-per-tenant Postgres — **✅ Shipped (`@multitenant/database` v0.5.2).**
 - **8.5** per-tenant DSN via env — **✅ Shipped (core 0.5.1, config 0.4.2, database 0.5.4).**
-- Next: **8.6** bounded pools, **8.7** ORM reference, **8.8** migrations doc.
+- **8.6** bounded per-tenant pool cache — **✅ Shipped (`@multitenant/database` v0.5.5).**
+- Next: **8.7** ORM reference, **8.8** migrations doc.
 - Pick **one** ORM for **8.7**; **8.8** migrations doc as follow-up milestone.
 
 **Exit:** DoD items 1–4 satisfied for one vertical slice (e.g. Drizzle + Postgres shared + one per-tenant URL mock).

@@ -6,6 +6,8 @@ Node-only **async context** for tenant scope using `AsyncLocalStorage`. Use afte
 
 **Phase 8.5 — per-tenant URL:** `resolveTenantDatabaseUrl(resolved, registry.tenants, options?)` reads `tenant.database.envVar` from validated config (see [per-tenant-database-url.md](https://github.com/klypalskyi/multitenant/blob/master/docs/INTERNAL/per-tenant-database-url.md)).
 
+**Phase 8.6 — bounded pool cache:** `BoundedTenantDbResourceCache`, `getOrCreateTenantDatabaseResource`, `makeTenantDatabaseCacheKey` — LRU-capped cache for distinct pools/clients per tenant+DSN (see [bounded-tenant-db-pools.md](https://github.com/klypalskyi/multitenant/blob/master/docs/INTERNAL/bounded-tenant-db-pools.md)).
+
 **Phase 8.3 — Postgres RLS:** `buildSetLocalTenantGucSql`, `buildSetLocalTenantGucSqlFromScope`, `escapePostgresStringLiteral`, `POSTGRES_RLS_TENANT_GUC_DEFAULT` — safe **`SET LOCAL … TO …`** strings for `current_setting` policies. See [postgres-rls-tenant.md](https://github.com/klypalskyi/multitenant/blob/master/docs/INTERNAL/postgres-rls-tenant.md).
 
 **Phase 8.4 — schema-per-tenant Postgres:** `schemaNameForTenant(tenantKey, options?)`, `requireSchemaNameForCurrentTenant(options?)` map registry keys to **PostgreSQL-safe schema names** (63-byte cap, normalization rules). See [schema-per-tenant-postgres.md](https://github.com/klypalskyi/multitenant/blob/master/docs/INTERNAL/schema-per-tenant-postgres.md).

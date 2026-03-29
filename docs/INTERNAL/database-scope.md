@@ -2,7 +2,7 @@
 
 **Node-only.** Optional helpers built on `AsyncLocalStorage` so server code (Express, Nest request handlers, Next.js route handlers in the **Node** runtime) can read a **tenant scope** set at the HTTP boundary without threading `tenantKey` through every call.
 
-This package does **not** include drivers, pooling, or SQL. It complements `createTenantRegistry` / `ResolvedTenant`: you still resolve the tenant from the request; then wrap downstream work in `runWithTenantScope` / `runWithTenantScopeAsync`.
+This package does **not** include drivers or SQL. **Phase 8.6** adds a **driver-agnostic bounded pool cache** (LRU + optional idle eviction) — see [Bounded per-tenant DB pools](bounded-tenant-db-pools.md). It complements `createTenantRegistry` / `ResolvedTenant`: you still resolve the tenant from the request; then wrap downstream work in `runWithTenantScope` / `runWithTenantScopeAsync`.
 
 ## API (summary)
 
@@ -13,6 +13,7 @@ This package does **not** include drivers, pooling, or SQL. It complements `crea
 - **Schema-per-tenant Postgres (Phase 8.4):** `schemaNameForTenant`, `requireSchemaNameForCurrentTenant` — see [Schema-per-tenant Postgres](schema-per-tenant-postgres.md).
 - **Postgres RLS + `SET LOCAL` (Phase 8.3):** `buildSetLocalTenantGucSql`, `buildSetLocalTenantGucSqlFromScope`, literals/GUC validation — see [Postgres RLS tenant GUC](postgres-rls-tenant.md).
 - **Per-tenant DSN env (Phase 8.5):** `resolveTenantDatabaseUrl` — see [Per-tenant database URL](per-tenant-database-url.md).
+- **Bounded pool cache (Phase 8.6):** `BoundedTenantDbResourceCache`, `getOrCreateTenantDatabaseResource`, `makeTenantDatabaseCacheKey` — see [Bounded per-tenant DB pools](bounded-tenant-db-pools.md).
 
 See package `README` and `packages/database/src/index.ts` for exact types and behavior.
 

@@ -16,6 +16,16 @@ export {
 export { resolveTenantDatabaseUrl } from './resolve-tenant-db-url';
 export type { ResolveTenantDatabaseUrlOptions } from './resolve-tenant-db-url';
 
+export {
+  BoundedTenantDbResourceCache,
+  getOrCreateTenantDatabaseResource,
+  makeTenantDatabaseCacheKey,
+} from './bounded-tenant-db-resource-cache';
+export type {
+  BoundedTenantDbResourceCacheOptions,
+  TenantDbCacheEntry,
+} from './bounded-tenant-db-resource-cache';
+
 export interface TenantScopeState {
   tenantKey: string;
   resolved?: ResolvedTenant;
