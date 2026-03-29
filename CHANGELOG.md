@@ -4,6 +4,13 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Phase 7.1 — README hero complete
+
+### Documentation
+
+- **`README.md`** — one-line value prop; **`@multitenant/core`** npm badge; **Quick links** row; **`TenantsConfig`** in copy-paste middleware; **App Router `layout.tsx`**: `await headers()`, **`requireTenant`**, **`TenantProvider`** + `environment`; link to **react-ssr** checklist.
+- **`PLAN.md`** — **7.1** **Done**; **7.2** framed as ongoing brand convention; last reviewed; Sprint D bullet.
+
 ## [2026-03-29] Phase 5.3–5.4 — Nest + React framework docs closed
 
 ### Documentation

@@ -2,7 +2,13 @@
 
 Multi-tenant + multi-market toolkit for TypeScript apps.
 
+**In one line:** resolve **tenant + market** from the **Host** / proxy headers using a single **`tenants.config.json`**, then wire **Next.js (App + Pages), Express, Nest, or React** with typed errors and optional identity cookies.
+
+[![npm](https://img.shields.io/npm/v/@multitenant/core.svg?label=%40multitenant%2Fcore)](https://www.npmjs.com/package/@multitenant/core)
+
 Intro / pitfalls / diagram: [docs/WHY-MULTITENANT.md](docs/WHY-MULTITENANT.md).
+
+**Quick links:** [Getting started](docs/GETTING-STARTED.md) · [Config reference](docs/CONFIG/tenants-config.md) · [Framework overview](docs/FRAMEWORKS/overview.md) · [docs index](docs/INDEX.md) · [Release / publish](docs/RELEASE.md)
 
 **Demo:** there is no hosted SaaS in this repo — use [docs/INDEX.md](docs/INDEX.md), [examples/README.md](examples/README.md) (**runnable** [`express-minimal`](examples/express-minimal/) and [`next-minimal`](examples/next-minimal/) workspaces + `config-smoke`), and `npx multitenant init` as the hands-on path.
 
@@ -18,12 +24,12 @@ Scaffold writes a valid `tenants.config.json` (and optional framework stubs with
 ### Copy-paste: Next.js App Router (`middleware.ts`)
 
 ```ts
-import type { EnvironmentName } from '@multitenant/core';
+import type { EnvironmentName, TenantsConfig } from '@multitenant/core';
 import { createTenantRegistry } from '@multitenant/core';
 import { createTenantMiddleware } from '@multitenant/next-app';
 import tenantsConfig from './tenants.config.json';
 
-const registry = createTenantRegistry(tenantsConfig as any);
+const registry = createTenantRegistry(tenantsConfig as TenantsConfig);
 const env = (process.env.MULTITENANT_ENV ?? 'local') as EnvironmentName;
 
 export const middleware = createTenantMiddleware(registry, { environment: env });
@@ -114,12 +120,12 @@ You can also do `createTenantRegistry()` in Node to auto-load `<cwd>/tenants.con
 `middleware.ts`:
 
 ```ts
-import type { EnvironmentName } from '@multitenant/core';
+import type { EnvironmentName, TenantsConfig } from '@multitenant/core';
+import { createTenantRegistry } from '@multitenant/core';
 import { createTenantMiddleware } from '@multitenant/next-app';
 import tenantsConfig from './tenants.config.json';
-import { createTenantRegistry } from '@multitenant/core';
 
-const registry = createTenantRegistry(tenantsConfig);
+const registry = createTenantRegistry(tenantsConfig as TenantsConfig);
 const env = (
   process.env.MULTITENANT_ENV ??
   process.env.TENANTIFY_ENV ??
@@ -133,24 +139,30 @@ export const middleware = createTenantMiddleware(registry, {
 
 Note: if you run `next dev` directly (Host doesn't match any tenant domains), `createTenantMiddleware` will passthrough by default (no tenant headers added). If you want strict resolution, pass `onMissingTenant: 'throw'`.
 
-`app/layout.tsx`:
+`app/layout.tsx` (async request APIs; **`requireTenant`** throws **`TenantNotFoundError`** when unresolved — aligns with [react-ssr checklist](docs/FRAMEWORKS/react-ssr.md)):
 
 ```ts
+import type { EnvironmentName } from '@multitenant/core';
+import type { ReactNode } from 'react';
 import { TenantProvider } from '@multitenant/react';
-import { getTenantFromHeaders } from '@multitenant/next-app';
+import { requireTenant } from '@multitenant/next-app';
 import { headers } from 'next/headers';
 import { tenantRegistry } from './tenant-registry';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const h = headers();
-  const tenant = getTenantFromHeaders(h, tenantRegistry) ?? (() => {
-    throw new Error('No tenant resolved');
-  })();
+const env = (
+  process.env.MULTITENANT_ENV ??
+  process.env.TENANTIFY_ENV ??
+  'local'
+) as EnvironmentName;
+
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const h = await headers();
+  const tenant = requireTenant(h, tenantRegistry, { environment: env });
 
   return (
-    <html>
+    <html lang="en">
       <body>
-        <TenantProvider registry={tenantRegistry} tenant={tenant}>
+        <TenantProvider registry={tenantRegistry} tenant={tenant} environment={env}>
           {children}
         </TenantProvider>
       </body>

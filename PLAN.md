@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **Phase 5** framework polish **Done** for **5.1–5.4**: Next App Router checklist (**5.1**); Express doc+API (**5.2**, unchanged); Nest **`TenantNotFoundFilter`** copy-paste + guard/DI (**5.3**); React SSR/RSC + Next App/Pages (**5.4**).
+**Last reviewed:** 2026-03-29 — **Phase 7.1** README hero **Done**: one-line value prop; **`@multitenant/core`** npm badge; **Quick links** (getting started, config, frameworks, INDEX, RELEASE); hero + deep-dive **`middleware.ts`** use **`TenantsConfig`** cast; **App Router `layout.tsx`** — **`await headers()`**, **`requireTenant`**, typed **`TenantProvider`** (see **`README.md`**).
 
 ---
 
@@ -30,6 +30,7 @@
 | Website / landing in repo | **Not shipped** | Optional external |
 | ORM / DB adapters (shared DB + per-tenant DB) | **Shipped** | **`@multitenant/database` v0.5.5** + thin ORM peers **`drizzle` / `kysely` / `prisma` / `typeorm`** @ **v0.1.0**; **8.8** migrations doc; further drivers/ORMs only on demand |
 | Orientation: why / pitfalls / diagram | **Shipped** | `docs/WHY-MULTITENANT.md` — two mermaid diagrams + pitfalls + **Next steps** (examples, INDEX, frameworks, DB scope); links to errors & sessions |
+| README hero (10-second pitch) | **Shipped** | root **`README.md`** — Phase **7.1**: value line, npm badge, quick links, **`requireTenant`** layout |
 
 **Naming note:** The public API uses `resolveByHost`, `resolveByRequest`, `getTenantFromHeaders`, and `requireTenant`. Do **not** document or implement `resolveTenant()` / `getTenant()` unless adding explicit aliases with a deprecation story.
 
@@ -172,8 +173,8 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 7.1 | **README hero** | **Shipped (partial):** 30-second start + copy-paste Next `middleware.ts` + open-source links |
-| 7.2 | **Brand** | Keep `@multitenant/*` scope; consistent naming in all public docs |
+| 7.1 | **README hero** | **Done:** 30-second start + copy-paste Next `middleware.ts` (**`TenantsConfig`**); **one-line pitch** + npm badge + **Quick links**; **async `layout.tsx`** + **`requireTenant`** + **`TenantProvider`** (`environment`); open-source footer (`@multitenant/*` on npm) |
+| 7.2 | **Brand** | **Convention (ongoing):** `@multitenant/*` scope; consistent naming in public docs — verify on release doc passes |
 | 7.3 | **Website / demo** | **Done:** root `README.md` — no hosted SaaS; explicit **runnable** `examples/express-minimal`, `examples/next-minimal`, `examples/README`, `docs/INDEX`, `multitenant init` |
 
 ---
@@ -278,7 +279,8 @@ Exit criteria are mandatory; task lists are indicative.
 - **Done (docs follow-through, 2026-03):** `react-ssr.md` SSR/RSC-first + Next subsections (**5.4 Done**); Nest **`TenantRequiredGuard`** + **`TenantNotFoundFilter`** (**5.3 Done**); `WHY-MULTITENANT.md` second mermaid + App Router link (6.4); `next-app-router.md` full checklist + RSC page + **`marketKey`** fix (5.1 **Done** 2026-03); `@multitenant/react` hook tests (6.1).
 - **Done (2026-03):** runnable **`examples/express-minimal`**, **`examples/next-minimal`** + CI express smoke.
 - **Done (2026-03):** Phase **6.4** (`WHY-MULTITENANT` next steps) + **7.3** (README runnable examples).
-- **Open:** optional global coverage thresholds.
+- **Done (2026-03):** Phase **7.1** README hero (`README.md` — pitch, badge, quick links, modern App Router layout).
+- **Open:** optional global coverage thresholds (Phase 6.1).
 
 ### Sprint E — Database / ORM (optional; Phase 8)
 
