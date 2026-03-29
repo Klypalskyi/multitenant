@@ -1,16 +1,16 @@
 ---
 title: "Next.js (App Router)"
 description: "`auto` middleware + `example-next-minimal` workspace."
+icon: Triangle
 ---
 
 Same pattern as **`examples/next-minimal/middleware.ts`**: static JSON import + **`createTenantMiddlewareFromConfig`**.
 
 ## Run the workspace
 
-```bash
-npm run dev -w @multitenant/example-next-minimal
-# Open http://us.localhost:3050 (hosts in root tenants.config.json)
-```
+<WorkspaceRunTabs workspace="@multitenant/example-next-minimal" script="dev" />
+
+Open **`http://us.localhost:3050`** (hosts in root **`tenants.config.json`**).
 
 ## `auto` middleware
 

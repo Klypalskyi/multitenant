@@ -19,4 +19,12 @@ html:has(body[data-scroll-locked]) {
   #nd-sidebar a[data-active='true'] {
     font-weight: 600;
   }
+
+  /* Package-manager tabs: no nested “code block” chrome from prose / defaults */
+  .pm-code-block pre,
+  .pm-code-block code {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
 }

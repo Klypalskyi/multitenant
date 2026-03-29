@@ -1,6 +1,7 @@
 ---
 title: "Next.js"
 description: "`@multitenant/next`, `next-app`, `next-pages` — meta package, App Router, Pages Router."
+icon: Triangle
 ---
 
 <a id="nextjs-meta" />
@@ -11,9 +12,7 @@ description: "`@multitenant/next`, `next-app`, `next-pages` — meta package, Ap
 
 ### Install
 
-```bash
-npm install @multitenant/next next react react-dom
-```
+<InstallTabs npm="npm install @multitenant/next next react react-dom" />
 
 ### When to use
 
@@ -32,9 +31,7 @@ Use **`@multitenant/next-app`** (or **`@multitenant/next`**). Keep **middleware*
 
 ### Install
 
-```bash
-npm install @multitenant/next-app next react react-dom
-```
+<InstallTabs npm="npm install @multitenant/next-app next react react-dom" />
 
 Peers: **`next`**, and typically **`@multitenant/core`** for **`createTenantRegistry`**.
 
@@ -143,9 +140,7 @@ You typically **`createTenantRegistry`** once (e.g. **`lib/tenant-registry.ts`**
 
 ### Install
 
-```bash
-npm install @multitenant/next-pages next react react-dom
-```
+<InstallTabs npm="npm install @multitenant/next-pages next react react-dom" />
 
 Package name on npm is **`next-pages`** (monorepo folder **`next-paages`**).
 
@@ -167,9 +162,7 @@ See [Errors](/docs/errors).
 
 ### Scaffold
 
-```bash
-npx @multitenant/cli init --framework next-pages
-```
+<CliDlxTabs args="init --framework next-pages" />
 
 Install **`@multitenant/next-pages`**, **`next`**, **`react`**, **`@multitenant/core`**.
 

@@ -1,6 +1,7 @@
 ---
 title: "Identity"
 description: "`@multitenant/identity` — AES-256-GCM session cookies and tenant access checks."
+icon: KeyRound
 ---
 
 **Node-only.** Builds on **`@multitenant/core`** types (**`EncodedSession`**, **`Identity`**, **`canAccessTenant`**, **`assertAccess`**): parse **`Cookie`** headers, emit **`Set-Cookie`**, and optionally verify the session’s tenant matches the host-resolved tenant.
@@ -9,9 +10,7 @@ Resolution order in production is usually: **host → `ResolvedTenant`** (core) 
 
 ## Install
 
-```bash
-npm install @multitenant/identity
-```
+<InstallTabs npm="npm install @multitenant/identity" />
 
 ## Session cookie flow
 

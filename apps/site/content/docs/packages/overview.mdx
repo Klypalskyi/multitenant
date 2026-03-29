@@ -1,6 +1,7 @@
 ---
 title: "Overview"
 description: "All `@multitenant/*` packages at a glance."
+icon: LayoutGrid
 ---
 
 All public libraries are scoped **`@multitenant/…`** on npm. Install only what your app needs; **`@multitenant/next`** is a convenience meta-package for Next.js App Router projects. Each published package has its own page under **Packages** in the sidebar.
@@ -12,9 +13,7 @@ All public libraries are scoped **`@multitenant/…`** on npm. Install only what
 | **[`@multitenant/core`](/docs/packages/core)** | **`createTenantRegistry`**, **`resolveByHost`**, **`resolveByRequest`**, **`getTenantConfig`**, **`isTenantFeatureEnabled`**, **`TenantNotFoundError`**, … |
 | **[`@multitenant/config`](/docs/packages/config)** | **`loadTenantsConfig`**, **`validateTenantsConfig`** — same validation as **`multitenant check`** |
 
-```bash
-npm install @multitenant/core @multitenant/config
-```
+<InstallTabs npm="npm install @multitenant/core @multitenant/config" />
 
 ## CLI & dev proxy
 
@@ -23,10 +22,9 @@ npm install @multitenant/core @multitenant/config
 | **[`@multitenant/cli`](/docs/packages/cli)** | **`multitenant init`**, **`check`**, **`print`**, **`dev`** (local proxy + config hot reload) |
 | **[`@multitenant/dev-proxy`](/docs/packages/dev-proxy)** | HTTP proxy + WebSocket upgrade used by **`multitenant dev`** |
 
-```bash
-npm install -D @multitenant/cli
-# or: npx @multitenant/cli …
-```
+<InstallTabs npm="npm install -D @multitenant/cli" />
+
+Or run CLI without installing ( **`npx` / `pnpm dlx` / `yarn dlx`** ) — see [CLI](/docs/cli/dev-check-print).
 
 ## Next.js
 
@@ -36,10 +34,11 @@ npm install -D @multitenant/cli
 | **[`@multitenant/next-app`](/docs/packages/next#nextjs-app-router)** | App Router — **`createTenantMiddleware`**, **`getTenantFromHeaders`**, **`requireTenant`**; **`/auto`**, **`/auto-node`** |
 | **[`@multitenant/next-pages`](/docs/packages/next#nextjs-pages-router)** | Pages Router — **`withTenantGSSP`**, **`withTenantApi`** |
 
-```bash
-npm install @multitenant/next-app next react react-dom
-# or: npm install @multitenant/next next react react-dom
-```
+<InstallTabs npm="npm install @multitenant/next-app next react react-dom" />
+
+Meta package (one line for typical App Router setups):
+
+<InstallTabs npm="npm install @multitenant/next next react react-dom" />
 
 ## React
 
@@ -56,10 +55,9 @@ Peers: **`react`** ≥ 18.
 | **[`@multitenant/express`](/docs/packages/express)** | **`multitenantExpress({ registry, environment })`** → **`req.tenant`** |
 | **[`@multitenant/nest`](/docs/packages/nest)** | **`MultitenantModuleForRoot`**, **`@Tenant()`** decorator |
 
-```bash
-npm install @multitenant/express express
-npm install @multitenant/nest @nestjs/common @nestjs/core
-```
+<InstallTabs npm="npm install @multitenant/express express" />
+
+<InstallTabs npm="npm install @multitenant/nest @nestjs/common @nestjs/core" />
 
 ## Identity & database (optional)
 
@@ -74,4 +72,8 @@ npm install @multitenant/nest @nestjs/common @nestjs/core
 
 ---
 
-Versions are **per package** on npm. Release process: **`docs/RELEASE.md`** and **`npm run release:publish`** from the monorepo.
+Versions are **per package** on npm. Release process: **`docs/RELEASE.md`** and:
+
+<RunScriptTabs script="release:publish" />
+
+(from the monorepo root)

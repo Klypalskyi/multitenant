@@ -1,6 +1,7 @@
 ---
 title: "Express"
 description: "`@multitenant/express` — Express middleware and `req.tenant`."
+icon: Server
 ---
 
 **Express** middleware: **`req.tenant`** (and related fields) after **`createTenantRegistry`** resolves the incoming **Host** / forwarded headers for the active **environment**.
@@ -9,9 +10,7 @@ Middleware resolves **`ResolvedTenant | null`** from **`Host`** / **`x-forwarded
 
 ## Install
 
-```bash
-npm install @multitenant/express express
-```
+<InstallTabs npm="npm install @multitenant/express express" />
 
 Peer: **`express`**.
 

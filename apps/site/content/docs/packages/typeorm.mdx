@@ -1,15 +1,14 @@
 ---
 title: "TypeORM"
 description: "`@multitenant/typeorm` — per-tenant or shared Postgres `DataSource`."
+icon: Cylinder
 ---
 
 **TypeORM** **DataSource** helpers for Postgres: **cached per tenant DSN** or **one shared `DataSource`**. You must **`await dataSource.initialize()`** before queries; on eviction use **`onEvict`** to **`destroy()`**.
 
 ## Install
 
-```bash
-npm install @multitenant/typeorm typeorm pg reflect-metadata
-```
+<InstallTabs npm="npm install @multitenant/typeorm typeorm pg reflect-metadata" />
 
 ## Per-tenant database URL
 

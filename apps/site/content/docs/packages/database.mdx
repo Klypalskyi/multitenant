@@ -1,6 +1,7 @@
 ---
 title: "Database"
 description: "`@multitenant/database` — ALS tenant scope, URL resolution, bounded pool cache, Postgres helpers."
+icon: Database
 ---
 
 **Node-only.** This package gives you **AsyncLocalStorage** so repository code can read **`tenantKey`** without threading it through every function, plus **bounded caching** for per-tenant DB clients/pools, **env-based DSN resolution** from config, and small **Postgres** helpers (RLS GUC, `tenant_id` on writes).
@@ -9,9 +10,7 @@ It does **not** resolve the tenant from HTTP — use **`@multitenant/core`** + a
 
 ## Install
 
-```bash
-npm install @multitenant/database
-```
+<InstallTabs npm="npm install @multitenant/database" />
 
 ## 1. Tenant scope (ALS)
 

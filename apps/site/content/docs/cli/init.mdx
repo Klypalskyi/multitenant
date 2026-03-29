@@ -1,15 +1,14 @@
 ---
 title: "multitenant init"
 description: "Scaffold `tenants.config.json` and starter files."
+icon: FilePlus
 ---
 
 Writes a **minimal, valid** **`tenants.config.json`** and optionally **starter files** for an adapter.
 
 ## Usage
 
-```bash
-npx @multitenant/cli init [options]
-```
+<CliDlxTabs args="init [options]" />
 
 ## Common options
 
@@ -40,8 +39,6 @@ Install peers: **`@multitenant/next-app`**, **`next`**, **`react`**, etc., as ne
 
 ## After init
 
-```bash
-npx @multitenant/cli check
-```
+<CliDlxTabs args="check" />
 
-For multi-host local dev, use **`npx @multitenant/cli dev`** (or **`multitenant dev`** after **`npm install @multitenant/cli`**) — [dev, check, print](/docs/cli/dev-check-print).
+For multi-host local dev, use **`npx @multitenant/cli dev`** (tabs: [dev, check, print](/docs/cli/dev-check-print)) or **`multitenant dev`** after **`npm install -D @multitenant/cli`** (or pnpm/yarn) — [dev, check, print](/docs/cli/dev-check-print).

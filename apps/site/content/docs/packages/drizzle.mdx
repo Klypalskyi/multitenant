@@ -1,6 +1,7 @@
 ---
 title: "Drizzle"
 description: "`@multitenant/drizzle` — per-tenant or shared `pg` pools with Drizzle ORM."
+icon: Droplets
 ---
 
 Thin **Drizzle** + **`pg`** helpers on top of **`@multitenant/database`**: **per-tenant DSN** (cached **`Pool`**) or **one shared pool** + row-level tenant isolation from **`@multitenant/database`**.
@@ -9,9 +10,7 @@ Host / tenant resolution stays in **`@multitenant/core`** — pass **`ResolvedTe
 
 ## Install
 
-```bash
-npm install @multitenant/drizzle drizzle-orm pg
-```
+<InstallTabs npm="npm install @multitenant/drizzle drizzle-orm pg" />
 
 ## Per-tenant database URL
 

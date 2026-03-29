@@ -1,6 +1,7 @@
 ---
 title: "Errors"
 description: "`MultitenantError` hierarchy and stable `code` values."
+icon: CircleAlert
 ---
 
 Every failure mode you should catch in integrator code extends **`MultitenantError`** and exposes a stable **`code`** string — use **`instanceof`** or **`switch (e.code)`**, not fragile **`message`** substring checks.

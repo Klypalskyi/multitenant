@@ -1,4 +1,5 @@
 {
   "title": "Examples",
+  "icon": "FlaskConical",
   "pages": ["index", "express", "next-app"]
 }

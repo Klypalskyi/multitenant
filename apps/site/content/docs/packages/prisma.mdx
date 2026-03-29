@@ -1,15 +1,14 @@
 ---
 title: "Prisma"
 description: "`@multitenant/prisma` — per-tenant or shared `PrismaClient` instances."
+icon: Pyramid
 ---
 
 **Prisma Client** factories: **cached per `(tenantKey, DSN)`** or **one shared client** for a single database. Always **`$disconnect`** evicted clients via **`onEvict`** on **`BoundedTenantDbResourceCache`**.
 
 ## Install
 
-```bash
-npm install @multitenant/prisma @prisma/client
-```
+<InstallTabs npm="npm install @multitenant/prisma @prisma/client" />
 
 ## Per-tenant database URL
 

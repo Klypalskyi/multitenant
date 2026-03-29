@@ -1,15 +1,16 @@
 ---
 title: "dev, check, print"
 description: "Local proxy, validation, and config inspection."
+icon: Play
 ---
+
+<CliLocalNote />
 
 ## `multitenant dev` — local proxy
 
 Maps **tenant hostnames** to your app's dev server and injects headers (**`x-tenant-key`**, **`x-market-key`**, **`x-tenant-env`**, optional flags JSON).
 
-```bash
-npx @multitenant/cli dev [options]
-```
+<CliDlxTabs args="dev [options]" />
 
 | Option | Default | Description |
 |--------|---------|-------------|
@@ -17,17 +18,16 @@ npx @multitenant/cli dev [options]
 | **`--cwd`** | **`process.cwd()`** | Working directory |
 | **`-p` / `--port`** | **`3100`** | Proxy listen port |
 | **`-t` / `--target`** | **`http://localhost:3000`** | Your app URL |
-| **`--run-dev`** | off | Spawn **`npm`/`pnpm`/`yarn` run dev`** |
+| **`--run-dev`** | off | Spawn **`npm` / `pnpm` / `yarn` run dev** (whichever your project uses) |
 | **`--env`** | **`local`** | **`local` \| `development` \| `staging` \| `production`** |
 
 **Behaviour:** load + validate config → build registry → proxy → forward **`Host`** resolution as headers → watch config file and **hot-reload** registry.
 
 ### Examples
 
-```bash
-npx @multitenant/cli dev --target http://localhost:3000 --port 3100
-npx @multitenant/cli dev --run-dev --port 3100
-```
+<CliDlxTabs args="dev --target http://localhost:3000 --port 3100" />
+
+<CliDlxTabs args="dev --run-dev --port 3100" />
 
 Then open e.g. **`http://us.localhost:3100`** — use a **hostname from your config’s** **`domains.local`** (first label is often the tenant subdomain), **not** **`http://localhost:3100`**. **`localhost`** is not a tenant host, so the proxy cannot resolve a tenant (it responds with a short HTML hint listing example hosts).
 
@@ -39,9 +39,7 @@ Browsing **`http://us.localhost:3000`** with **`next dev`** on **3000** is also 
 
 Validates **`tenants.config.json`** and exits **0** or **1** with the same errors **`validateTenantsConfig`** throws in code.
 
-```bash
-npx @multitenant/cli check
-```
+<CliDlxTabs args="check" />
 
 Use in **CI** next to your tests.
 
@@ -49,4 +47,8 @@ Use in **CI** next to your tests.
 
 ## `multitenant print`
 
-Prints a **normalized** view of the config (tenants, domains per environment) — useful for debugging large files. Run **`multitenant print --help`** for flags.
+Prints a **normalized** view of the config (tenants, domains per environment) — useful for debugging large files.
+
+<CliDlxTabs args="print" />
+
+<CliDlxTabs args="print --help" />

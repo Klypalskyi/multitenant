@@ -1,6 +1,7 @@
 ---
 title: "Home"
 description: "Multitenant — config-driven tenant and market resolution for TypeScript."
+icon: House
 ---
 
 **Config-driven** tenant and **market** resolution for TypeScript: one **`tenants.config.json`**, **`createTenantRegistry`**, and adapters for **Next.js** (App + Pages), **Express**, **Nest**, and **React** — with **typed errors** you can branch on in production.
@@ -9,7 +10,9 @@ description: "Multitenant — config-driven tenant and market resolution for Typ
 
 Every adapter expects a **`TenantRegistry`** from **`createTenantRegistry(config)`** where **`config`** is your validated **`TenantsConfig`** (JSON file, **`loadTenantsConfig`**, or **`validateTenantsConfig`** after a CMS map).
 
-Scaffold stubs: **`npx @multitenant/cli init --framework …`**.
+Scaffold stubs (npm / pnpm / yarn — pick a tab):
+
+<CliDlxTabs args="init --framework next-app" />
 
 | Package | Use case |
 |---------|----------|
