@@ -26,6 +26,8 @@ Multi-tenant and multi-market management for TypeScript apps.
 - [Postgres RLS tenant GUC](INTERNAL/postgres-rls-tenant.md) – `SET LOCAL`, policies, poolers (Phase 8.3)
 - [Per-tenant database URL](INTERNAL/per-tenant-database-url.md) – `tenants[].database.envVar`, `resolveTenantDatabaseUrl` (Phase 8.5)
 - [Bounded per-tenant DB pools](INTERNAL/bounded-tenant-db-pools.md) – LRU-capped cache, `getOrCreateTenantDatabaseResource` (Phase 8.6)
+- [Drizzle + Postgres reference](INTERNAL/drizzle-postgres.md) – `@multitenant/drizzle`, shared vs per-tenant DSN (Phase 8.7)
+- [Database migrations (multi-tenant)](INTERNAL/database-migrations-multitenant.md) – shared DB vs N DBs (Phase 8.8)
 - [Session cookies & cross-domain](INTERNAL/session-cookies.md) – SameSite, `Domain`, `@multitenant/identity` attributes
 - [Tenant-bound sessions](INTERNAL/tenant-bound-sessions.md) – `assertAccess` vs host-resolved tenant
 - [Release (tag, push, npm)](RELEASE.md) – versioning, git tag, publish order

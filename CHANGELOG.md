@@ -4,6 +4,27 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] `@multitenant/drizzle` 0.1.0 — Drizzle + node-postgres reference (Phase 8.7)
+
+### Added
+
+- New package **`@multitenant/drizzle`**: **`getOrCreateTenantNodePgPool`**, **`createNodePgDrizzle`**, **`getTenantNodePgDrizzle`** (peers: **`drizzle-orm`**, **`pg`**; deps: core, database).
+- **Vitest:** `packages/drizzle/src/node-pg.test.ts` (mocked `pg`).
+
+### Documentation
+
+- **`docs/INTERNAL/drizzle-postgres.md`**, **`packages/drizzle/README.md`**, **`docs/FRAMEWORKS/overview.md`**, **`docs/INTERNAL/architecture.md`**, **`docs/INDEX.md`**, **`CLAUDE.md`**, **`scripts/publish-packages.sh`**, **`PLAN.md`**.
+
+## [2026-03-29] Phase 8.8 — multi-tenant database migrations (documentation)
+
+### Added
+
+- **`docs/INTERNAL/database-migrations-multitenant.md`** — shared DB vs N databases vs schema-per-tenant; operational patterns (no hosted orchestrator).
+
+### Documentation
+
+- **`docs/INDEX.md`**, **`PLAN.md`**, **`docs/INTERNAL/drizzle-postgres.md`** (See also).
+
 ## [2026-03-29] `@multitenant/database` 0.5.5 — bounded per-tenant pool cache (Phase 8.6)
 
 ### Added

@@ -64,5 +64,6 @@ export function poolForRequest(
 ## See also
 
 - [Per-tenant database URL](per-tenant-database-url.md) (Phase 8.5)
+- [Drizzle + Postgres reference](drizzle-postgres.md) (Phase 8.7) — `getOrCreateTenantNodePgPool`
 - [Database scope / ALS](database-scope.md)
 - [PLAN Phase 8](../../PLAN.md)

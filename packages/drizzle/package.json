@@ -1,0 +1,40 @@
+{
+  "name": "@multitenant/drizzle",
+  "version": "0.1.0",
+  "description": "Reference wiring: Drizzle ORM + node-postgres + @multitenant/database (shared DB & per-tenant URL) — Phase 8.7",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@multitenant/core": "^0.5.0",
+    "@multitenant/database": "^0.5.5"
+  },
+  "peerDependencies": {
+    "drizzle-orm": ">=0.29.0",
+    "pg": ">=8.0.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.0",
+    "drizzle-orm": "^0.40.0",
+    "pg": "^8.13.0",
+    "vitest": "^3.0.5"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klypalskyi/multitenant.git",
+    "directory": "packages/drizzle"
+  },
+  "bugs": {
+    "url": "https://github.com/klypalskyi/multitenant/issues"
+  },
+  "homepage": "https://github.com/klypalskyi/multitenant/tree/master/packages/drizzle",
+  "publishConfig": {
+    "access": "public"
+  }
+}

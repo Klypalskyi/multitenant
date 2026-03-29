@@ -8,6 +8,7 @@
 - **dev-proxy** – HTTP (+ WS upgrade) proxy server; resolves tenant by Host and injects headers. Node-only.
 - **cli** – `multitenant` binary (with deprecated `tenantify` alias): `init`, `dev`, `check`, `print`. Uses config + core + dev-proxy; `dev` optionally spawns `npm run dev`. See `docs/CLI/init.md`, `docs/CLI/tenantify-dev.md`.
 - **database** – Node-only ALS + shared-DB + Postgres naming + RLS `SET LOCAL` builders + **`resolveTenantDatabaseUrl`** + **`BoundedTenantDbResourceCache`** (per-tenant DSN + bounded pool cache). Depends on core. See `docs/INTERNAL/database-scope.md`, `docs/INTERNAL/shared-db-tenant-id.md`, `docs/INTERNAL/schema-per-tenant-postgres.md`, `docs/INTERNAL/postgres-rls-tenant.md`, `docs/INTERNAL/per-tenant-database-url.md`, `docs/INTERNAL/bounded-tenant-db-pools.md`.
+- **drizzle** – Reference adapter: Drizzle ORM + `pg` wired to **`@multitenant/database`** (Phase 8.7). Peers: `drizzle-orm`, `pg`. See `docs/INTERNAL/drizzle-postgres.md`.
 - **react** – `TenantProvider`, hooks. Depends on core.
 - **next-app** – Middleware factory, `getTenantFromHeaders`, `requireTenant`. Depends on core; `auto-node` subpath uses `@multitenant/config`.
 - **next** – Meta-package re-exporting core, config, react, next-app (single install line).
@@ -17,7 +18,7 @@
 
 ## Build order
 
-Core → config, database, identity, dev-proxy → react, next-app, next, next-pages, express, nest, cli.
+Core → config, database, drizzle, identity, dev-proxy → react, next-app, next, next-pages, express, nest, cli.
 
 ## Adding an adapter
 
@@ -48,4 +49,4 @@ See `docs/RELEASE.md` for detailed release instructions.
 
 GitHub Actions (`.github/workflows/ci.yml`) runs `npm ci`, `npm run build`, `npm test`, and **`npm run examples:smoke`** (`examples/config-smoke` against the repo root `tenants.config.json`) on pushes and pull requests to `master` / `main` (Node 22).
 
-Workspace packages with tests today: `core`, `config`, `cli`, `database`, `identity`, `next-app`, `next-pages`, `express`, `nest`, `react`.
+Workspace packages with tests today: `core`, `config`, `cli`, `database`, `drizzle`, `identity`, `next-app`, `next-pages`, `express`, `nest`, `react`.

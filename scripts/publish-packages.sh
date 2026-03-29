@@ -8,6 +8,7 @@ pkgs=(
   @multitenant/core
   @multitenant/config
   @multitenant/database
+  @multitenant/drizzle
   @multitenant/identity
   @multitenant/dev-proxy
   @multitenant/react
