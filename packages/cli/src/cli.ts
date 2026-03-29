@@ -7,14 +7,14 @@ import { loadTenantsConfig, resolveConfigPath } from '@multitenant/config';
 import { createTenantRegistry } from '@multitenant/core';
 import { startDevProxy } from '@multitenant/dev-proxy';
 import chokidar from 'chokidar';
-import { runInit, type InitFramework } from './init';
+import { runInit, InitAbortedError, type InitFramework } from './init';
 
 const program = new Command();
 
 program
   .name('multitenant')
   .description('Multi-tenant dev proxy and config tools')
-  .version('0.5.0');
+  .version('0.5.1');
 
 program
   .command('init')
@@ -45,14 +45,22 @@ program
         );
         process.exit(1);
       }
-      await runInit({
-        cwd: path.resolve(opts.cwd),
-        tenantKey: opts.tenant,
-        marketKey: opts.market,
-        localHostPattern: opts.localHost,
-        framework: opts.framework as InitFramework,
-        force: Boolean(opts.force),
-      });
+      try {
+        await runInit({
+          cwd: path.resolve(opts.cwd),
+          tenantKey: opts.tenant,
+          marketKey: opts.market,
+          localHostPattern: opts.localHost,
+          framework: opts.framework as InitFramework,
+          force: Boolean(opts.force),
+        });
+      } catch (e) {
+        if (e instanceof InitAbortedError) {
+          console.error(e.message);
+          process.exit(1);
+        }
+        throw e;
+      }
     },
   );
 

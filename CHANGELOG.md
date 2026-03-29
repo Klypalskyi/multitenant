@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here. Each `@multitenant/*` package has its own semver in `packages/<name>/package.json`; only packages with `src/` changes get bumped per release (versions may differ across packages between releases).
 
+## [0.5.1] - 2026-03-29
+
+### Added
+
+- **`@multitenant/cli`:** Vitest tests and `npm run test:coverage` for `init` (`buildMinimalTenantsConfig`, `runInit`, framework stubs, overwrite prompts). Optional `confirmOverwrite` on `InitOptions` for programmatic/tests.
+
+### Changed
+
+- **`@multitenant/cli`:** `InitAbortedError` when init overwrite is declined; CLI command catches and exits with code 1 (replaces `process.exit` inside `runInit`).
+
 ## [0.5.0] - 2026-03-29
 
 ### Added

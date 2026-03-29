@@ -7,7 +7,8 @@
 | File | Notes |
 |------|--------|
 | `packages/cli/src/cli.ts` | Commander program: `init`, `check`, `print`, `dev`. |
-| `packages/cli/src/init.ts` | `runInit()` — minimal config + optional framework stubs. |
+| `packages/cli/src/init.ts` | `runInit()`, `buildMinimalTenantsConfig`, `InitAbortedError`; optional `confirmOverwrite` for tests/CI. |
+| `packages/cli/src/init.test.ts` | Vitest: pure config validation, temp-dir integration, framework stubs, overwrite/skip paths. |
 | `packages/cli/src/index.ts` | Re-exports config/core/dev-proxy helpers for programmatic use. |
 
 ## Commands (high level)

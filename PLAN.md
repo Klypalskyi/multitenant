@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 (Sprint B partial: `multitenant init` shipped in `@multitenant/cli` v0.5.0; `@multitenant/next` / `next-app/auto` still open).
+**Last reviewed:** 2026-03-29 (Sprint B: `@multitenant/cli` v0.5.0 `init`, v0.5.1 init tests; `@multitenant/next` / `next-app/auto` still open).
 
 ---
 
@@ -26,7 +26,7 @@
 | `export { middleware } from '@multitenant/next-app/auto'` | **Not shipped** | |
 | Server helper `getTenantConfig()` (non-React) | **Not shipped** | Hook exists only |
 | `isFeatureEnabled()` | **Not shipped** | Use `useTenantFlag` / `resolved.flags` |
-| Package unit tests (core + config) | **Shipped** | `npm test` / `vitest`; wire CI separately |
+| Package unit tests (core + config + cli init) | **Shipped** | `npm test` / `vitest`; `@multitenant/cli` has `test:coverage`; wire CI separately |
 | Website / landing in repo | **Not shipped** | Optional external |
 | ORM / DB adapters (shared DB + per-tenant DB) | **Not shipped** | Phase 8 — `@multitenant/database` + thin ORM peers |
 
@@ -290,7 +290,7 @@ Exit criteria are mandatory; task lists are indicative.
 
 1. **Build:** `npm run build` at repo root exits 0.
 2. **Init path (Sprint B partial):** `npx multitenant init` → `npx multitenant check` exits 0; add framework deps and run `npm run dev` on the app port (e.g. 3000), then `multitenant dev --target http://localhost:3000 --port 3100` to hit tenant hosts on **3100** (proxy) while the app listens on **3000**. Defaults from `init` use `main.localhost` in `domains.local` — adjust to match your hosts.
-3. **Tests:** `npm test` runs core + config unit tests (add CI workflow when ready).
+3. **Tests:** `npm test` runs core + config + **cli (`init`)** unit tests (add CI workflow when ready).
 4. **Errors:** `instanceof` / `e.code` distinguish config vs resolution vs missing tenant for core, config, and Next strict paths.
 
 ---

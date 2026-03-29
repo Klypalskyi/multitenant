@@ -7,6 +7,13 @@ CLI for working with `@multitenant/*` multi-tenant packages. It exposes a `multi
 - `multitenant print` – print tenants/markets summary
 - `multitenant dev` – start a local dev proxy with per-tenant subdomains
 
+## Testing (this repo / contributors)
+
+```bash
+npm test -w @multitenant/cli
+npm run test:coverage -w @multitenant/cli
+```
+
 ## Install
 
 ```bash

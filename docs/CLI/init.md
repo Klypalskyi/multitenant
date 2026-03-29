@@ -44,6 +44,10 @@ npx multitenant check
 
 For local multi-host testing, run your app and the dev proxy (see [multitenant dev](tenantify-dev.md)).
 
+## Programmatic use & tests
+
+`runInit` throws **`InitAbortedError`** if the user declines an overwrite (CLI catches this and exits with code 1). For automated tests, pass **`confirmOverwrite`** on the options object to simulate approve/decline without a TTY.
+
 ## Success criteria (PLAN)
 
 From an empty folder: `npx multitenant init` → `npx multitenant check` exits 0; optional `--framework next-app` gives a runnable middleware stub once Next and `@multitenant/*` deps are installed.

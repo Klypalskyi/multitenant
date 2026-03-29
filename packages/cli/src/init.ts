@@ -18,9 +18,21 @@ export interface InitOptions {
   localHostPattern: string;
   framework: InitFramework;
   force: boolean;
+  /**
+   * Override overwrite prompts (e.g. tests). When omitted, uses TTY `readline`.
+   */
+  confirmOverwrite?: (message: string) => Promise<boolean>;
 }
 
-function buildMinimalConfig(opts: InitOptions): TenantsConfig {
+export class InitAbortedError extends Error {
+  constructor(message = 'Aborted.') {
+    super(message);
+    this.name = 'InitAbortedError';
+  }
+}
+
+/** Pure minimal config; validated by tests and `runInit` via `validateTenantsConfig`. */
+export function buildMinimalTenantsConfig(opts: InitOptions): TenantsConfig {
   const { tenantKey, marketKey, localHostPattern } = opts;
   return {
     version: 1,
@@ -45,7 +57,7 @@ function buildMinimalConfig(opts: InitOptions): TenantsConfig {
   };
 }
 
-async function confirmOverwrite(message: string): Promise<boolean> {
+async function ttyConfirmOverwrite(message: string): Promise<boolean> {
   if (!process.stdin.isTTY) {
     return false;
   }
@@ -57,6 +69,13 @@ async function confirmOverwrite(message: string): Promise<boolean> {
   } finally {
     rl.close();
   }
+}
+
+async function askOverwrite(opts: InitOptions, message: string): Promise<boolean> {
+  if (opts.confirmOverwrite) {
+    return opts.confirmOverwrite(message);
+  }
+  return ttyConfirmOverwrite(message);
 }
 
 async function pathExists(p: string): Promise<boolean> {
@@ -122,17 +141,17 @@ export async function runInit(opts: InitOptions): Promise<void> {
 
   if (await pathExists(configPath)) {
     if (!opts.force) {
-      const ok = await confirmOverwrite(
+      const ok = await askOverwrite(
+        opts,
         `${DEFAULT_CONFIG_FILENAME} already exists. Overwrite?`,
       );
       if (!ok) {
-        console.error('Aborted.');
-        process.exit(1);
+        throw new InitAbortedError();
       }
     }
   }
 
-  const raw = buildMinimalConfig(opts);
+  const raw = buildMinimalTenantsConfig(opts);
   validateTenantsConfig(raw);
   await fs.writeFile(configPath, `${JSON.stringify(raw, null, 2)}\n`, 'utf8');
   console.log(`Wrote ${configPath}`);
@@ -144,7 +163,7 @@ export async function runInit(opts: InitOptions): Promise<void> {
     case 'next-app': {
       const mw = path.join(opts.cwd, 'middleware.ts');
       if ((await pathExists(mw)) && !opts.force) {
-        const ok = await confirmOverwrite('middleware.ts already exists. Overwrite?');
+        const ok = await askOverwrite(opts, 'middleware.ts already exists. Overwrite?');
         if (!ok) {
           console.log('Skipped middleware.ts.');
           break;
@@ -159,7 +178,7 @@ export async function runInit(opts: InitOptions): Promise<void> {
       await fs.mkdir(libDir, { recursive: true });
       const regPath = path.join(libDir, 'tenant-registry.ts');
       if ((await pathExists(regPath)) && !opts.force) {
-        const ok = await confirmOverwrite('lib/tenant-registry.ts already exists. Overwrite?');
+        const ok = await askOverwrite(opts, 'lib/tenant-registry.ts already exists. Overwrite?');
         if (!ok) {
           console.log('Skipped lib/tenant-registry.ts.');
           break;
@@ -172,7 +191,8 @@ export async function runInit(opts: InitOptions): Promise<void> {
     case 'express': {
       const ex = path.join(opts.cwd, 'multitenant.server.example.ts');
       if ((await pathExists(ex)) && !opts.force) {
-        const ok = await confirmOverwrite(
+        const ok = await askOverwrite(
+          opts,
           'multitenant.server.example.ts already exists. Overwrite?',
         );
         if (!ok) {
