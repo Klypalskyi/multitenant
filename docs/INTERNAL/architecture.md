@@ -4,7 +4,7 @@
 
 - **core** – Types (`TenantsConfig`, `ResolvedTenant`), `createTenantRegistry`, typed errors (`MultitenantError`, `InvalidTenantsConfigError`, …), identity guards. Pure resolution is edge-safe when you pass a loaded config; **optional** Node auto-load of `tenants.config.json` uses `fs` (see `createTenantRegistry` options).
 - **config** – Load/validate `tenants.config.json` (Zod), cross-field validation. Node-only.
-- **identity** – Encrypt/sign session cookie (AES-256-GCM). Node-only. Re-exports core identity types and guards.
+- **identity** – Encrypt/sign session cookie (AES-256-GCM). Node-only. Re-exports core identity types and guards. See `docs/INTERNAL/session-cookies.md` for SameSite / Domain patterns.
 - **dev-proxy** – HTTP (+ WS upgrade) proxy server; resolves tenant by Host and injects headers. Node-only.
 - **cli** – `multitenant` binary (with deprecated `tenantify` alias): `init`, `dev`, `check`, `print`. Uses config + core + dev-proxy; `dev` optionally spawns `npm run dev`. See `docs/CLI/init.md`, `docs/CLI/tenantify-dev.md`.
 - **database** – Node-only `AsyncLocalStorage` tenant scope (`runWithTenantScope`, `requireTenantScope`). Depends on core. See `docs/INTERNAL/database-scope.md`.

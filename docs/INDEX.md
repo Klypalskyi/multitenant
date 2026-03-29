@@ -21,4 +21,5 @@ Multi-tenant and multi-market management for TypeScript apps.
 - [Architecture](INTERNAL/architecture.md) – packages, build, adding adapters
 - [Errors](INTERNAL/errors.md) – `MultitenantError` classes and codes
 - [Database tenant scope (ALS)](INTERNAL/database-scope.md) – `@multitenant/database` for Node request context
+- [Session cookies & cross-domain](INTERNAL/session-cookies.md) – SameSite, `Domain`, `@multitenant/identity` attributes
 - [Release (tag, push, npm)](RELEASE.md) – versioning, git tag, publish order

@@ -6,6 +6,17 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 - _(nothing yet)_
 
+## [2026-03-29] Docs — examples README, session cookies, Next copy-paste
+
+### Documentation
+
+- **`examples/README.md`** — reference layout for App Router / Pages / Express snippets; how to integrate with `multitenant init` and `multitenant dev`.
+- **`docs/INTERNAL/session-cookies.md`** — SameSite, `Domain` vs host-only, `__Host-`, subdomain patterns; links identity helpers.
+- **`docs/FRAMEWORKS/next-app-router.md`** — copy-paste **Route Handler**, **Server Action**, and shared `tenant-registry` module.
+- **`docs/INDEX.md`**, **`docs/INTERNAL/architecture.md`**, **`PLAN.md`** — cross-links and Phase 4.3 / 5.1 / 6.3 dashboard updates.
+
+_No package `src/` changes — no npm publish._
+
 ## [2026-03-29] Sprint D — README + npm metadata + next-pages API
 
 ### Changed

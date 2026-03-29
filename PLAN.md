@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — Sprint D: package README + npm `repository` metadata; `next-pages` `withTenantApi` typed 404 JSON; root README middleware snippet.
+**Last reviewed:** 2026-03-29 — Sprint D+ docs: `examples/README.md`; `docs/INTERNAL/session-cookies.md`; Next App Router copy-paste route/action samples in `docs/FRAMEWORKS/next-app-router.md`.
 
 ---
 
@@ -18,7 +18,7 @@
 | Adapters: React, Next App/Pages, Express, Nest | **Shipped** | |
 | React: `useTenantConfig`, `useTenantFlag`, experiments | **Shipped** | `tenant.flags` map — not a separate `features` block |
 | Identity: cookie encode/decode, `canAccessTenant`, `assertAccess` | **Shipped** | No `getSession`/`setSession` helpers |
-| Examples: `examples/next-app-router`, `next-pages`, `express` | **Shipped** | |
+| Examples: `examples/next-app-router`, `next-pages`, `express` | **Partial** | Reference snippets + `examples/README.md`; no per-example `package.json` yet (Phase 6.3) |
 | Typed error classes (`TenantNotFoundError`, etc.) | **Shipped** | v0.4.0 — `MultitenantError` + `code`; see `docs/INTERNAL/errors.md` |
 | `createTenantRegistry(_, { debug: true })` + custom `log` | **Shipped** | v0.4.0 |
 | `npx multitenant init` | **Shipped** | `@multitenant/cli` v0.5.0 — `docs/CLI/init.md` |
@@ -135,7 +135,7 @@
 |----|------|---------------------|
 | 4.1 | **Session helpers** | **Partial (v0.5.0)** — `getSessionFromCookieHeader`, `buildSessionSetCookieHeader` in `@multitenant/identity`; full get/set wrappers optional |
 | 4.2 | **Tenant-bound sessions** | Session payload includes tenant id; `assertAccess` used on sensitive routes; docs for threat model (header trust) |
-| 4.3 | **Cross-domain** | Document patterns: shared vs isolated cookies (Domain, SameSite table); code only where generic |
+| 4.3 | **Cross-domain** | **Partial:** `docs/INTERNAL/session-cookies.md` — SameSite, host-only vs `Domain`, `__Host-`, multi-subdomain notes; `buildSessionSetCookieHeader` still omits `Domain` (app may append) |
 
 ---
 
@@ -145,7 +145,7 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 5.1 | Next.js: Edge middleware, Server Actions | **Partial:** `docs/FRAMEWORKS/next-app-router.md` — Edge vs Node, middleware headers, Server Actions; copy-paste route sample still optional |
+| 5.1 | Next.js: Edge middleware, Server Actions | **Partial:** `docs/FRAMEWORKS/next-app-router.md` — Edge vs Node, middleware headers, Server Actions, **copy-paste** route handler + server action + shared registry |
 | 5.2 | Express | **Shipped (doc + API):** global `req.tenant` augment; `docs/FRAMEWORKS/express.md`; optional `onMissingTenant` (**v0.4.2**) |
 | 5.3 | Nest | **Partial:** `docs/FRAMEWORKS/nestjs.md` — module, `@Tenant()`, null tenant, registry not a default provider |
 | 5.4 | React | **Partial:** `docs/FRAMEWORKS/react-ssr.md` — `TenantProvider` + App Router notes |
@@ -160,7 +160,7 @@
 |----|------|---------------------|
 | 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app + **next-pages** + **express**; CI runs `npm test` |
 | 6.2 | **Integration tests** | **Partial:** `@multitenant/next-app` middleware + `NextRequest` / header contract (`src/middleware.integration.test.ts`) in CI |
-| 6.3 | **Examples** | Each `examples/*` documents `install && dev/build` commands; optional CI smoke |
+| 6.3 | **Examples** | **Partial:** `examples/README.md` — what each folder is, how to use `multitenant init` in a real app; runnable `package.json` per example + CI smoke still open |
 | 6.4 | **Documentation** | **Partial:** `docs/WHY-MULTITENANT.md` — why / when not / pitfalls / mermaid host → registry → tenant |
 
 ---
