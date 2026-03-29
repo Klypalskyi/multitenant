@@ -4,7 +4,7 @@ Multi-tenant and multi-market management for TypeScript apps.
 
 ## For integrators
 
-- **[Docs site (Fumadocs, first-class)](https://github.com/klypalskyi/multitenant/tree/master/apps/site)** — human-readable guides + examples under **`/docs/*`** (e.g. **`/docs/getting-started`**, **`/docs/config`**, **`/docs/packages/*`**, **`/docs/examples`**); local: `npm run site:dev`. Deploy: Vercel **Root Directory** `apps/site`.
+- **[Docs site (Fumadocs, first-class)](https://github.com/klypalskyi/multitenant/tree/master/apps/site)** — human-readable guides + examples under **`/docs/*`** (e.g. **`/docs/guide/quick-start`**, **`/docs/guide/config`**, **`/docs/packages/*`**, **`/docs/examples`**); local: `npm run site:dev`. Deploy: Vercel **Root Directory** `apps/site`.
 - [Examples (runnable + reference)](../examples/README.md) – `express-minimal`, `next-minimal`, `config-smoke`
 - [Why Multitenant / pitfalls](WHY-MULTITENANT.md) – mental model, resolution + Next middleware mermaid, when not to use
 - [Getting started](GETTING-STARTED.md) – install, config, first tenant

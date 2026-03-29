@@ -18,11 +18,15 @@ const patches = {
     title: 'Why Multitenant?',
     description: 'When this stack fits, host→tenant flow, and pitfalls.',
   },
-  'getting-started.mdx': {
+  'guide/quick-start.mdx': {
+    title: 'Quick start',
+    description: 'Scaffold config and validate in under a minute.',
+  },
+  'guide/getting-started.mdx': {
     title: 'Getting started',
     description: 'Install, config, validation, and wiring adapters.',
   },
-  'config.mdx': {
+  'guide/config.mdx': {
     title: 'Configuration',
     description: '`tenants.config.json` schema, flags, and merge rules.',
   },

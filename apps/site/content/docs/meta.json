@@ -2,10 +2,9 @@
   "title": "Documentation",
   "pages": [
     "index",
-    "---Introduction---",
     "why-multitenant",
-    "getting-started",
-    "config",
+    "---Guide---",
+    "...guide",
     "---Errors---",
     "errors",
     "---Reference---",

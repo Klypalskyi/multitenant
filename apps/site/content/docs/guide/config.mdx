@@ -10,7 +10,44 @@ Single source of truth for **markets**, **tenants**, **domain → tenant** maps 
 - Default: **`tenants.config.json`** at the **repo / app root**.
 - **`@multitenant/config`**: **`loadTenantsConfig({ cwd })`** (default **`process.cwd()`**).
 
+Typical layout (names vary by stack):
+
+<Files>
+  <Folder name="my-app" defaultOpen>
+    <File name="tenants.config.json" />
+    <Folder name="src">
+      <File name="middleware.ts" />
+      <File name="lib/tenant-registry.ts" />
+    </Folder>
+  </Folder>
+</Files>
+
 Invalid files throw **`InvalidTenantsConfigError`** — same checks as **`npx @multitenant/cli check`**. See [Errors](/docs/errors).
+
+## Minimal skeleton
+
+```json
+{
+  "version": 1,
+  "defaultEnvironment": "local",
+  "markets": {
+    "us": {
+      "currency": "USD",
+      "locale": "en-US",
+      "timezone": "America/New_York"
+    }
+  },
+  "tenants": {
+    "acme": {
+      "market": "us",
+      "domains": {
+        "local": { "acme.localhost": "acme" },
+        "production": { "acme.example.com": "acme" }
+      }
+    }
+  }
+}
+```
 
 ## Top-level fields
 
@@ -29,7 +66,7 @@ Each key is a market id. Typical fields:
 
 - **`currency`**, **`locale`**, **`timezone`** (required)
 - **`locales`** (optional) — extra BCP 47 tags; must include **`locale`** if set
-- **`config`** (optional) — arbitrary defaults merged into every tenant in this market **before** tenant-level **`config`** (Phase 3.3)
+- **`config`** (optional) — arbitrary defaults merged into every tenant in this market **before** tenant-level **`config`** (see **Config merge**)
 
 Optional presentation / SEO / theme keys exist in the schema (labels, **`seo`**, **`theme`**) — see the Zod-driven reference in the repo if you need every field.
 
@@ -51,7 +88,7 @@ Client: **`useTenantFlag(name)`** when you have a resolved tenant in context.
 
 There is **no** separate **`features`** field — if a CMS says “features”, **map** that object into **`flags`** before **`validateTenantsConfig`**.
 
-## Config merge (Phase 3.3)
+## Config merge
 
 **Order:** **`markets[*].config`** → **`tenants[*].config`** → **`tenants[*].configByEnvironment[environment]`** (for the active environment).
 
@@ -59,6 +96,33 @@ There is **no** separate **`features`** field — if a CMS says “features”, 
 - **Conflict:** at the same path, one layer has a **plain object** and another a **non-object** → **`InvalidTenantsConfigError`**.
 
 **Effective config** for app code: **`getTenantConfig(registry, tenantKey, environment?)`** or **`useTenantConfig()`** in React.
+
+Example — **`support`** is deep-merged; **`tier`** is overridden last for **`production`**:
+
+```json
+{
+  "markets": {
+    "us": {
+      "currency": "USD",
+      "locale": "en-US",
+      "timezone": "America/New_York",
+      "config": { "support": { "tier": "standard" } }
+    }
+  },
+  "tenants": {
+    "acme": {
+      "market": "us",
+      "domains": { "local": { "acme.localhost": "acme" } },
+      "config": { "support": { "email": "help@acme.test" } },
+      "configByEnvironment": {
+        "production": { "support": { "tier": "priority" } }
+      }
+    }
+  }
+}
+```
+
+After merge for **`acme`** in **`production`**: **`support.tier`** → **`priority`**, **`support.email`** → **`help@acme.test`**.
 
 ## Validation (hard errors)
 

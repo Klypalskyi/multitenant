@@ -31,20 +31,12 @@ Details: [Next.js — App Router](/docs/packages/next#nextjs-app-router).
 ## Read next
 
 - **[Why Multitenant?](/docs/why-multitenant)** — mental model, when **not** to use this, pitfalls.
-- **[Getting started](/docs/getting-started)** — install, minimal config, validation, async/bootstrap.
-- **[Configuration](/docs/config)** — `tenants.config.json` schema, flags, merge rules.
+- **[Quick start](/docs/guide/quick-start)** — **`init`** + **`check`** in two commands.
+- **[Getting started](/docs/guide/getting-started)** — install, minimal config, validation, async/bootstrap.
+- **[Configuration](/docs/guide/config)** — `tenants.config.json` schema, flags, merge rules.
 - **[Packages](/docs/packages/overview)** — scoped **`@multitenant/*`** installs at a glance.
 - **[Examples](/docs/examples)** — **[Express](/docs/examples/express)** and **[Next.js (App Router)](/docs/examples/next-app)** walkthroughs (`express-minimal`, `next-minimal`).
 - **[Errors](/docs/errors)** — `MultitenantError` hierarchy and stable **`code`** strings.
 - **[CLI](/docs/cli/init)** — `init`, `dev` proxy, `check`, `print`.
-
-## 30-second bootstrap
-
-```bash
-npx @multitenant/cli init --force
-npx @multitenant/cli check
-```
-
-Then wire **`@multitenant/next-app`**, **`@multitenant/express`**, or another adapter — see [Getting started](/docs/getting-started) and [Next.js](/docs/packages/next).
 
 The monorepo also ships **reference** ORM packages (**Drizzle**, **Kysely**, **Prisma**, **TypeORM**) and **`@multitenant/database`** (ALS scope). Deep-dive markdown for contributors remains in the [GitHub `docs/` tree](https://github.com/klypalskyi/multitenant/tree/master/docs).

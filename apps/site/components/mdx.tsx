@@ -1,4 +1,5 @@
 import defaultMdxComponents from 'fumadocs-ui/mdx';
+import { File, Files, Folder } from 'fumadocs-ui/components/files';
 import type { MDXComponents } from 'mdx/types';
 import { Mermaid } from '@/components/mermaid';
 
@@ -6,6 +7,9 @@ export function getMDXComponents(components?: MDXComponents) {
   return {
     ...defaultMdxComponents,
     Mermaid,
+    Files,
+    File,
+    Folder,
     ...components,
   } satisfies MDXComponents;
 }

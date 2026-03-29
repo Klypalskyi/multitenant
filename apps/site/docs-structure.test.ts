@@ -8,8 +8,9 @@ const contentDir = join(__dirname, 'content/docs');
 const requiredMdx = [
   'index.mdx',
   'why-multitenant.mdx',
-  'getting-started.mdx',
-  'config.mdx',
+  'guide/quick-start.mdx',
+  'guide/getting-started.mdx',
+  'guide/config.mdx',
   'packages/overview.mdx',
   'packages/core.mdx',
   'packages/config.mdx',
@@ -44,7 +45,9 @@ describe('@multitenant/site docs pages', () => {
 
   it('home index links to key sections', () => {
     const home = readFileSync(join(contentDir, 'index.mdx'), 'utf8');
-    expect(home).toContain('/docs/getting-started');
+    expect(home).toContain('/docs/guide/quick-start');
+    expect(home).toContain('/docs/guide/getting-started');
+    expect(home).toContain('/docs/guide/config');
     expect(home).toContain('/docs/packages/next');
     expect(home).toContain('/docs/packages/overview');
     expect(home).toContain('/docs/examples');

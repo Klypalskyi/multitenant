@@ -8,8 +8,10 @@ const config = {
   async redirects() {
     /** Pre-Fumadocs routes lived at `/foo`; docs are now under `/docs/foo`. */
     const legacy = [
-      ['/getting-started', '/docs/getting-started'],
-      ['/config', '/docs/config'],
+      ['/getting-started', '/docs/guide/getting-started'],
+      ['/config', '/docs/guide/config'],
+      ['/docs/getting-started', '/docs/guide/getting-started'],
+      ['/docs/config', '/docs/guide/config'],
       ['/errors', '/docs/errors'],
       ['/examples', '/docs/examples'],
       ['/why-multitenant', '/docs/why-multitenant'],

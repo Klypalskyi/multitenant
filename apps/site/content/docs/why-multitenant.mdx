@@ -79,7 +79,7 @@ flowchart TD
 
 - **Tenant is purely from JWT / session**, never from host — you may still use **`TenantsConfig`** for markets, but forced routing from **`Host`** is the wrong mental model.
 - **Thousands of dynamic tenants** with no stable domain map — you will fight DNS and config size; consider a DB-backed resolver (out of scope for core).
-- **Edge DB / heavy Node work in middleware** — keep middleware thin; DB access belongs in **Node** runtimes (see **`@multitenant/database`** + [Getting started](/docs/getting-started) Edge note).
+- **Edge DB / heavy Node work in middleware** — keep middleware thin; DB access belongs in **Node** runtimes (see **`@multitenant/database`** + [Getting started](/docs/guide/getting-started) Edge note).
 
 ## Common pitfalls
 
@@ -90,7 +90,7 @@ flowchart TD
 
 ## Next on this site
 
-- [Getting started](/docs/getting-started)
+- [Getting started](/docs/guide/getting-started)
 - [Examples](/docs/examples)
-- [Configuration](/docs/config)
+- [Configuration](/docs/guide/config)
 - [Errors](/docs/errors)
