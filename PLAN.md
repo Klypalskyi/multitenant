@@ -169,7 +169,8 @@
 
 ## Phase 7 — Positioning (P0)
 
-**Goal:** Understandable in 10 seconds.
+**Goal:** Understandable in 10 seconds.  
+**Shipped tasks:** **7.1**, **7.3**; **7.2** is a standing naming convention (not a one-time build artifact).
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
