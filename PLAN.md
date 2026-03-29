@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — `WHY-MULTITENANT.md`: Next App Router flow mermaid + `next-app-router.md` link (Phase 6.4).
+**Last reviewed:** 2026-03-29 — `next-app-router.md`: copy-paste root `middleware.ts` tied to shared `tenantRegistry` (Phase 5.1).
 
 ---
 
@@ -145,7 +145,7 @@
 
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
-| 5.1 | Next.js: Edge middleware, Server Actions | **Partial:** `docs/FRAMEWORKS/next-app-router.md` — Edge vs Node, middleware headers, Server Actions, **copy-paste** route handler + server action + shared registry |
+| 5.1 | Next.js: Edge middleware, Server Actions | **Partial:** `docs/FRAMEWORKS/next-app-router.md` — Edge vs Node, middleware headers, Server Actions, **copy-paste** `middleware.ts` (shared registry) + route handler + server action + `lib/tenant-registry` |
 | 5.2 | Express | **Shipped (doc + API):** global `req.tenant` augment; `docs/FRAMEWORKS/express.md`; optional `onMissingTenant` (**v0.4.2**) |
 | 5.3 | Nest | **Partial:** `docs/FRAMEWORKS/nestjs.md` — module, `@Tenant()`, null tenant; **DI recipe**; **copy-paste `TenantRequiredGuard`** (`TenantNotFoundError`) + `@UseGuards`; optional global exception filter still app-owned |
 | 5.4 | React | **Partial:** `docs/FRAMEWORKS/react-ssr.md` — RSC/SSR boundary (serializable `ResolvedTenant` vs registry); classic SSR; **Next** App Router + Pages examples |

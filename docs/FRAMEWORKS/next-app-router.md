@@ -43,6 +43,25 @@ export function multitenantEnv() {
 }
 ```
 
+**`middleware.ts`** (project root — **same registry** as Route Handlers / Server Actions)
+
+```ts
+import { createTenantMiddleware } from '@multitenant/next-app';
+import { multitenantEnv, tenantRegistry } from '@/lib/tenant-registry';
+
+export const middleware = createTenantMiddleware(tenantRegistry, {
+  environment: multitenantEnv(),
+  // onMissingTenant: 'throw', // when every request must map to a tenant
+});
+
+/** Optional — skip static assets and Next internals explicitly */
+export const config = {
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
+};
+```
+
+For a **single-file** middleware that only imports JSON (no shared `lib/tenant-registry` module), use the minimal pattern in the root [README](../../README.md) (“Copy-paste: Next.js App Router”) — fine when you don’t need the same `TenantRegistry` instance in server code yet.
+
 **`app/api/whoami/route.ts`** (Route Handler)
 
 ```ts

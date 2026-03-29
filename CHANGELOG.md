@@ -4,6 +4,15 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Docs — Next `middleware.ts` + shared registry (Phase 5.1)
+
+### Documentation
+
+- **`docs/FRAMEWORKS/next-app-router.md`** — copy-paste root **`middleware.ts`** using the same `tenantRegistry` as Route Handlers / Server Actions; optional `matcher`; pointer to single-file README pattern.
+- **`PLAN.md`** — Phase **5.1** + last reviewed.
+
+_No package `src/` changes — no npm publish._
+
 ## [2026-03-29] Docs — WHY-MULTITENANT Next flow (Phase 6.4)
 
 ### Documentation
