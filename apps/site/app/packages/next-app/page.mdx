@@ -1,0 +1,22 @@
+# `@multitenant/next-app`
+
+**Next.js App Router** integration: **middleware** for Edge-safe tenant resolution (headers), plus server helpers to read **`x-tenant-key`**, **`x-market-key`**, and related headers. Subpaths **`/auto`** and **`/auto-node`** re-export config-aware shortcuts.
+
+## Install
+
+```bash
+npm install @multitenant/next-app next react react-dom
+```
+
+Peers: **`next`**, and typically **`@multitenant/core`** for **`createTenantRegistry`**.
+
+## Main APIs
+
+- **`createTenantMiddleware(registry, options?)`** — sets resolution headers; **`onMissingTenant`**: **`'passthrough'`** | **`'warn'`** | **`'throw'`**
+- **`getTenantFromHeaders`**, **`requireTenant`** — in Server Components / Route Handlers / **`nodejs`** runtime
+
+## See also
+
+- [Next.js App Router](/frameworks/next-app) — patterns, shared registry module, middleware defaults
+- [`@multitenant/next`](/packages/next) — meta-package that includes this
+- [`@multitenant/react`](/packages/react) — client context from the same headers

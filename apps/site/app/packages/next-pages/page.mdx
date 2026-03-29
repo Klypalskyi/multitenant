@@ -1,0 +1,21 @@
+# `@multitenant/next-pages`
+
+**Next.js Pages Router** helpers: **`getServerSideProps`** and **API route** wrappers that attach **`ResolvedTenant`** (and market) to the request context.
+
+## Install
+
+```bash
+npm install @multitenant/next-pages next react react-dom
+```
+
+Package name on npm is **`next-pages`** (monorepo folder **`next-paages`**).
+
+## Main APIs
+
+- **`withTenantGSSP`** — wrap **`getServerSideProps`** with tenant resolution
+- **`withTenantApi`** — same for **`pages/api`**
+
+## See also
+
+- [Next.js Pages Router](/frameworks/next-pages) — usage and edge cases
+- [`@multitenant/core`](/packages/core) — **`createTenantRegistry`**

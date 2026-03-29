@@ -10,7 +10,23 @@ const requiredMdx = [
   'why-multitenant/page.mdx',
   'getting-started/page.mdx',
   'config/page.mdx',
-  'packages/page.mdx',
+  'packages/overview/page.mdx',
+  'packages/core/page.mdx',
+  'packages/config/page.mdx',
+  'packages/cli/page.mdx',
+  'packages/dev-proxy/page.mdx',
+  'packages/next-app/page.mdx',
+  'packages/next-pages/page.mdx',
+  'packages/next/page.mdx',
+  'packages/react/page.mdx',
+  'packages/express/page.mdx',
+  'packages/nest/page.mdx',
+  'packages/identity/page.mdx',
+  'packages/database/page.mdx',
+  'packages/drizzle/page.mdx',
+  'packages/kysely/page.mdx',
+  'packages/prisma/page.mdx',
+  'packages/typeorm/page.mdx',
   'errors/page.mdx',
   'examples/page.mdx',
   'cli/init/page.mdx',
@@ -36,6 +52,7 @@ describe('@multitenant/site docs pages', () => {
     const home = readFileSync(join(appDir, 'page.mdx'), 'utf8');
     expect(home).toContain('/getting-started');
     expect(home).toContain('/frameworks/overview');
+    expect(home).toContain('/packages/overview');
     expect(home).toContain('/examples');
   });
 });

@@ -1,0 +1,21 @@
+# `@multitenant/nest`
+
+**NestJS** integration: register tenant resolution once, inject **`ResolvedTenant`** into handlers with **`@Tenant()`**, and use guard-friendly patterns alongside **`@multitenant/core`**.
+
+## Install
+
+```bash
+npm install @multitenant/nest @nestjs/common @nestjs/core
+```
+
+Peers: **`@nestjs/common`**, **`@nestjs/core`**.
+
+## Main APIs
+
+- **`MultitenantModuleForRoot`**
+- **`@Tenant()`** — `Tenant` parameter decorator from the package
+
+## See also
+
+- [Nest](/frameworks/nest) — module setup and testing notes
+- [`@multitenant/core`](/packages/core) — registry and types

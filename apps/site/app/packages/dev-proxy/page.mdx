@@ -1,0 +1,22 @@
+# `@multitenant/dev-proxy`
+
+Node **HTTP proxy** with **WebSocket** upgrade support: forwards traffic to your app while resolving **tenant from host** using the same registry model as **`@multitenant/core`**. **`multitenant dev`** wraps this package.
+
+## Install
+
+Usually pulled in as a dependency of **`@multitenant/cli`**. To depend on it directly:
+
+```bash
+npm install @multitenant/dev-proxy
+```
+
+## Role
+
+- Tenant resolution from **Host** / **X-Forwarded-Host**
+- Transparent proxy to a local target (e.g. Next or Vite dev server)
+- Suitable for multi-tenant local development without editing **`/etc/hosts`** for every flow
+
+## See also
+
+- [`@multitenant/cli`](/packages/cli) — **`multitenant dev`** entry point
+- [`@multitenant/core`](/packages/core) — **`resolveByHost`** semantics

@@ -1,0 +1,19 @@
+# `@multitenant/next`
+
+**Meta-package** for App Router apps: re-exports **`@multitenant/core`**, **`@multitenant/config`**, **`@multitenant/react`**, and **`@multitenant/next-app`** so you can depend on one scope for typical Next.js setups.
+
+## Install
+
+```bash
+npm install @multitenant/next next react react-dom
+```
+
+## When to use
+
+- Prefer **`@multitenant/next`** when you want **one install line** and tree-shaking still keeps bundles reasonable.
+- Use **`@multitenant/next-app`** alone if you only need the middleware/server surface and already depend on **core** separately.
+
+## See also
+
+- [`@multitenant/next-app`](/packages/next-app) — middleware and server APIs
+- [Frameworks overview](/frameworks/overview) — how adapters fit together

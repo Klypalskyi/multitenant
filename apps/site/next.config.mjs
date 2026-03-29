@@ -8,4 +8,7 @@ const withNextra = nextra({
 
 export default withNextra({
   reactStrictMode: true,
+  async redirects() {
+    return [{ source: '/packages', destination: '/packages/overview', permanent: true }];
+  },
 });
