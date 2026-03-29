@@ -66,3 +66,7 @@ For scope and pitfalls, see [Why Multitenant](WHY-MULTITENANT.md).
    Open `http://us.localhost:3100` (or the hosts you defined in `domains.local`).
 
    Optional: `npx multitenant dev --run-dev` to let Multitenant spawn `npm run dev` for you.
+
+## Async or remote config (bootstrap only)
+
+`createTenantRegistry` is **synchronous** — pass an already-loaded `TenantsConfig` object. If config comes from **S3, Control Plane, or your DB**, load and validate it **once** at process/App startup (e.g. `await fetchConfig()` → `validateTenantsConfig(raw)`), then construct the registry and reuse that instance for the lifetime of the worker (refresh on interval or signal if your ops model requires it). Do **not** make the registry itself async; keep async I/O at the edges and inject the resulting config into middleware and DI.

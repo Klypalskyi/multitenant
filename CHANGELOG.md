@@ -6,6 +6,16 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 - _(nothing yet)_
 
+## [2026-03-29] Docs — tenant-bound sessions + async config bootstrap
+
+### Documentation
+
+- **`docs/INTERNAL/tenant-bound-sessions.md`** — align `EncodedSession` with host resolution; `assertAccess`; header trust; non-`MultitenantError` denial path.
+- **`docs/GETTING-STARTED.md`** — async/remote config at bootstrap; sync `createTenantRegistry`.
+- **`docs/WHY-MULTITENANT.md`**, **`docs/INDEX.md`**, **`docs/INTERNAL/session-cookies.md`**, **`PLAN.md`**, **`docs/INTERNAL/architecture.md`** — cross-links and Phase 1.2 / 3.4 / 4.2 / 6.4 rows.
+
+_No package `src/` changes — no npm publish._
+
 ## [2026-03-29] Examples smoke + Nest DI docs
 
 ### Added

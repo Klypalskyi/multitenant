@@ -36,8 +36,10 @@ Resolution is **not** authentication: knowing the tenant from the hostname does 
 1. **`next dev` on `localhost`** without matching `domains.local` — middleware may passthrough with no tenant; use `multitenant dev` and hosts from your config or set `onMissingTenant: 'throw'` only when you control Host.
 2. **Trusting `X-Tenant-Id` from the client** — resolve from **registry + trusted proxy headers**, then validate session if needed.
 3. **Duplicating `ResolvedTenant` types** — import from `@multitenant/core`; canonical types live there only (`PLAN.md` Phase 1.3 audit).
+4. **Skipping session ↔ host alignment** — if you use identity cookies, the session’s tenant must **match** the tenant resolved from the host on mutating routes; see [Tenant-bound sessions](INTERNAL/tenant-bound-sessions.md).
 
 ## Next steps
 
 - [Getting started](GETTING-STARTED.md)
 - [Errors](INTERNAL/errors.md)
+- [Tenant-bound sessions](INTERNAL/tenant-bound-sessions.md) — `assertAccess` + resolved tenant

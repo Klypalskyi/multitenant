@@ -37,5 +37,6 @@ Browsers do **not** set `Domain` for host-only cookies. Today’s helper builds 
 
 ## See also
 
+- [Tenant-bound sessions](tenant-bound-sessions.md) — align `EncodedSession` with host-resolved tenant (`assertAccess`)
 - [`docs/FRAMEWORKS/next-app-router.md`](../FRAMEWORKS/next-app-router.md) — where headers (and thus cookies on the request) are visible in Route Handlers and Server Actions
 - Package **`@multitenant/identity`** README — `CookieConfig`, session helpers

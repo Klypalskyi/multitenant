@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — Nest DI recipe (`docs/FRAMEWORKS/nestjs.md`); `examples/config-smoke` + `npm run examples:smoke` in CI.
+**Last reviewed:** 2026-03-29 — Phase 4.2 / 3.4 docs: `docs/INTERNAL/tenant-bound-sessions.md`; async config bootstrap in `GETTING-STARTED.md`; WHY pitfalls + links.
 
 ---
 
@@ -26,10 +26,10 @@
 | `export { middleware } from '@multitenant/next-app/auto'` | **Shipped** | v0.5.0 — `auto` (config object) + `auto-node` (project-root JSON load); Edge vs Node documented on subpath |
 | Server helper `getTenantConfig()` (non-React) | **Shipped** | v0.5.0 in `@multitenant/core` — pair with registry + `ResolvedTenant.tenantKey` |
 | `isFeatureEnabled()` / flags server-side | **Shipped** | v0.5.0 — `isTenantFeatureEnabled` in core (flags map) |
-| Package unit tests + CI | **Shipped** | `npm test` (turbo): core, config, cli, database, identity, **next-app** integration tests; GitHub Actions `build` + `test` on push/PR |
+| Package unit tests + CI | **Shipped** | `npm test` (turbo): core, config, cli, database, identity, **next-app** integration tests; GitHub Actions `build` + `test` + **`npm run examples:smoke`** on push/PR |
 | Website / landing in repo | **Not shipped** | Optional external |
 | ORM / DB adapters (shared DB + per-tenant DB) | **Partial** | `@multitenant/database` v0.5.0 — ALS scope only (8.1); ORM peers + pools still open |
-| Orientation: why / pitfalls / diagram | **Partial** | `docs/WHY-MULTITENANT.md` |
+| Orientation: why / pitfalls / diagram | **Partial** | `docs/WHY-MULTITENANT.md`; `docs/INTERNAL/tenant-bound-sessions.md` |
 
 **Naming note:** The public API uses `resolveByHost`, `resolveByRequest`, `getTenantFromHeaders`, and `requireTenant`. Do **not** document or implement `resolveTenant()` / `getTenant()` unless adding explicit aliases with a deprecation story.
 
@@ -69,7 +69,7 @@
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
 | 1.1 | **Error taxonomy** | **Partial:** Express `onMissingTenant: 'throw'` → `next(TenantNotFoundError)`; Next Pages `withTenantApi` → 404 JSON with `MULTITENANT_TENANT_NOT_FOUND` (**next-pages v0.4.2**); GSSP still `notFound`; Nest null. |
-| 1.2 | **Align docs & PLAN with real API** — no fictional method names | **Partial:** framework docs use canonical names; periodic grep for `resolveTenant` / `getTenant()` in docs (`PLAN.md` note only). |
+| 1.2 | **Align docs & PLAN with real API** — no fictional method names | **Partial:** `*.md` grep: no stray `resolveTenant` / `getTenant()` except intentional notes in `PLAN.md` / Appendix B. |
 | 1.3 | **Duplication audit** — types across packages | **Done (audit):** `ResolvedTenant` / `TenantsConfig` interfaces only in `@multitenant/core` (`packages/*/src` grep). |
 | 1.4 | **Debug / observability on registry** | **Done (v0.4.0)** — optional structured OTel hook still future (Appendix A) |
 
@@ -117,7 +117,7 @@
 | 3.1 | **Server + client parity for config** | **Shipped (v0.5.0)** — `getTenantConfig` in `@multitenant/core` |
 | 3.2 | **Feature surface** | **Partial (v0.5.0)** — `isTenantFeatureEnabled` (flags map); separate `features` block + migration still optional |
 | 3.3 | **Environment merge (if still needed)** | Explicit merge order (market → tenant → env override); tests; `multitenant check` validates conflicts |
-| 3.4 | **Async config (optional)** | Factory pattern documented: `createTenantRegistry` stays sync; async loading at app bootstrap only |
+| 3.4 | **Async config (optional)** | **Partial:** `docs/GETTING-STARTED.md` — load/validate async at bootstrap; pass sync config into `createTenantRegistry`; refresh policy out of scope |
 
 ---
 
@@ -134,7 +134,7 @@
 | ID | Task | Acceptance criteria |
 |----|------|---------------------|
 | 4.1 | **Session helpers** | **Partial (v0.5.0)** — `getSessionFromCookieHeader`, `buildSessionSetCookieHeader` in `@multitenant/identity`; full get/set wrappers optional |
-| 4.2 | **Tenant-bound sessions** | Session payload includes tenant id; `assertAccess` used on sensitive routes; docs for threat model (header trust) |
+| 4.2 | **Tenant-bound sessions** | **Partial:** `docs/INTERNAL/tenant-bound-sessions.md` — `currentTenantKey`, `assertAccess(session, { tenantKey: resolved.tenantKey })`, header trust, 403 mapping note |
 | 4.3 | **Cross-domain** | **Partial:** `docs/INTERNAL/session-cookies.md` — SameSite, host-only vs `Domain`, `__Host-`, multi-subdomain notes; `buildSessionSetCookieHeader` still omits `Domain` (app may append) |
 
 ---
@@ -161,7 +161,7 @@
 | 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app + **next-pages** + **express**; CI runs `npm test` |
 | 6.2 | **Integration tests** | **Partial:** `@multitenant/next-app` middleware + `NextRequest` / header contract (`src/middleware.integration.test.ts`) in CI |
 | 6.3 | **Examples** | **Partial:** `examples/README.md`; **`examples/config-smoke`** — workspace + CI step `npm run examples:smoke` (root config + resolution); full Next/Express runnable examples still open |
-| 6.4 | **Documentation** | **Partial:** `docs/WHY-MULTITENANT.md` — why / when not / pitfalls / mermaid host → registry → tenant |
+| 6.4 | **Documentation** | **Partial:** `docs/WHY-MULTITENANT.md` — why / when not / pitfalls / mermaid; links to tenant-bound sessions + getting started |
 
 ---
 
