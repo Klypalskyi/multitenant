@@ -4,6 +4,13 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Phase 5.3–5.4 — Nest + React framework docs closed
+
+### Documentation
+
+- **`docs/FRAMEWORKS/nestjs.md`** — copy-paste **`TenantNotFoundFilter`** (404 JSON + `exception.code`) + `useGlobalFilters` bootstrap; Fastify typing note.
+- **`PLAN.md`** — Phase **5.3** / **5.4** **Done**; Phase **5** polish complete for **5.1–5.4**; Sprint D bullets aligned.
+
 ## [2026-03-29] Phase 5.1 — Next.js App Router integration doc complete
 
 ### Documentation

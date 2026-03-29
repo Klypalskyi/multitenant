@@ -141,7 +141,51 @@ export class ApiController {
 }
 ```
 
-Register the guard in `providers` if you inject dependencies into it; for the snippet above, `providers: [TenantRequiredGuard]` plus `@UseGuards(TenantRequiredGuard)` is enough.
+### Example: map `TenantNotFoundError` to HTTP 404 JSON
+
+Guards throw `TenantNotFoundError` (`code`: **`MULTITENANT_TENANT_NOT_FOUND`**). Nest’s default handler may not return the shape you want — use a small **exception filter** (global or per-controller):
+
+```ts
+// tenant-not-found.filter.ts
+import {
+  type ArgumentsHost,
+  Catch,
+  type ExceptionFilter,
+  HttpStatus,
+} from '@nestjs/common';
+import type { Response } from 'express';
+import { TenantNotFoundError } from '@multitenant/core';
+
+@Catch(TenantNotFoundError)
+export class TenantNotFoundFilter implements ExceptionFilter {
+  catch(exception: TenantNotFoundError, host: ArgumentsHost): void {
+    const res = host.switchToHttp().getResponse<Response>();
+    const status = HttpStatus.NOT_FOUND;
+    res.status(status).json({
+      code: exception.code,
+      message: exception.message,
+    });
+  }
+}
+```
+
+```ts
+// main.ts (global)
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { TenantNotFoundFilter } from './tenant-not-found.filter';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalFilters(new TenantNotFoundFilter());
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+For **`@nestjs/platform-fastify`**, replace `express`’s `Response` typing with Fastify’s reply type or use `host.switchToHttp().getResponse()` without importing `express`.
+
+Register **`TenantRequiredGuard`** in `providers` only if it has injected dependencies; otherwise `@UseGuards` alone is enough. Register **`TenantNotFoundFilter`** globally (`useGlobalFilters`) or per-controller (`@UseFilters`) when you want **`MULTITENANT_TENANT_NOT_FOUND`** as JSON **404**.
 
 ## See also
 

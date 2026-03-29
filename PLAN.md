@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **Phase 5.1** Next App Router doc **Done**: `next-app-router.md` copy-paste **`lib/tenant-registry`**, **`middleware.ts`**, Route Handler, Server Action, **RSC `page.tsx`**, Node **`runtime`** note; Route Handler JSON uses **`ResolvedTenant.marketKey`** (not `market`).
+**Last reviewed:** 2026-03-29 — **Phase 5** framework polish **Done** for **5.1–5.4**: Next App Router checklist (**5.1**); Express doc+API (**5.2**, unchanged); Nest **`TenantNotFoundFilter`** copy-paste + guard/DI (**5.3**); React SSR/RSC + Next App/Pages (**5.4**).
 
 ---
 
@@ -148,8 +148,8 @@
 |----|------|---------------------|
 | 5.1 | Next.js: Edge middleware, Server Actions | **Done:** `docs/FRAMEWORKS/next-app-router.md` — Edge vs Node table, middleware headers, RSC + Route Handlers + Server Actions, copy-paste **`lib/tenant-registry`**, **`middleware.ts`**, **`app/api/.../route.ts`**, **`app/actions.ts`**, **`app/page.tsx` (RSC)** + **`getTenantConfig`**; **`export const runtime = 'nodejs'`** on **layout/page** when forcing Node for DB/ALS. |
 | 5.2 | Express | **Shipped (doc + API):** global `req.tenant` augment; `docs/FRAMEWORKS/express.md`; optional `onMissingTenant` (**v0.4.2**) |
-| 5.3 | Nest | **Partial:** `docs/FRAMEWORKS/nestjs.md` — module, `@Tenant()`, null tenant; **DI recipe**; **copy-paste `TenantRequiredGuard`** (`TenantNotFoundError`) + `@UseGuards`; optional global exception filter still app-owned |
-| 5.4 | React | **Partial:** `docs/FRAMEWORKS/react-ssr.md` — RSC/SSR boundary (serializable `ResolvedTenant` vs registry); classic SSR; **Next** App Router + Pages examples |
+| 5.3 | Nest | **Done:** `docs/FRAMEWORKS/nestjs.md` — module, `@Tenant()`, null tenant; **DI recipe**; **`TenantRequiredGuard`** + **`TenantNotFoundFilter`** (404 JSON `MULTITENANT_TENANT_NOT_FOUND`); Fastify note on filter |
+| 5.4 | React | **Done:** `docs/FRAMEWORKS/react-ssr.md` — RSC/SSR boundary (`ResolvedTenant` serializable vs registry); classic SSR; **Next** App Router (`layout`+`providers`) + **Pages** (`getServerSideProps`) |
 
 ---
 
@@ -275,7 +275,7 @@ Exit criteria are mandatory; task lists are indicative.
 - **Done:** GitHub Actions CI (Node 22); framework docs; `WHY-MULTITENANT.md`; README 30-second start + **copy-paste `middleware.ts`**; per-package READMEs + `package.json` `repository` / `license` / `homepage`; `next-app` + **express** + **next-pages** (`withTenantApi`) tests in `npm test`.
 - **Done (Pages):** `withTenantApi` 404 JSON includes `code: MULTITENANT_TENANT_NOT_FOUND` (`@multitenant/next-pages` **v0.4.2**).
 - **Done:** `examples/config-smoke` + CI `npm run examples:smoke`; Nest DI recipe in `docs/FRAMEWORKS/nestjs.md`.
-- **Done (docs follow-through, 2026-03):** `react-ssr.md` SSR/RSC-first + Next subsections (5.4); Nest **`TenantRequiredGuard`** copy-paste (5.3); `WHY-MULTITENANT.md` second mermaid + App Router link (6.4); `next-app-router.md` full checklist + RSC page + **`marketKey`** fix (5.1 **Done** 2026-03); `@multitenant/react` hook tests (6.1).
+- **Done (docs follow-through, 2026-03):** `react-ssr.md` SSR/RSC-first + Next subsections (**5.4 Done**); Nest **`TenantRequiredGuard`** + **`TenantNotFoundFilter`** (**5.3 Done**); `WHY-MULTITENANT.md` second mermaid + App Router link (6.4); `next-app-router.md` full checklist + RSC page + **`marketKey`** fix (5.1 **Done** 2026-03); `@multitenant/react` hook tests (6.1).
 - **Done (2026-03):** runnable **`examples/express-minimal`**, **`examples/next-minimal`** + CI express smoke.
 - **Done (2026-03):** Phase **6.4** (`WHY-MULTITENANT` next steps) + **7.3** (README runnable examples).
 - **Open:** optional global coverage thresholds.
