@@ -65,6 +65,7 @@ Same as [database-scope.md](database-scope.md) and [per-tenant-database-url.md](
 
 - [Drizzle + Postgres](drizzle-postgres.md) — `@multitenant/drizzle`
 - [Prisma + Postgres](prisma-postgres.md) — `@multitenant/prisma`
+- [TypeORM + Postgres](typeorm-postgres.md) — `@multitenant/typeorm`
 - Package README — `packages/kysely/README.md`
 - [Shared DB `tenant_id`](shared-db-tenant-id.md)
 - [Migrations (multi-tenant)](database-migrations-multitenant.md)

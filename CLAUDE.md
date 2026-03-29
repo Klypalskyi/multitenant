@@ -22,6 +22,7 @@ packages/
 ├── database/       # Node ALS tenant scope (runWithTenantScope); pool cache; no bundled driver
 ├── drizzle/        # Reference: Drizzle + pg wired to database package (Phase 8.7)
 ├── kysely/         # Reference: Kysely + pg wired to database package (Phase 8.7)
+├── typeorm/        # Reference: TypeORM DataSource (Postgres) + database cache (Phase 8.7)
 ├── prisma/         # Reference: Prisma Client + database cache / per-tenant DSN (Phase 8.7)
 ├── identity/       # Cookie encryption/decryption, session header helpers, re-exports identity types
 ├── dev-proxy/      # HTTP proxy + WebSocket upgrade, tenant-by-host resolution
@@ -181,6 +182,7 @@ git diff main --name-only | grep 'packages/.*/src/'
 - **database**: `@multitenant/core` (Node-only ALS + DB helpers)
 - **drizzle**: `@multitenant/core`, `@multitenant/database` (peers: `drizzle-orm`, `pg`)
 - **kysely**: `@multitenant/core`, `@multitenant/database` (peers: `kysely`, `pg`)
+- **typeorm**: `@multitenant/core`, `@multitenant/database` (peer: `typeorm`)
 - **prisma**: `@multitenant/core`, `@multitenant/database` (peer: `@prisma/client`)
 - **react**: `@multitenant/core` (peer: `react`)
 - **next-app**: `@multitenant/core`, `@multitenant/config` (peer: `next`) — config used by `auto-node`

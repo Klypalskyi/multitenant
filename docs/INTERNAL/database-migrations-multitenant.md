@@ -5,7 +5,7 @@
 ## Shared database (single migration set)
 
 - **One** schema, **`tenant_id`** (or RLS GUC) on tenant-bound tables — see [shared-db-tenant-id.md](shared-db-tenant-id.md).
-- **Migrations:** standard **one** linear history (Drizzle Kit, Prisma Migrate, Flyway, etc.) against the shared URL.
+- **Migrations:** standard **one** linear history (Drizzle Kit, Prisma Migrate, TypeORM migrations, Flyway, etc.) against the shared URL.
 - **Idempotency:** use your tool’s native migrations; avoid ad-hoc `CREATE TABLE IF NOT EXISTS` scattered across app startup unless you have a single controlled bootstrap path.
 - **Ordering:** never deploy app code that expects a column **before** the migration that adds it has run (same as single-tenant apps).
 

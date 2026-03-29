@@ -11,6 +11,7 @@ pkgs=(
   @multitenant/drizzle
   @multitenant/kysely
   @multitenant/prisma
+  @multitenant/typeorm
   @multitenant/identity
   @multitenant/dev-proxy
   @multitenant/react

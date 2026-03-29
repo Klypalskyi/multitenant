@@ -4,6 +4,17 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] `@multitenant/typeorm` 0.1.0 — TypeORM Postgres DataSource reference (Phase 8.7)
+
+### Added
+
+- New package **`@multitenant/typeorm`**: **`createSharedPostgresDataSource`**, **`getOrCreateTenantPostgresDataSource`** (peer **`typeorm`**; deps: core, database).
+- **Vitest:** `packages/typeorm/src/postgres-data-source.test.ts` (mocked **`DataSource`**).
+
+### Documentation
+
+- **`docs/INTERNAL/typeorm-postgres.md`**, **`packages/typeorm/README.md`**, cross-links from Drizzle/Kysely/Prisma/INDEX/frameworks overview, **`docs/INTERNAL/architecture.md`**, **`docs/INTERNAL/database-migrations-multitenant.md`** (TypeORM mention), **`CLAUDE.md`**, **`scripts/publish-packages.sh`**, **`PLAN.md`** — Phase **8.7** ORM set complete; dashboard ORM **Shipped**.
+
 ## [2026-03-29] `@multitenant/kysely` 0.1.0 — Kysely + node-postgres reference (Phase 8.7)
 
 ### Added
