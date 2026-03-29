@@ -1,9 +1,11 @@
 ---
 title: "Database"
-description: "`@multitenant/database` — ALS scope and Postgres helpers."
+description: "`@multitenant/database` — ALS tenant scope, URL resolution, bounded pool cache, Postgres helpers."
 ---
 
-**Node-only** **AsyncLocalStorage** scope for the current tenant (and related context): **`runWithTenantScope`** so downstream DB layers see **`tenantKey`** / **`environment`** without threading arguments everywhere. Includes Postgres-oriented pool helpers and a **bounded pool cache**; **not** for Edge runtimes.
+**Node-only.** This package gives you **AsyncLocalStorage** so repository code can read **`tenantKey`** without threading it through every function, plus **bounded caching** for per-tenant DB clients/pools, **env-based DSN resolution** from config, and small **Postgres** helpers (RLS GUC, `tenant_id` on writes).
+
+It does **not** resolve the tenant from HTTP — use **`@multitenant/core`** + an adapter first, then call **`runWithTenantScope`** at the boundary.
 
 ## Install
 
@@ -11,11 +13,74 @@ description: "`@multitenant/database` — ALS scope and Postgres helpers."
 npm install @multitenant/database
 ```
 
-## Main APIs
+## 1. Tenant scope (ALS)
 
-- **`runWithTenantScope(store, fn)`**
-- Postgres pool helpers aligned with **`ResolvedTenant`** (see package **`README`** / exports)
+After you have **`ResolvedTenant`** (e.g. from **`registry.resolveByRequest`**), store **`tenantKey`** and optionally the full **`resolved`** object for downstream code:
+
+```ts
+import type { TenantRegistry } from '@multitenant/core';
+import { runWithTenantScopeAsync, requireTenantKey, assignTenantIdForWrite } from '@multitenant/database';
+
+export async function handleRequest(registry: TenantRegistry, req: Request) {
+  const resolved = registry.resolveByRequest(req as any, { environment: 'local' });
+  if (!resolved) return new Response('no tenant', { status: 404 });
+
+  return runWithTenantScopeAsync({ tenantKey: resolved.tenantKey, resolved }, async () => {
+    const key = requireTenantKey(); // same as resolved.tenantKey
+    const row = assignTenantIdForWrite({ title: 'hello' }); // sets tenant_id = key
+    // ... db access that reads requireTenantKey() / getResolvedTenantFromScope()
+    return new Response(JSON.stringify({ key, row }));
+  });
+}
+```
+
+**Helpers:** **`getTenantScope`**, **`requireTenantScope`**, **`requireResolvedTenantFromScope`**, **`requireTenantKey`**, **`getResolvedTenantFromScope`**.
+
+**Shared-database** topology: one physical DB for all tenants — use **`assignTenantIdForWrite`** / **`assertRowTenantColumn`** and/or Postgres RLS (**`buildSetLocalTenantGucSql`**, **`buildSetLocalTenantGucSqlFromScope`**) so rows cannot cross tenants.
+
+## 2. Resolve DSN from config + env
+
+In **`tenants.config.json`**, each tenant may declare **`database.envVar`** (the **name** of an env var holding the URL, not the secret in JSON). **`resolveTenantDatabaseUrl`** reads it:
+
+```ts
+import type { ResolvedTenant, TenantDefinition } from '@multitenant/core';
+import { resolveTenantDatabaseUrl } from '@multitenant/database';
+
+export function databaseUrlForTenant(
+  resolved: ResolvedTenant,
+  tenants: Record<string, TenantDefinition>,
+): string | undefined {
+  return resolveTenantDatabaseUrl(resolved, tenants, { required: true });
+}
+```
+
+If **`required: true`** (default) and the env var is missing, it **throws** with a clear message.
+
+## 3. Bounded pool / client cache
+
+**`BoundedTenantDbResourceCache<T>`** stores one resource per **(tenantKey, database URL)** so you do not leak pools when many tenants exist. Use **`onEvict`** to **`pool.end()`**, **`$disconnect()`**, or **`dataSource.destroy()`** when entries are evicted.
+
+```ts
+import { BoundedTenantDbResourceCache } from '@multitenant/database';
+import { Pool } from 'pg';
+
+const poolCache = new BoundedTenantDbResourceCache<Pool>({
+  maxPools: 64,
+  idleEvictMs: 30 * 60 * 1000,
+  onEvict: (pool) => {
+    void pool.end();
+  },
+});
+```
+
+ORM packages (**`@multitenant/drizzle`**, **Kysely**, **Prisma**, **TypeORM**) wrap this cache with driver-specific factories — see [ORM helpers](#see-also).
+
+## 4. Postgres schema / RLS
+
+- **`schemaNameForTenant`**, **`requireSchemaNameForCurrentTenant`** — safe identifier length / naming for per-tenant schemas.
+- **`buildSetLocalTenantGucSql`**, **`buildSetLocalTenantGucSqlFromScope`** — emit **`SET LOCAL`** for a custom GUC consumed by RLS policies.
 
 ## See also
 
-- [`@multitenant/drizzle`](/docs/packages/drizzle), [`@multitenant/kysely`](/docs/packages/kysely), [`@multitenant/prisma`](/docs/packages/prisma), [`@multitenant/typeorm`](/docs/packages/typeorm) — ORM-specific facades on top of per-tenant pools/clients
+- [`@multitenant/identity`](/docs/packages/identity) — encrypted session cookies; pair with host resolution.
+- [Drizzle](/docs/packages/drizzle), [Kysely](/docs/packages/kysely), [Prisma](/docs/packages/prisma), [TypeORM](/docs/packages/typeorm) — per-tenant or shared DB facades.

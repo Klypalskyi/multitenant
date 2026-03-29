@@ -3,9 +3,9 @@ title: "React"
 description: "`@multitenant/react` — TenantProvider, hooks, SSR/RSC."
 ---
 
-**React context** and hooks for **tenant**, **market**, and **feature flags**, fed from server-provided props (or your own **`ResolvedTenant`**). Pairs with **`@multitenant/next-app`** or any app that can serialize resolution into the tree.
+**React context** and hooks for **tenant**, **market**, **feature flags**, **theme**, **experiments**, and **per-tenant config** — fed from server-provided **`ResolvedTenant`** plus a **client-side** **`TenantRegistry`** rebuilt from the **same** static config the server used.
 
-**`TenantProvider`** and hooks run in the **client** React tree (**`'use client'`** in Next).
+**`TenantProvider`** and hooks run in the **client** tree (**`'use client'`** in Next).
 
 ## Install
 
@@ -19,35 +19,100 @@ Peer: **`react`** ≥ 18.
 
 | Layer | Responsibility |
 |-------|----------------|
-| **Server** (RSC, SSR handler, etc.) | Resolve **`ResolvedTenant`** with **`createTenantRegistry`** + **`resolveByRequest`** (or adapter). |
+| **Server** (RSC, SSR, loader) | Resolve **`ResolvedTenant`** with **`createTenantRegistry`** + adapter (**`getTenantFromHeaders`**, **`resolveByRequest`**, …). |
 | **Client** | **`TenantProvider`** + **`useTenant`**, **`useMarket`**, **`useTenantConfig`**, … |
 
-## Serializable **`ResolvedTenant`** vs **`TenantRegistry`**
+**`ResolvedTenant`** is plain JSON — safe across the server→client boundary. **`TenantRegistry`** is **not** serializable: on the client, **import the same `tenants.config.json`** (or shared module) and call **`createTenantRegistry(config)`** once, then pass **`registry`** + **`tenant`** into **`TenantProvider`**.
 
-- **`ResolvedTenant`** — plain JSON — safe across RSC / loader boundaries.
-- **`TenantRegistry`** — not serializable — **do not** pass across server→client flight as a prop.
+## Client shell (`TenantProvider`)
 
-**Pattern:**
+```tsx
+'use client';
 
-1. Server: resolve **`tenant`** once per request.
-2. Pass **`tenant`** into a **client** subtree.
-3. Client subtree: **import** a module that does **`createTenantRegistry(sameStaticConfig)`** and render **`<TenantProvider registry={registry} tenant={tenant}>`**.
+import type { ResolvedTenant, TenantsConfig } from '@multitenant/core';
+import { createTenantRegistry } from '@multitenant/core';
+import { TenantProvider } from '@multitenant/react';
+import tenantsConfig from '../tenants.config.json';
 
-The client rebuilds the registry from the **same** config the server used; **`tenant`** must **match** server resolution for hydration.
+const registry = createTenantRegistry(tenantsConfig as TenantsConfig);
+
+export function AppShell({
+  tenant,
+  children,
+}: {
+  tenant: ResolvedTenant;
+  children: React.ReactNode;
+}) {
+  return (
+    <TenantProvider registry={registry} tenant={tenant} environment={tenant.environment}>
+      {children}
+    </TenantProvider>
+  );
+}
+```
+
+Server layout passes **`tenant`** from **`requireTenant(headers(), registry)`** or equivalent — see [Next.js — App Router](/docs/packages/next#nextjs-app-router).
+
+## Hooks
+
+```tsx
+'use client';
+
+import {
+  useTenant,
+  useMarket,
+  useTenantFlag,
+  useTenantTheme,
+  useExperiment,
+  useTenantConfig,
+  useTenantContext,
+} from '@multitenant/react';
+
+export function TenantBanner() {
+  const { tenantKey, marketKey, flags } = useTenant();
+  const market = useMarket();
+  const beta = useTenantFlag('beta');
+  const theme = useTenantTheme();
+
+  return (
+    <div>
+      {tenantKey} · {marketKey} · {market.locale} · {market.currency}
+      {beta ? ' · beta' : ''}
+      {theme?.preset ? ` · theme ${theme.preset}` : ''}
+    </div>
+  );
+}
+
+export function ExperimentSlot() {
+  const variant = useExperiment('hero_copy');
+  return <section data-variant={variant}>…</section>;
+}
+
+export function TenantSettingsPanel() {
+  const settings = useTenantConfig<{ supportEmail?: string }>();
+  return <a href={`mailto:${settings.supportEmail}`}>Support</a>;
+}
+
+/** Escape hatch: registry + tenant + environment in one object */
+export function DebugTenant() {
+  const { registry, tenant, environment } = useTenantContext();
+  return <pre>{JSON.stringify({ environment, tenantKey: tenant.tenantKey }, null, 2)}</pre>;
+}
+```
+
+- **`useMarket()`** — **`NormalizedMarket`** from **`registry.markets[tenant.marketKey]`** (throws if missing).
+- **`useTenantFlag(name)`** — boolean from **`tenant.flags[name]`**.
+- **`useExperiment(key)`** — string variant from **`tenant.experiments[key]`** (throws if missing).
+- **`useTenantConfig()`** — merged per-tenant config via **`getTenantConfig(registry, tenantKey, environment)`** from **core**.
 
 ## Next.js App Router
 
-Resolve in a **Server Component** or layout with **`headers()`** + **`requireTenant`**, then pass **`tenant`** into a **client** shell that mounts **`TenantProvider`**. See [Next.js — App Router](/docs/packages/next#nextjs-app-router) for header-based resolution.
+Resolve in a **Server Component** or layout with **`headers()`** + **`requireTenant`**, then pass **`tenant`** into a **client** shell that mounts **`TenantProvider`**. See [Next.js — App Router](/docs/packages/next#nextjs-app-router).
 
 ## Classic SSR
 
-Embed **`ResolvedTenant`** in HTML/JSON bootstrap data, then on client **`TenantProvider`** + same static config import as server.
-
-## Main APIs
-
-- **`TenantProvider`**
-- **`useTenant`**, **`useMarket`**, **`useTenantConfig`**, **`useTenantFlag`**, **`useExperiment`**, … (see package README)
+Embed **`ResolvedTenant`** in HTML/JSON bootstrap, then on the client use **`TenantProvider`** with the same static config import as the server.
 
 ## See also
 
-- [`@multitenant/core`](/docs/packages/core) — types for **`ResolvedTenant`**
+- [`@multitenant/core`](/docs/packages/core) — **`ResolvedTenant`**, **`getTenantConfig`**, **`TenantRegistry`**

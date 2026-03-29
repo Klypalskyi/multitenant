@@ -1,0 +1,37 @@
+---
+title: "Next.js (App Router)"
+description: "`auto` middleware + `example-next-minimal` workspace."
+---
+
+Same pattern as **`examples/next-minimal/middleware.ts`**: static JSON import + **`createTenantMiddlewareFromConfig`**.
+
+## Run the workspace
+
+```bash
+npm run dev -w @multitenant/example-next-minimal
+# Open http://us.localhost:3050 (hosts in root tenants.config.json)
+```
+
+## `auto` middleware
+
+```ts
+import type { EnvironmentName, TenantsConfig } from '@multitenant/core';
+import { createTenantMiddlewareFromConfig } from '@multitenant/next-app/auto';
+import tenantsConfig from '../../tenants.config.json';
+
+const env = (
+  process.env.MULTITENANT_ENV ?? process.env.TENANTIFY_ENV ?? 'local'
+) as EnvironmentName;
+
+export const middleware = createTenantMiddlewareFromConfig(tenantsConfig as TenantsConfig, {
+  environment: env,
+});
+```
+
+For a **shared** **`TenantRegistry`** in middleware **and** Route Handlers / Server Actions, use an explicit **`createTenantRegistry`** module instead of **`auto`** — see [Next.js — App Router](/docs/packages/next#nextjs-app-router).
+
+## See also
+
+- [Next.js package](/docs/packages/next) — **`getTenantFromHeaders`**, **`requireTenant`**, Edge vs Node
+- [React](/docs/packages/react) — **`TenantProvider`** + hooks on the client
+- [Examples overview](/docs/examples)

@@ -6,12 +6,13 @@
     "why-multitenant",
     "getting-started",
     "config",
-    "---Errors & examples---",
+    "---Errors---",
     "errors",
-    "examples",
     "---Reference---",
     "...packages",
     "---CLI---",
-    "...cli"
+    "...cli",
+    "---Examples---",
+    "...examples"
   ]
 }

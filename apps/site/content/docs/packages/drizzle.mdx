@@ -1,9 +1,11 @@
 ---
 title: "Drizzle"
-description: "`@multitenant/drizzle` — tenant-scoped Drizzle."
+description: "`@multitenant/drizzle` — per-tenant or shared `pg` pools with Drizzle ORM."
 ---
 
-Thin **Drizzle** + **`pg`** helpers: **`getOrCreateTenantNodePgPool`**, **`getTenantNodePgDrizzle`**, **`createNodePgDrizzle`** — obtain a **Drizzle** instance scoped to **`ResolvedTenant`** (Postgres). Does **not** replace **`createTenantRegistry`**; use **core** for HTTP/host resolution, then this for **data** access.
+Thin **Drizzle** + **`pg`** helpers on top of **`@multitenant/database`**: **per-tenant DSN** (cached **`Pool`**) or **one shared pool** + row-level tenant isolation from **`@multitenant/database`**.
+
+Host / tenant resolution stays in **`@multitenant/core`** — pass **`ResolvedTenant`** + **`tenants`** from your registry/config here.
 
 ## Install
 
@@ -11,11 +13,49 @@ Thin **Drizzle** + **`pg`** helpers: **`getOrCreateTenantNodePgPool`**, **`getTe
 npm install @multitenant/drizzle drizzle-orm pg
 ```
 
-## Main APIs
+## Per-tenant database URL
 
-- **`getOrCreateTenantNodePgPool`**, **`getTenantNodePgDrizzle`**, **`createNodePgDrizzle`**
+Each tenant maps to an env-backed DSN via **`tenants[tenantKey].database.envVar`**. Reuse **`BoundedTenantDbResourceCache<Pool>`** and **`getTenantNodePgDrizzle`**:
+
+```ts
+import type { ResolvedTenant, TenantDefinition } from '@multitenant/core';
+import { BoundedTenantDbResourceCache } from '@multitenant/database';
+import { getTenantNodePgDrizzle } from '@multitenant/drizzle';
+import * as schema from './schema';
+
+const poolCache = new BoundedTenantDbResourceCache<import('pg').Pool>({
+  maxPools: 48,
+  onEvict: (pool) => void pool.end(),
+});
+
+export function dbForTenant(
+  resolved: ResolvedTenant,
+  tenants: Record<string, TenantDefinition>,
+) {
+  return getTenantNodePgDrizzle(poolCache, resolved, tenants, schema, {
+    poolOptions: { max: 10 },
+  });
+}
+
+// usage inside runWithTenantScope + after resolveByRequest:
+// const db = dbForTenant(resolved, registry.tenants);
+// await db.select().from(schema.items).where(eq(schema.items.tenant_id, resolved.tenantKey));
+```
+
+## Shared database (one pool)
+
+One **`Pool`** for the app; enforce **`tenant_id`** (or RLS) with **`assignTenantIdForWrite`** / **`requireTenantKey`** from **`@multitenant/database`**:
+
+```ts
+import { Pool } from 'pg';
+import { createNodePgDrizzle } from '@multitenant/drizzle';
+import * as schema from './schema';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+export const db = createNodePgDrizzle(pool, schema);
+```
 
 ## See also
 
-- [`@multitenant/database`](/docs/packages/database) — ALS + pool patterns
-- [`@multitenant/core`](/docs/packages/core) — **`ResolvedTenant`**
+- [`@multitenant/database`](/docs/packages/database) — ALS, **`BoundedTenantDbResourceCache`**, **`resolveTenantDatabaseUrl`**
+- [`@multitenant/core`](/docs/packages/core) — **`ResolvedTenant`**, **`TenantDefinition`**

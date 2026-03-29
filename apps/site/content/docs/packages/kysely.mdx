@@ -1,9 +1,9 @@
 ---
 title: "Kysely"
-description: "`@multitenant/kysely` — tenant-scoped Kysely."
+description: "`@multitenant/kysely` — per-tenant or shared `pg` pools with Kysely."
 ---
 
-Thin **Kysely** + **`pg`** helpers: **`getOrCreateTenantNodePgPool`**, **`getTenantNodePgKysely`**, **`createNodePgKysely`** — per-tenant **Kysely** from **`ResolvedTenant`**. Postgres-oriented; resolution stays in **`@multitenant/core`**.
+**Kysely** + **`pg`** helpers: **per-tenant URL** with a bounded **`Pool`** cache, or **shared DB** with **`createNodePgKysely`** and tenant isolation from **`@multitenant/database`**.
 
 ## Install
 
@@ -11,9 +11,41 @@ Thin **Kysely** + **`pg`** helpers: **`getOrCreateTenantNodePgPool`**, **`getTen
 npm install @multitenant/kysely kysely pg
 ```
 
-## Main APIs
+## Per-tenant database URL
 
-- **`getOrCreateTenantNodePgPool`**, **`getTenantNodePgKysely`**, **`createNodePgKysely`**
+```ts
+import type { ResolvedTenant, TenantDefinition } from '@multitenant/core';
+import { BoundedTenantDbResourceCache } from '@multitenant/database';
+import { getTenantNodePgKysely } from '@multitenant/kysely';
+import type { DB } from './types'; // your Kysely codegen / hand types
+
+const poolCache = new BoundedTenantDbResourceCache<import('pg').Pool>({
+  maxPools: 48,
+  onEvict: (pool) => void pool.end(),
+});
+
+export function kyselyForTenant(
+  resolved: ResolvedTenant,
+  tenants: Record<string, TenantDefinition>,
+) {
+  return getTenantNodePgKysely<DB>(poolCache, resolved, tenants, {
+    poolOptions: { max: 10 },
+  });
+}
+```
+
+## Shared database
+
+```ts
+import { Pool } from 'pg';
+import { createNodePgKysely } from '@multitenant/kysely';
+import type { DB } from './types';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+export const db = createNodePgKysely<DB>(pool);
+```
+
+Then inside **`runWithTenantScope`**, filter queries by **`requireTenantKey()`** or use **`assignTenantIdForWrite`** on inserts.
 
 ## See also
 

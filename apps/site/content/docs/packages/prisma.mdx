@@ -1,9 +1,9 @@
 ---
 title: "Prisma"
-description: "`@multitenant/prisma` — tenant-scoped Prisma clients."
+description: "`@multitenant/prisma` — per-tenant or shared `PrismaClient` instances."
 ---
 
-**Prisma Client** helpers for **multi-tenant Postgres**: **`createSharedPrismaClient`**, **`getOrCreateTenantPrismaClient`** — cache **Prisma** instances per tenant (or share where safe; see options). Assumes you already resolved **`ResolvedTenant`** with **`@multitenant/core`**.
+**Prisma Client** factories: **cached per `(tenantKey, DSN)`** or **one shared client** for a single database. Always **`$disconnect`** evicted clients via **`onEvict`** on **`BoundedTenantDbResourceCache`**.
 
 ## Install
 
@@ -11,10 +11,38 @@ description: "`@multitenant/prisma` — tenant-scoped Prisma clients."
 npm install @multitenant/prisma @prisma/client
 ```
 
-## Main APIs
+## Per-tenant database URL
 
-- **`createSharedPrismaClient`**, **`getOrCreateTenantPrismaClient`**
-- **`GetOrCreateTenantPrismaClientOptions`** for tuning pool / datasource URL mapping
+```ts
+import type { ResolvedTenant, TenantDefinition } from '@multitenant/core';
+import { BoundedTenantDbResourceCache } from '@multitenant/database';
+import { getOrCreateTenantPrismaClient } from '@multitenant/prisma';
+import type { PrismaClient } from '@prisma/client';
+
+const prismaCache = new BoundedTenantDbResourceCache<PrismaClient>({
+  maxPools: 32,
+  onEvict: (c) => void c.$disconnect(),
+});
+
+export function prismaForTenant(
+  resolved: ResolvedTenant,
+  tenants: Record<string, TenantDefinition>,
+): PrismaClient {
+  return getOrCreateTenantPrismaClient(prismaCache, resolved, tenants, {
+    prismaOptions: { log: process.env.NODE_ENV === 'development' ? ['error'] : [] },
+  });
+}
+```
+
+## Shared database
+
+```ts
+import { createSharedPrismaClient } from '@multitenant/prisma';
+
+export const prisma = createSharedPrismaClient(process.env.DATABASE_URL!);
+```
+
+Pair with **`runWithTenantScope`** + **`assignTenantIdForWrite`** / **`assertRowTenantColumn`** from **`@multitenant/database`** so every query/write is scoped to the current tenant.
 
 ## See also
 

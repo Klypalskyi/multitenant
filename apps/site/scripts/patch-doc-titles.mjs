@@ -30,9 +30,17 @@ const patches = {
     title: 'Errors',
     description: '`MultitenantError` hierarchy and stable `code` values.',
   },
-  'examples.mdx': {
+  'examples/index.mdx': {
     title: 'Examples',
-    description: 'Minimal Express and Next workspaces in the monorepo.',
+    description: 'Runnable monorepo workspaces — Express, Next.js App Router, config smoke.',
+  },
+  'examples/express.mdx': {
+    title: 'Express',
+    description: 'Minimal Express + multitenantExpress — example express-minimal.',
+  },
+  'examples/next-app.mdx': {
+    title: 'Next.js (App Router)',
+    description: '`auto` middleware + example-next-minimal workspace.',
   },
   'cli/init.mdx': {
     title: 'multitenant init',

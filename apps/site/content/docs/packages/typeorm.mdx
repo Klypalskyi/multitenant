@@ -1,9 +1,9 @@
 ---
 title: "TypeORM"
-description: "`@multitenant/typeorm` — tenant-scoped DataSource."
+description: "`@multitenant/typeorm` — per-tenant or shared Postgres `DataSource`."
 ---
 
-**TypeORM** **DataSource** helpers for Postgres: **`createSharedPostgresDataSource`**, **`getOrCreateTenantPostgresDataSource`** — map **`ResolvedTenant`** → **`DataSource`** with bounded caching. Use **`@multitenant/core`** for request/host tenant resolution.
+**TypeORM** **DataSource** helpers for Postgres: **cached per tenant DSN** or **one shared `DataSource`**. You must **`await dataSource.initialize()`** before queries; on eviction use **`onEvict`** to **`destroy()`**.
 
 ## Install
 
@@ -11,10 +11,50 @@ description: "`@multitenant/typeorm` — tenant-scoped DataSource."
 npm install @multitenant/typeorm typeorm pg reflect-metadata
 ```
 
-## Main APIs
+## Per-tenant database URL
 
-- **`createSharedPostgresDataSource`**, **`getOrCreateTenantPostgresDataSource`**
-- **`PostgresDataSourceExtras`** / options types
+```ts
+import type { ResolvedTenant, TenantDefinition } from '@multitenant/core';
+import { BoundedTenantDbResourceCache } from '@multitenant/database';
+import { getOrCreateTenantPostgresDataSource } from '@multitenant/typeorm';
+import type { DataSource } from 'typeorm';
+import { User } from './entity/User';
+
+const dsCache = new BoundedTenantDbResourceCache<DataSource>({
+  maxPools: 24,
+  onEvict: (ds) => void ds.destroy().catch(() => undefined),
+});
+
+export async function dataSourceForTenant(
+  resolved: ResolvedTenant,
+  tenants: Record<string, TenantDefinition>,
+): Promise<DataSource> {
+  const ds = getOrCreateTenantPostgresDataSource(dsCache, resolved, tenants, {
+    dataSourceOptions: {
+      entities: [User],
+      synchronize: false,
+    },
+  });
+  if (!ds.isInitialized) await ds.initialize();
+  return ds;
+}
+```
+
+## Shared database
+
+```ts
+import { createSharedPostgresDataSource } from '@multitenant/typeorm';
+import { User } from './entity/User';
+
+export const AppDataSource = createSharedPostgresDataSource(process.env.DATABASE_URL!, {
+  entities: [User],
+  synchronize: false,
+});
+
+// await AppDataSource.initialize() at bootstrap
+```
+
+Use **`runWithTenantScope`** + **`requireTenantKey()`** in repositories or RLS so rows stay tenant-scoped.
 
 ## See also
 

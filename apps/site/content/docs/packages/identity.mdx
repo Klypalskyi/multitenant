@@ -1,9 +1,11 @@
 ---
 title: "Identity"
-description: "`@multitenant/identity` — encrypted session cookies."
+description: "`@multitenant/identity` — AES-256-GCM session cookies and tenant access checks."
 ---
 
-**Node-only** helpers for **encrypted session cookies** (**AES-256-GCM**): parse **`Cookie`** headers, build **`Set-Cookie`** values, and optional **`assertAccess`** patterns for tenant-scoped sessions. Complements resolution from **`@multitenant/core`**; does not replace host-based tenant detection.
+**Node-only.** Builds on **`@multitenant/core`** types (**`EncodedSession`**, **`Identity`**, **`canAccessTenant`**, **`assertAccess`**): parse **`Cookie`** headers, emit **`Set-Cookie`**, and optionally verify the session’s tenant matches the host-resolved tenant.
+
+Resolution order in production is usually: **host → `ResolvedTenant`** (core) → **session** (this package) → **`assertAccess`** / compare **`session.currentTenantKey`** to **`resolved.tenantKey`**.
 
 ## Install
 
@@ -11,12 +13,53 @@ description: "`@multitenant/identity` — encrypted session cookies."
 npm install @multitenant/identity
 ```
 
-## Main APIs
+## Session cookie flow
 
-- **`getSessionFromCookieHeader`**, **`buildSessionSetCookieHeader`**
-- Session payload types and **`assertAccess`** utilities (see package exports)
+```ts
+import type { EncodedSession } from '@multitenant/core';
+import {
+  getSessionFromCookieHeader,
+  buildSessionSetCookieHeader,
+} from '@multitenant/identity';
+
+const SECRET = process.env.MULTITENANT_SESSION_SECRET!;
+
+// Incoming request
+export function readSession(cookieHeader: string | null): EncodedSession | null {
+  return getSessionFromCookieHeader(cookieHeader, SECRET);
+}
+
+// After login / tenant switch — attach to Response
+export function loginSetCookie(session: EncodedSession): string {
+  return buildSessionSetCookieHeader(session, SECRET, {
+    path: '/',
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    maxAgeSeconds: 60 * 60 * 24 * 7,
+  });
+}
+```
+
+Default cookie name is **`multitenant_session`**; override with **`cookieName`** in options.
+
+## Align session with host-resolved tenant
+
+```ts
+import type { EncodedSession, ResolvedTenant } from '@multitenant/core';
+import { assertAccess } from '@multitenant/identity';
+
+export function guardRoute(resolved: ResolvedTenant, session: EncodedSession | null) {
+  assertAccess(session, { tenantKey: resolved.tenantKey });
+  if (session && session.currentTenantKey !== resolved.tenantKey) {
+    throw new Error('Session tenant does not match host tenant');
+  }
+}
+```
+
+Use **`canAccessTenant(session, { tenantKey, requiredRoles })`** when you need a boolean instead of throwing.
 
 ## See also
 
-- [`@multitenant/core`](/docs/packages/core) — **`ResolvedTenant`** and errors
-- [Errors](/docs/errors) — how **`MultitenantError`** fits with auth failures
+- [`@multitenant/core`](/docs/packages/core) — **`ResolvedTenant`**, **`EncodedSession`**, errors
+- [Errors](/docs/errors) — **`MultitenantError`** vs generic auth failures
+- [Database](/docs/packages/database) — ALS scope after you have **`resolved`**

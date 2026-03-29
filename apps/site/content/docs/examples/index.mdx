@@ -1,0 +1,32 @@
+---
+title: "Examples"
+description: "Runnable monorepo workspaces — Express, Next.js App Router, config smoke."
+---
+
+Patterns below mirror **real packages** under **`examples/`**. Copy into your app; paths differ outside this repo.
+
+## Runnable workspaces (from monorepo root)
+
+| Workspace | Command | What it proves |
+|-----------|---------|----------------|
+| **`examples/config-smoke`** | **`npm run examples:smoke`** | Root **`tenants.config.json`** validates + **`resolveByHost`** |
+| **`examples/express-minimal`** | **`npm run examples:express-smoke`** | Express + **`multitenantExpress`** (supertest, no listen) |
+| **`examples/next-minimal`** | **`npm run dev -w @multitenant/example-next-minimal`** | Next **App Router** + **`@multitenant/next-app/auto`** |
+
+```bash
+npm run examples:smoke
+npm run examples:express-smoke
+npm run dev -w @multitenant/example-next-minimal
+# Next: open http://us.localhost:3050 (see root tenants.config.json)
+```
+
+## Guides
+
+- **[Express](/docs/examples/express)** — **`multitenantExpress`**, **`req.tenant`**, minimal **`app.cjs`**
+- **[Next.js (App Router)](/docs/examples/next-app)** — **`createTenantMiddlewareFromConfig`**, **`auto`** middleware
+
+## Next steps
+
+- [Getting started](/docs/getting-started) — **`npx @multitenant/cli dev`** proxy
+- [CLI](/docs/cli/dev-check-print)
+- [Home — adapters & packages](/docs)

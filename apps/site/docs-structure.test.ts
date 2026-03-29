@@ -26,7 +26,9 @@ const requiredMdx = [
   'packages/prisma.mdx',
   'packages/typeorm.mdx',
   'errors.mdx',
-  'examples.mdx',
+  'examples/index.mdx',
+  'examples/express.mdx',
+  'examples/next-app.mdx',
   'cli/init.mdx',
   'cli/dev-check-print.mdx',
 ];

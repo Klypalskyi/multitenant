@@ -1,0 +1,53 @@
+---
+title: "Express"
+description: "Minimal Express + multitenantExpress — example `express-minimal`."
+---
+
+Same idea as **`examples/express-minimal/app.cjs`**: load config, build registry, attach middleware, read **`req.tenant`**.
+
+## Run the workspace
+
+```bash
+npm run examples:express-smoke
+```
+
+Uses **supertest** against the in-memory app — no listen.
+
+## Minimal app
+
+```js
+'use strict';
+
+const path = require('node:path');
+const express = require('express');
+const { loadTenantsConfig } = require('@multitenant/config');
+const { createTenantRegistry } = require('@multitenant/core');
+const { multitenantExpress } = require('@multitenant/express');
+
+const repoRoot = path.join(__dirname, '..', '..'); // adjust to your layout
+
+async function createApp() {
+  const app = express();
+  const config = await loadTenantsConfig({ cwd: repoRoot });
+  const registry = createTenantRegistry(config);
+
+  app.use(multitenantExpress({ registry, environment: 'local' }));
+
+  app.get('/', (req, res) => {
+    if (!req.tenant) return res.status(404).send('no tenant');
+    res.type('text/plain').send(`Tenant ${req.tenant.tenantKey}, market ${req.tenant.marketKey}`);
+  });
+
+  return app;
+}
+
+module.exports = { createApp };
+```
+
+Point **`cwd`** at the directory that contains **`tenants.config.json`**.
+
+## See also
+
+- [Express package](/docs/packages/express) — **`onMissingTenant`**, **`TenantNotFoundError`**
+- [Next.js (App Router)](/docs/examples/next-app) — same config, different adapter
+- [Examples overview](/docs/examples)
