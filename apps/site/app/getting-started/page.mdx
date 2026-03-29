@@ -1,0 +1,15 @@
+# Getting started
+
+1. **Scaffold** — `npx multitenant init` writes `tenants.config.json` and optional framework stubs (`--framework next-app | next-pages | express`).
+
+2. **Validate** — `npx multitenant check` runs the same Zod validation as `loadTenantsConfig`.
+
+3. **Wire your framework** — install `@multitenant/next`, `@multitenant/express`, etc., and follow the checklist for your stack.
+
+4. **Local multi-host** — run your app on one port (e.g. 3000) and **`multitenant dev --target http://localhost:3000 --port 3100`** so tenant hosts hit the proxy.
+
+For the full guide (async config, Edge vs Node, identity), see the repo:
+
+- [Getting started (repo)](https://github.com/klypalskyi/multitenant/blob/master/docs/GETTING-STARTED.md)
+- [Config reference](https://github.com/klypalskyi/multitenant/blob/master/docs/CONFIG/tenants-config.md)
+- [Framework overview](https://github.com/klypalskyi/multitenant/blob/master/docs/FRAMEWORKS/overview.md)

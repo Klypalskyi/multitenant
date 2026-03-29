@@ -1,0 +1,20 @@
+# Packages
+
+Published on npm under **`@multitenant/*`**:
+
+| Package | Role |
+|---------|------|
+| `@multitenant/core` | Registry, resolution, `getTenantConfig`, flags |
+| `@multitenant/config` | Load / validate `tenants.config.json` |
+| `@multitenant/cli` | `init`, `check`, `print`, `dev` |
+| `@multitenant/next-app` | App Router middleware + server helpers |
+| `@multitenant/next-pages` | Pages Router GSSP / API |
+| `@multitenant/next` | Meta-package (single install line) |
+| `@multitenant/react` | `TenantProvider`, hooks |
+| `@multitenant/express` | `req.tenant` middleware |
+| `@multitenant/nest` | Module + `@Tenant()` |
+| `@multitenant/identity` | Encrypted session cookies |
+| `@multitenant/database` | ALS tenant scope, DB helpers |
+| `@multitenant/drizzle` / `kysely` / `prisma` / `typeorm` | Thin Postgres wiring examples |
+
+Versions are **per package** — see each `package.json` on GitHub and [RELEASE.md](https://github.com/klypalskyi/multitenant/blob/master/docs/RELEASE.md).

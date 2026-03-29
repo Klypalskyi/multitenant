@@ -16,6 +16,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Examples:** `examples/` — runnable **`express-minimal`**, **`next-minimal`**, **`config-smoke`** (see `examples/README.md`); copy-paste refs under `next-app-router`, etc.
 
 ```
+apps/
+├── site/ # Nextra 4 + nextra-theme-docs (marketing / docs); Vercel root apps/site
+
 packages/
 ├── core/           # Types, TenantRegistry, typed errors, identity guards, getTenantConfig (merged market/tenant/env config)
 ├── config/         # Load/validate tenants.config.json (Zod + cross-field checks)

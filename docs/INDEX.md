@@ -4,6 +4,7 @@ Multi-tenant and multi-market management for TypeScript apps.
 
 ## For integrators
 
+- [Marketing / docs site (Nextra)](../apps/site/README.md) – `npm run site:dev`; deploy via Vercel (**Root Directory:** `apps/site`) or `.github/workflows/deploy-site.yml`
 - [Examples (runnable + reference)](../examples/README.md) – `express-minimal`, `next-minimal`, `config-smoke`
 - [Why Multitenant / pitfalls](WHY-MULTITENANT.md) – mental model, resolution + Next middleware mermaid, when not to use
 - [Getting started](GETTING-STARTED.md) – install, config, first tenant

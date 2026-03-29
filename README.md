@@ -10,7 +10,9 @@ Intro / pitfalls / diagram: [docs/WHY-MULTITENANT.md](docs/WHY-MULTITENANT.md).
 
 **Quick links:** [Getting started](docs/GETTING-STARTED.md) · [Config reference](docs/CONFIG/tenants-config.md) · [Framework overview](docs/FRAMEWORKS/overview.md) · [docs index](docs/INDEX.md) · [Release / publish](docs/RELEASE.md)
 
-**Demo:** there is no hosted SaaS in this repo — use [docs/INDEX.md](docs/INDEX.md), [examples/README.md](examples/README.md) (**runnable** [`express-minimal`](examples/express-minimal/) and [`next-minimal`](examples/next-minimal/) workspaces + `config-smoke`), and `npx multitenant init` as the hands-on path.
+**Docs site:** [apps/site](apps/site) — Nextra 4 + `nextra-theme-docs` (same family as [shuding/nextra-docs-template](https://github.com/shuding/nextra-docs-template)). Local: **`npm run site:dev`**. Production: Vercel **Root Directory** `apps/site` (see `apps/site/vercel.json`) or **`.github/workflows/deploy-site.yml`**.
+
+**Hands-on:** [docs/INDEX.md](docs/INDEX.md), [examples/README.md](examples/README.md) (**[`express-minimal`](examples/express-minimal/)**, **[`next-minimal`](examples/next-minimal/)**, **`config-smoke`**), **`npx multitenant init`**.
 
 ### 30-second start
 

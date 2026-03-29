@@ -4,6 +4,24 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Docs site (`apps/site`) + CI (Vercel, npm)
+
+### Added
+
+- **`apps/site`** — **Nextra 4** + **`nextra-theme-docs`** marketing / docs shell (aligned with [shuding/nextra-docs-template](https://github.com/shuding/nextra-docs-template) stack: Next.js + docs theme); App Router + **`app/_meta.global.js`**, `npm run site:dev` from root.
+- **`.github/workflows/deploy-site.yml`** — optional Vercel deploy (**`amondnet/vercel-action`**); **`apps/site/vercel.json`** sets monorepo install/build from repo root.
+- **`.github/workflows/publish-npm.yml`** — publish **`@multitenant/*`** on **`v*`** tags or manual run (**`NPM_TOKEN`**).
+
+### Changed
+
+- **Root `package.json`** — **`apps/*`** workspaces; **`react` / `react-dom`** **overrides** @ **19.2.4** for a single tree with **`@multitenant/site`**; root **devDependencies** **`nextra`** + **`nextra-theme-docs`** for consistent hoisting; script **`site:dev`**.
+- **`packages/react`** — devDependency **`@testing-library/react`** **^16** + **React 19**-aligned type/dev packages for workspace overrides.
+- **`turbo.json`** — **`build`** outputs include **`.next/**`** (site).
+
+### Documentation
+
+- **`docs/RELEASE.md`**, **`PLAN.md`**, **`README.md`**, **`docs/INDEX.md`**, **`CLAUDE.md`**, **`apps/site/README.md`**.
+
 ## [2026-03-29] Phase 2 — DX closure (PLAN + dashboard)
 
 ### Documentation

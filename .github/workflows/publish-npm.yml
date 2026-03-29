@@ -1,0 +1,42 @@
+# Publishes @multitenant/* in dependency order (skips versions already on npm).
+# Use after tagging a release and bumping package versions per docs/RELEASE.md.
+#
+# Triggers: git tag v* (e.g. v0.7.0) or manual workflow_dispatch.
+# Secret: NPM_TOKEN — npm automation token with publish access to @multitenant scope.
+name: Publish npm
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+concurrency:
+  group: publish-npm
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: bash scripts/publish-packages.sh

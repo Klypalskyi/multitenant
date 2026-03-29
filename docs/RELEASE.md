@@ -149,3 +149,17 @@ Automation tokens usually skip OTP. If you publish with a **user** token or `npm
 
 - Confirm versions on https://www.npmjs.com/package/@multitenant/core
 - Open GitHub **Releases** and attach release notes from `CHANGELOG.md` for `v0.4.0`.
+
+## 7. GitHub Actions (npm + docs site)
+
+### Publish to npm (`.github/workflows/publish-npm.yml`)
+
+- **Triggers:** push of a version tag matching `v*` (e.g. `v0.7.0`), or **workflow_dispatch**.
+- **Secret:** `NPM_TOKEN` — npm **Automation** token with publish access to the `@multitenant` scope.
+- **Behaviour:** `npm ci` → `npm run build` → `bash scripts/publish-packages.sh` (same as local **`release:publish`**; only workspaces whose version is **not** already on npm are published).
+
+### Deploy site to Vercel (`.github/workflows/deploy-site.yml`)
+
+- **Triggers:** push to `main` / `master` that touches `apps/site/**`, `package-lock.json`, or the workflow file; or **workflow_dispatch**.
+- **Secrets:** `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` (from the Vercel project → **Settings**).
+- **Alternative:** connect the GitHub repo in Vercel, set **Root Directory** to `apps/site`, and use Vercel’s native Git deploys — `apps/site/vercel.json` still runs **`npm ci`** and **`npm run build -w @multitenant/site`** from the monorepo root so the install graph is correct.

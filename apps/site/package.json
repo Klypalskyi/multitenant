@@ -1,0 +1,23 @@
+{
+  "name": "@multitenant/site",
+  "private": true,
+  "description": "Nextra 4 docs / landing (same stack as shuding/nextra-docs-template lineage: Next + nextra-theme-docs)",
+  "scripts": {
+    "dev": "next dev --port 3101",
+    "build": "next build",
+    "start": "next start --port 3101"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "next": "^16.1.7",
+    "nextra": "4.6.1",
+    "nextra-theme-docs": "4.6.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "typescript": "^5.4.0"
+  }
+}

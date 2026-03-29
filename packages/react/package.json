@@ -19,12 +19,12 @@
     "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
-    "@testing-library/react": "^14.3.1",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
+    "@testing-library/react": "^16.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "jsdom": "^25.0.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "vitest": "^3.0.5"
   },
   "license": "MIT",

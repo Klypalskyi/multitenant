@@ -1,0 +1,21 @@
+# Multitenant
+
+**Config-driven** tenant and market resolution for TypeScript: one **`tenants.config.json`**, **`createTenantRegistry`**, and adapters for **Next.js** (App + Pages), **Express**, **Nest**, and **React**.
+
+## Why this exists
+
+- Resolve **tenant + market** from **Host** and proxy headers with typed errors (`TenantNotFoundError`, `InvalidTenantsConfigError`, …).
+- Optional **identity** cookies (`@multitenant/identity`), **ALS** DB scope (`@multitenant/database`), and thin **ORM reference** packages (Drizzle, Kysely, Prisma, TypeORM).
+
+## Quick start
+
+```bash
+npx multitenant init --force
+npx multitenant check
+```
+
+## npm
+
+Scoped packages are published as **`@multitenant/*`** — see [Packages](/packages) and [Getting started](/getting-started).
+
+The canonical markdown documentation lives in the [GitHub `docs/` tree](https://github.com/klypalskyi/multitenant/tree/master/docs).
