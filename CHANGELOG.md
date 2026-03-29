@@ -4,6 +4,13 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Phase 5.1 — Next.js App Router integration doc complete
+
+### Documentation
+
+- **`docs/FRAMEWORKS/next-app-router.md`** — fix Route Handler example (`ResolvedTenant.marketKey`); add **RSC `page.tsx`** + merged **`getTenantConfig`**; clarify Node vs Edge for Server Actions + **`runtime = 'nodejs'`** on layout/page.
+- **`PLAN.md`** — Phase **5.1** **Done**; last reviewed.
+
 ## [2026-03-29] `@multitenant/core` 0.5.2, `@multitenant/config` 0.4.3, `@multitenant/react` 0.5.2 — Phase 3.3 config merge
 
 ### Added

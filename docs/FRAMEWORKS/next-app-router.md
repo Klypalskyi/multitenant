@@ -75,7 +75,7 @@ export async function GET() {
   const resolved = getTenantFromHeaders(h, tenantRegistry, { environment: multitenantEnv() });
   return NextResponse.json({
     tenantKey: resolved?.tenantKey ?? null,
-    marketKey: resolved?.market?.key ?? null,
+    marketKey: resolved?.marketKey ?? null,
   });
 }
 ```
@@ -97,6 +97,53 @@ export async function currentTenantKey(): Promise<string | null> {
 ```
 
 Replace `@/` paths with your alias or relative imports. Use `requireTenant` instead of `getTenantFromHeaders` when a missing tenant must hard-fail.
+
+## App Router page (RSC)
+
+Server Components run in Node by default; they can call `headers()` like Route Handlers.
+
+**`app/page.tsx`**
+
+```tsx
+import { headers } from 'next/headers';
+import { getTenantFromHeaders } from '@multitenant/next-app';
+import { getTenantConfig } from '@multitenant/core';
+import { multitenantEnv, tenantRegistry } from '@/lib/tenant-registry';
+
+export default async function Page() {
+  const h = await headers();
+  const resolved = getTenantFromHeaders(h, tenantRegistry, { environment: multitenantEnv() });
+  const config = resolved
+    ? getTenantConfig(tenantRegistry, resolved.tenantKey, resolved.environment)
+    : {};
+  return (
+    <main>
+      <pre>{JSON.stringify({ tenantKey: resolved?.tenantKey ?? null, config }, null, 2)}</pre>
+    </main>
+  );
+}
+```
+
+## Node-only Server Action (database)
+
+Server Actions run on the **server**; App Router defaults to the **Node** runtime for server components and most actions. When you force **`runtime = 'edge'`** on a **layout** or **page**, actions imported from that tree run on Edge — avoid native DB drivers there.
+
+```ts
+'use server';
+
+import { headers } from 'next/headers';
+import { getTenantFromHeaders } from '@multitenant/next-app';
+import { multitenantEnv, tenantRegistry } from '@/lib/tenant-registry';
+
+export async function doWork(): Promise<void> {
+  const h = await headers();
+  const resolved = getTenantFromHeaders(h, tenantRegistry, { environment: multitenantEnv() });
+  if (!resolved) return;
+  // runWithTenantScope({ tenantKey: resolved.tenantKey }, () => { ... });
+}
+```
+
+To **force Node** for a subtree (e.g. before adding Edge‑unsafe code), set on **`app/layout.tsx`** or **`app/page.tsx`**: `export const runtime = 'nodejs'`.
 
 ## Testing
 
