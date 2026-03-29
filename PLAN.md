@@ -3,7 +3,7 @@
 **What this is:** Living backlog and execution guide for the `@multitenant/*` monorepo.  
 **What it is not:** Release notes (see `docs/RELEASE.md`) or full API reference (see `docs/INDEX.md`, package READMEs).
 
-**Last reviewed:** 2026-03-29 — **Phase 6.3:** runnable **`examples/express-minimal`** + **`examples/next-minimal`**; CI **`examples:express-smoke`**; ORM refs **drizzle + prisma** `v0.1.0`.
+**Last reviewed:** 2026-03-29 — **Phases 6.4 + 7.3:** **`WHY-MULTITENANT.md`** + root **`README`** pointers (runnable examples, docs index); dashboard orientation **Shipped**.
 
 ---
 
@@ -29,7 +29,7 @@
 | Package unit tests + CI | **Shipped** | `npm test` (turbo): core, config, cli, database, identity, **next-app** integration tests; GitHub Actions `build` + `test` + **`npm run examples:smoke`** on push/PR |
 | Website / landing in repo | **Not shipped** | Optional external |
 | ORM / DB adapters (shared DB + per-tenant DB) | **Partial** | **`@multitenant/database` v0.5.5** + **`@multitenant/drizzle` v0.1.0** + **`@multitenant/prisma` v0.1.0**; **8.8** doc; Kysely / TypeORM incremental |
-| Orientation: why / pitfalls / diagram | **Partial** | `docs/WHY-MULTITENANT.md` — host→registry + **Next middleware→headers→`getTenantFromHeaders`** mermaid; `docs/INTERNAL/tenant-bound-sessions.md` |
+| Orientation: why / pitfalls / diagram | **Shipped** | `docs/WHY-MULTITENANT.md` — two mermaid diagrams + pitfalls + **Next steps** (examples, INDEX, frameworks, DB scope); links to errors & sessions |
 
 **Naming note:** The public API uses `resolveByHost`, `resolveByRequest`, `getTenantFromHeaders`, and `requireTenant`. Do **not** document or implement `resolveTenant()` / `getTenant()` unless adding explicit aliases with a deprecation story.
 
@@ -161,7 +161,7 @@
 | 6.1 | **Unit tests** | **Partial:** core + config + cli + database + identity + next-app + **next-pages** + **express** + **nest** + **react**; CI runs `npm test` |
 | 6.2 | **Integration tests** | **Partial:** `@multitenant/next-app` middleware + `NextRequest` / header contract (`src/middleware.integration.test.ts`) in CI |
 | 6.3 | **Examples** | **Done:** **`examples/README.md`** — runnable **`express-minimal`** (`supertest` smoke, `npm run examples:express-smoke`) + **`next-minimal`** (`next build` via turbo + RSC + `@multitenant/next-app/auto`); **`config-smoke`** unchanged; reference-only folders retained. |
-| 6.4 | **Documentation** | **Partial:** `docs/WHY-MULTITENANT.md` — why / when not / pitfalls; **two** mermaid diagrams (core resolution + Next header path); links to getting started, errors, sessions, `docs/FRAMEWORKS/next-app-router.md` |
+| 6.4 | **Documentation** | **Done:** `docs/WHY-MULTITENANT.md` — why / when not / pitfalls; **two** mermaid diagrams; **Next steps** — getting started, **examples/README**, INDEX, framework overview, next-app-router, errors, **tenant-bound-sessions**, **database-scope**. |
 
 ---
 
@@ -173,7 +173,7 @@
 |----|------|---------------------|
 | 7.1 | **README hero** | **Shipped (partial):** 30-second start + copy-paste Next `middleware.ts` + open-source links |
 | 7.2 | **Brand** | Keep `@multitenant/*` scope; consistent naming in all public docs |
-| 7.3 | **Website / demo** | **Partial:** root `README.md` — no hosted demo; points at docs + `examples/` + `multitenant init` |
+| 7.3 | **Website / demo** | **Done:** root `README.md` — no hosted SaaS; explicit **runnable** `examples/express-minimal`, `examples/next-minimal`, `examples/README`, `docs/INDEX`, `multitenant init` |
 
 ---
 
@@ -276,6 +276,7 @@ Exit criteria are mandatory; task lists are indicative.
 - **Done:** `examples/config-smoke` + CI `npm run examples:smoke`; Nest DI recipe in `docs/FRAMEWORKS/nestjs.md`.
 - **Done (docs follow-through, 2026-03):** `react-ssr.md` SSR/RSC-first + Next subsections (5.4); Nest **`TenantRequiredGuard`** copy-paste (5.3); `WHY-MULTITENANT.md` second mermaid + App Router link (6.4); `next-app-router.md` root **`middleware.ts`** shared with `lib/tenant-registry` (5.1); `@multitenant/react` **v0.5.1** hook tests (6.1).
 - **Done (2026-03):** runnable **`examples/express-minimal`**, **`examples/next-minimal`** + CI express smoke.
+- **Done (2026-03):** Phase **6.4** (`WHY-MULTITENANT` next steps) + **7.3** (README runnable examples).
 - **Open:** optional global coverage thresholds.
 
 ### Sprint E — Database / ORM (optional; Phase 8)

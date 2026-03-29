@@ -4,7 +4,7 @@ Multi-tenant + multi-market toolkit for TypeScript apps.
 
 Intro / pitfalls / diagram: [docs/WHY-MULTITENANT.md](docs/WHY-MULTITENANT.md).
 
-**Demo:** there is no hosted app in this repo — treat [docs/INDEX.md](docs/INDEX.md), [examples/](examples/README.md), and `npx multitenant init` as the hands-on walkthrough.
+**Demo:** there is no hosted SaaS in this repo — use [docs/INDEX.md](docs/INDEX.md), [examples/README.md](examples/README.md) (**runnable** [`express-minimal`](examples/express-minimal/) and [`next-minimal`](examples/next-minimal/) workspaces + `config-smoke`), and `npx multitenant init` as the hands-on path.
 
 ### 30-second start
 

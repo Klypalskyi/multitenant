@@ -4,6 +4,14 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+## [2026-03-29] Phase 6.4 + 7.3 — orientation & README demo pointers
+
+### Documentation
+
+- **`docs/WHY-MULTITENANT.md`** — **Next steps** expanded (examples, INDEX, frameworks overview, database-scope).
+- **`README.md`** — demo line names runnable **express-minimal** / **next-minimal**.
+- **`PLAN.md`** — Phase **6.4** + **7.3** **Done**; dashboard **Orientation** **Shipped**; CI row lists **drizzle/prisma** tests + **examples:express-smoke**.
+
 ## [2026-03-29] Phase 6.3 — runnable Express + Next examples
 
 ### Added

@@ -61,10 +61,13 @@ flowchart TD
 ## Next steps
 
 - [Getting started](GETTING-STARTED.md)
+- [Examples (runnable + reference)](../examples/README.md) — Express + Next minimal workspaces, `config-smoke`
+- [Docs index](INDEX.md) — configuration, CLI, framework guides
+- [Framework overview](FRAMEWORKS/overview.md) — adapter packages at a glance
 - [Next.js App Router](FRAMEWORKS/next-app-router.md) — middleware, headers, Route Handlers, Server Actions
 - [Errors](INTERNAL/errors.md)
 - [Tenant-bound sessions](INTERNAL/tenant-bound-sessions.md) — `assertAccess` + resolved tenant
-
+- [Database scope (Node)](INTERNAL/database-scope.md) — ALS + optional DB helpers (not Edge)
 </think>
 
 
