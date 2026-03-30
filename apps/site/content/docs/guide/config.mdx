@@ -342,7 +342,7 @@ import {
 } from '@multitenant/config';
 
 const ldClient = LaunchDarkly.init(process.env.LAUNCHDARKLY_SDK_KEY!);
-await ldClient.waitForInitialization({ timeout: 5 });
+await ldClient.waitForInitialization({ timeout: 5 }); // seconds
 
 // Load the base config from tenants.config.json
 const baseConfig = await loadTenantsConfig();
