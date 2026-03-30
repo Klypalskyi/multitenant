@@ -50,44 +50,516 @@ Invalid files throw **`InvalidTenantsConfigError`** — same checks as **`npx @m
 }
 ```
 
+## Full example
+
+A comprehensive example using **all** available fields:
+
+```json
+{
+  "version": 1,
+  "defaultEnvironment": "local",
+  "defaults": {
+    "environment": "local",
+    "localDomainTemplate": "{tenant}.localhost"
+  },
+  "markets": {
+    "us": {
+      "label": "United States",
+      "currency": "USD",
+      "locale": "en-US",
+      "locales": ["en-US", "es-US"],
+      "timezone": "America/New_York",
+      "primaryDomain": "us.example.com",
+      "fallbackTenant": "us-main",
+      "config": {
+        "support": { "tier": "standard", "phone": "+1-800-555-0100" }
+      },
+      "seo": {
+        "defaultTitleTemplate": "%s | Example US",
+        "defaultMetaDescription": "Example Inc. — US market",
+        "canonicalBaseUrl": "https://us.example.com"
+      },
+      "theme": {
+        "preset": "light",
+        "tokens": { "primaryColor": "#0066cc", "borderRadius": 8 }
+      }
+    },
+    "eu": {
+      "label": "Europe",
+      "currency": "EUR",
+      "locale": "en-GB",
+      "locales": ["en-GB", "de-DE", "fr-FR"],
+      "timezone": "Europe/London",
+      "primaryDomain": "eu.example.com",
+      "config": {
+        "support": { "tier": "standard" }
+      }
+    }
+  },
+  "tenants": {
+    "us-main": {
+      "label": "US Main",
+      "market": "us",
+      "domains": {
+        "local": {
+          "us.localhost": "us-main",
+          "*.us.localhost": "us-main"
+        },
+        "development": {
+          "us.dev.example.com": "us-main"
+        },
+        "staging": {
+          "us.staging.example.com": "us-main"
+        },
+        "production": {
+          "us.example.com": "us-main",
+          "www.us.example.com": { "tenant": "us-main", "basePath": "/" }
+        }
+      },
+      "paths": {
+        "basePath": "/us"
+      },
+      "flags": {
+        "newCheckout": true,
+        "darkMode": false
+      },
+      "config": {
+        "support": { "email": "help@us.example.com" }
+      },
+      "configByEnvironment": {
+        "production": {
+          "support": { "tier": "priority", "email": "vip@us.example.com" }
+        }
+      },
+      "theme": {
+        "preset": "brand-us"
+      },
+      "seo": {
+        "defaultTitleTemplate": "%s | US Store",
+        "canonicalBaseUrl": "https://us.example.com",
+        "overrides": {
+          "/sale": "Big Sale — US Store"
+        }
+      },
+      "access": {
+        "defaultRoles": ["viewer"],
+        "permissions": ["read", "write"]
+      },
+      "database": {
+        "envVar": "DATABASE_URL_US_MAIN"
+      },
+      "experiments": {
+        "checkout-v2": {
+          "forcedVariant": "new",
+          "enabled": true
+        }
+      }
+    },
+    "eu-main": {
+      "label": "EU Main",
+      "market": "eu",
+      "domains": {
+        "local": {
+          "eu.localhost": "eu-main"
+        },
+        "production": {
+          "eu.example.com": "eu-main"
+        }
+      },
+      "flags": {
+        "newCheckout": false
+      }
+    }
+  },
+  "experiments": {
+    "checkout-v2": {
+      "description": "Test the new checkout flow",
+      "defaultVariant": "control",
+      "variants": ["control", "new"]
+    }
+  }
+}
+```
+
+## Real-world example: EU tenant with country-level markets
+
+A common pattern for European businesses is one **tenant per country** with each country as its own **market** — separate currency, locale, timezone, and domain. This avoids a single catch-all `"eu"` market with mixed currencies and locales.
+
+```json
+{
+  "version": 1,
+  "defaultEnvironment": "local",
+  "markets": {
+    "de": {
+      "label": "Germany",
+      "currency": "EUR",
+      "locale": "de-DE",
+      "locales": ["de-DE", "en-DE"],
+      "timezone": "Europe/Berlin",
+      "primaryDomain": "de.example.com",
+      "config": {
+        "support": { "phone": "+49-800-000-0000" },
+        "legal": { "vatPrefix": "DE", "gdprBanner": true }
+      }
+    },
+    "es": {
+      "label": "Spain",
+      "currency": "EUR",
+      "locale": "es-ES",
+      "locales": ["es-ES", "ca-ES", "en-ES"],
+      "timezone": "Europe/Madrid",
+      "primaryDomain": "es.example.com",
+      "config": {
+        "support": { "phone": "+34-900-000-000" },
+        "legal": { "vatPrefix": "ES", "gdprBanner": true }
+      }
+    },
+    "gb": {
+      "label": "United Kingdom",
+      "currency": "GBP",
+      "locale": "en-GB",
+      "timezone": "Europe/London",
+      "primaryDomain": "uk.example.com",
+      "config": {
+        "support": { "phone": "+44-800-000-0000" },
+        "legal": { "vatPrefix": "GB", "gdprBanner": true }
+      }
+    },
+    "fr": {
+      "label": "France",
+      "currency": "EUR",
+      "locale": "fr-FR",
+      "locales": ["fr-FR", "en-FR"],
+      "timezone": "Europe/Paris",
+      "primaryDomain": "fr.example.com",
+      "config": {
+        "support": { "phone": "+33-800-000-000" },
+        "legal": { "vatPrefix": "FR", "gdprBanner": true }
+      }
+    }
+  },
+  "tenants": {
+    "eu-de": {
+      "label": "EU — Germany",
+      "market": "de",
+      "domains": {
+        "local": { "de.localhost": "eu-de" },
+        "staging": { "de.staging.example.com": "eu-de" },
+        "production": { "de.example.com": "eu-de" }
+      },
+      "flags": { "newCheckout": true },
+      "database": { "envVar": "DATABASE_URL_EU_DE" }
+    },
+    "eu-es": {
+      "label": "EU — Spain",
+      "market": "es",
+      "domains": {
+        "local": { "es.localhost": "eu-es" },
+        "staging": { "es.staging.example.com": "eu-es" },
+        "production": { "es.example.com": "eu-es" }
+      },
+      "flags": { "newCheckout": false },
+      "database": { "envVar": "DATABASE_URL_EU_ES" }
+    },
+    "eu-gb": {
+      "label": "EU — United Kingdom",
+      "market": "gb",
+      "domains": {
+        "local": { "uk.localhost": "eu-gb" },
+        "staging": { "uk.staging.example.com": "eu-gb" },
+        "production": { "uk.example.com": "eu-gb" }
+      },
+      "flags": { "newCheckout": true },
+      "database": { "envVar": "DATABASE_URL_EU_GB" }
+    },
+    "eu-fr": {
+      "label": "EU — France",
+      "market": "fr",
+      "domains": {
+        "local": { "fr.localhost": "eu-fr" },
+        "staging": { "fr.staging.example.com": "eu-fr" },
+        "production": { "fr.example.com": "eu-fr" }
+      },
+      "flags": { "newCheckout": false },
+      "database": { "envVar": "DATABASE_URL_EU_FR" }
+    }
+  }
+}
+```
+
+**Key points:**
+
+- Each **country is a market** (`de`, `es`, `gb`, `fr`) — this keeps currency (`EUR` vs `GBP`), timezone, and locale cleanly separated.
+- Each **tenant** (`eu-de`, `eu-es`, …) belongs to exactly **one** market and maps country-specific domains across environments.
+- Shared config like `legal.gdprBanner` lives in the **market `config`**; tenant-specific overrides (e.g. different `configByEnvironment` for production) layer on top via [Config merge](#config-merge).
+- Feature flags can differ per tenant — Germany and the UK opt into `newCheckout` while Spain and France do not.
+- Database URLs are per-tenant via `envVar` — the actual connection strings live in environment variables, never in the JSON file.
+
 ## Top-level fields
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| **`version`** | **`1`** | Yes | Config version. |
-| **`defaultEnvironment`** | **`local` \| `development` \| `staging` \| `production`** | No | Used when runtime does not pass an environment. |
-| **`markets`** | Record of market definitions | Yes | Currency, locale, timezone, optional **`config`** defaults (see merge below). |
-| **`tenants`** | Record of tenant definitions | Yes | Each references a **`market`** and has per-env **`domains`**. |
-| **`experiments`** | Record | No | A/B definitions; tenant overrides must reference these keys. |
-| **`defaults`** | Object | No | e.g. **`localDomainTemplate`**. |
+| **`version`** | **`1`** | Yes | Config schema version. Currently only **`1`** is supported. |
+| **`defaultEnvironment`** | **`"local"` \| `"development"` \| `"staging"` \| `"production"`** | No | Fallback environment used when the runtime does not explicitly pass one. If omitted, adapters typically default based on `NODE_ENV`. |
+| **`markets`** | **`Record<string, MarketDefinition>`** | Yes | A map of market ids to their definitions. Markets define locale, currency, and timezone for a geographic region. |
+| **`tenants`** | **`Record<string, TenantDefinition>`** | Yes | A map of tenant ids to their definitions. Each tenant belongs to a market and declares per-environment domain mappings. |
+| **`experiments`** | **`Record<string, ExperimentDefinition>`** | No | Top-level A/B experiment definitions. Tenant-level `experiments` overrides **must** reference keys declared here. |
+| **`defaults`** | **`TenantsDefaults`** | No | Global defaults applied across the config (e.g. default environment, local domain template). |
+
+---
 
 ## Markets
 
-Each key is a market id. Typical fields:
+Each key in the **`markets`** object is a **market id** (e.g. `"us"`, `"eu"`). A market groups tenants that share the same geographic / locale settings.
 
-- **`currency`**, **`locale`**, **`timezone`** (required)
-- **`locales`** (optional) — extra BCP 47 tags; must include **`locale`** if set
-- **`config`** (optional) — arbitrary defaults merged into every tenant in this market **before** tenant-level **`config`** (see **Config merge**)
+### Market fields
 
-Optional presentation / SEO / theme keys exist in the schema (labels, **`seo`**, **`theme`**) — see the Zod-driven reference in the repo if you need every field.
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| **`currency`** | `string` | Yes | ISO 4217 currency code for the market (e.g. `"USD"`, `"EUR"`, `"GBP"`). |
+| **`locale`** | `string` | Yes | Default BCP 47 locale tag (e.g. `"en-US"`, `"de-DE"`). When `locales` is set, this value **must** appear in the `locales` array. |
+| **`timezone`** | `string` | Yes | IANA timezone identifier (e.g. `"America/New_York"`, `"Europe/London"`). Used for date/time formatting. |
+| **`label`** | `string` | No | Human-readable display name for the market (e.g. `"United States"`). Useful for admin UIs and debugging. |
+| **`locales`** | `string[]` | No | All BCP 47 locale tags supported in this market (e.g. `["en-US", "es-US"]`). When set, **must** include `locale` and must not contain duplicates. Omit to support only the default `locale`. |
+| **`primaryDomain`** | `string` | No | The canonical production domain for this market (e.g. `"us.example.com"`). Informational — not used for resolution. |
+| **`fallbackTenant`** | `string` | No | Tenant key to fall back to when resolution fails within this market. |
+| **`config`** | `Record<string, unknown>` | No | Arbitrary key/value defaults. Merged into **every tenant** in this market as the **first** layer — before tenant `config` and `configByEnvironment`. See [Config merge](#config-merge). |
+| **`seo`** | `MarketSeoConfig` | No | Default SEO settings for all tenants in this market. See [SEO fields](#market-seo-fields) below. |
+| **`theme`** | `ThemeConfigRef` | No | Default theme settings for all tenants in this market. See [Theme fields](#theme-fields) below. |
+
+### Market SEO fields
+
+The **`seo`** object on a market:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| **`defaultTitleTemplate`** | `string` | Page title template (e.g. `"%s \| Example US"`). `%s` is replaced with the page title. |
+| **`defaultMetaDescription`** | `string` | Fallback `<meta name="description">` content. |
+| **`canonicalBaseUrl`** | `string` | Base URL for canonical link tags (must be a valid URL, e.g. `"https://us.example.com"`). |
+
+### Theme fields
+
+The **`theme`** object (used on both markets and tenants):
+
+| Field | Type | Description |
+|-------|------|-------------|
+| **`preset`** | `string` | Name of a theme preset (e.g. `"light"`, `"brand-us"`). Interpretation is app-specific. |
+| **`tokens`** | `Record<string, string \| number \| boolean>` | Design tokens (e.g. `{ "primaryColor": "#0066cc", "borderRadius": 8 }`). Keys and semantics are app-defined. |
+
+---
 
 ## Tenants
 
-Each key is a tenant id.
+Each key in the **`tenants`** object is a **tenant id** (e.g. `"us-main"`, `"acme"`). A tenant represents an individual site or brand served by the multitenant app.
 
-- **`market`** (required) — must exist in **`markets`**
-- **`domains`** (required) — per-environment map: **host pattern** → tenant key **string** or **`{ tenant, basePath? }`**
-  - Patterns: exact host (**`us.example.com`**) or wildcard (**`*.us.example.com`**)
-- **`flags`** — **`Record<string, boolean>`** feature toggles (see below)
-- **`config`**, **`configByEnvironment`** — merged settings (see **Config merge**)
-- **`paths.basePath`**, **`theme`**, **`seo`**, **`access`**, **`experiments`**, **`database`** (per-tenant DB **env var name** only — not a raw URL)
+### Tenant fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| **`market`** | `string` | Yes | The market this tenant belongs to. **Must** match a key in `markets`. |
+| **`domains`** | `Partial<Record<EnvironmentName, DomainMap>>` | Yes | Per-environment domain-to-tenant mappings. See [Domain mapping](#domain-mapping) below. |
+| **`label`** | `string` | No | Human-readable display name (e.g. `"US Main"`). |
+| **`paths`** | `{ basePath?: string }` | No | Optional base path prefix. When set, the tenant is served under this subpath (e.g. `"/us"` → `example.com/us/…`). |
+| **`flags`** | `Record<string, boolean>` | No | Boolean feature toggles (e.g. `{ "newCheckout": true, "darkMode": false }`). See [Feature flags](#feature-flags-flags). |
+| **`config`** | `Record<string, unknown>` | No | Arbitrary tenant-level config. Merged **after** market `config` and **before** `configByEnvironment`. See [Config merge](#config-merge). |
+| **`configByEnvironment`** | `Partial<Record<EnvironmentName, Record<string, unknown>>>` | No | Per-environment config overlays. Each key (`local`, `development`, `staging`, `production`) holds a config object that is merged **last** — after market `config` and tenant `config`. See [Config merge](#config-merge). |
+| **`theme`** | `ThemeConfigRef` | No | Tenant-level theme overrides. Same shape as the market [Theme fields](#theme-fields). |
+| **`seo`** | `TenantSeoConfig` | No | Tenant-level SEO settings. Extends the market SEO shape with an optional `overrides` map. See [Tenant SEO fields](#tenant-seo-fields). |
+| **`access`** | `TenantAccessConfig` | No | Access control defaults. See [Access fields](#access-fields). |
+| **`database`** | `TenantDatabaseConfig` | No | Per-tenant database connection. See [Database fields](#database-fields). |
+| **`experiments`** | `Record<string, { forcedVariant?: string; enabled?: boolean }>` | No | Per-tenant experiment overrides. Every key **must** reference a top-level `experiments` entry. See [Experiments](#experiments). |
+
+### Domain mapping
+
+The **`domains`** object maps each environment to a **`DomainMap`** — a record of **host patterns** to **domain targets**.
+
+**Environment names:** `"local"`, `"development"`, `"staging"`, `"production"`.
+
+**Host patterns:**
+- **Exact host** — `"us.example.com"` matches only that hostname.
+- **Wildcard** — `"*.us.example.com"` matches any subdomain (e.g. `shop.us.example.com`).
+
+**Domain target** can be one of:
+- A **string** — the tenant key (e.g. `"us-main"`).
+- An **object** — `{ "tenant": "us-main", "basePath": "/us" }` for tenants served under a subpath.
+
+```json
+"domains": {
+  "local": {
+    "us.localhost": "us-main",
+    "*.us.localhost": "us-main"
+  },
+  "production": {
+    "us.example.com": "us-main",
+    "www.us.example.com": { "tenant": "us-main", "basePath": "/" }
+  }
+}
+```
+
+### Tenant SEO fields
+
+The tenant **`seo`** object extends the market SEO shape:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| **`defaultTitleTemplate`** | `string` | Page title template (overrides market value). |
+| **`defaultMetaDescription`** | `string` | Fallback meta description (overrides market value). |
+| **`canonicalBaseUrl`** | `string` | Canonical base URL (overrides market value). |
+| **`overrides`** | `Record<string, string>` | Path-specific title overrides (e.g. `{ "/sale": "Big Sale — US Store" }`). |
+
+### Access fields
+
+The **`access`** object controls authorization defaults:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| **`defaultRoles`** | `string[]` | Roles assigned by default to users in this tenant (e.g. `["viewer"]`). |
+| **`permissions`** | `string[]` | Permissions available in this tenant (e.g. `["read", "write"]`). |
+
+### Database fields
+
+The **`database`** object configures per-tenant database connectivity:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| **`envVar`** | `string` | The **name** of an environment variable that holds the database connection URL at runtime (e.g. `"DATABASE_URL_US_MAIN"`). Must be a valid env var name (letters, digits, underscores). |
+
+> **Security:** Never put raw connection URLs or credentials in `tenants.config.json` — it is checked into source control. Instead, store database URLs in environment variables and reference them by name via `envVar`. At runtime, use `resolveTenantDatabaseUrl` from `@multitenant/database` to read the actual connection string from the environment.
 
 ### Feature flags (`flags`)
 
-Server: **`isTenantFeatureEnabled(registry, tenantKey, name)`** in **`@multitenant/core`**.  
+Server: **`isTenantFeatureEnabled(registry, tenantKey, name)`** in **`@multitenant/core`**.
 Client: **`useTenantFlag(name)`** when you have a resolved tenant in context.
 
-There is **no** separate **`features`** field — if a CMS says “features”, **map** that object into **`flags`** before **`validateTenantsConfig`**.
+There is **no** separate **`features`** field — if a CMS says "features", **map** that object into **`flags`** before **`validateTenantsConfig`**.
+
+```json
+"flags": {
+  "newCheckout": true,
+  "darkMode": false
+}
+```
+
+#### Using 3rd-party feature flag providers
+
+Static `flags` in `tenants.config.json` work well for simple per-tenant toggles, but production apps often rely on **dynamic** feature flag services like [LaunchDarkly](https://launchdarkly.com/) or [Split.io](https://www.split.io/).
+
+The recommended pattern is to **sync** the external provider's evaluation into multitenant's `flags` at boot time (or periodically), so the rest of your app can use the unified `isTenantFeatureEnabled` / `useTenantFlag` API.
+
+##### LaunchDarkly example
+
+```ts
+import * as LaunchDarkly from '@launchdarkly/node-server-sdk';
+import {
+  loadTenantsConfig,
+  validateTenantsConfig,
+} from '@multitenant/config';
+
+const ldClient = LaunchDarkly.init(process.env.LAUNCHDARKLY_SDK_KEY!);
+await ldClient.waitForInitialization({ timeout: 5 }); // seconds
+
+// Load the base config from tenants.config.json
+const baseConfig = await loadTenantsConfig();
+
+// For each tenant, evaluate LaunchDarkly flags and merge them in
+for (const [tenantKey, tenant] of Object.entries(baseConfig.tenants)) {
+  const ldContext = { kind: 'tenant', key: tenantKey };
+  const newCheckout = await ldClient.variation('new-checkout', ldContext, false);
+  const darkMode    = await ldClient.variation('dark-mode', ldContext, false);
+
+  tenant.flags = {
+    ...tenant.flags,      // keep any static flags from JSON
+    newCheckout,           // override with LaunchDarkly value
+    darkMode,
+  };
+}
+
+const config = validateTenantsConfig(baseConfig);
+// → createTenantRegistry(config)  — flags now include LD values
+```
+
+##### Split.io example
+
+```ts
+import { SplitFactory } from '@splitsoftware/splitio';
+import {
+  loadTenantsConfig,
+  validateTenantsConfig,
+} from '@multitenant/config';
+
+const factory = SplitFactory({
+  core: { authorizationKey: process.env.SPLIT_API_KEY! },
+});
+const splitClient = factory.client();
+await new Promise<void>((resolve) => splitClient.on(splitClient.Event.SDK_READY, resolve));
+
+const baseConfig = await loadTenantsConfig();
+
+for (const [tenantKey, tenant] of Object.entries(baseConfig.tenants)) {
+  const newCheckout = splitClient.getTreatment(tenantKey, 'new-checkout') === 'on';
+  const darkMode    = splitClient.getTreatment(tenantKey, 'dark-mode')    === 'on';
+
+  tenant.flags = {
+    ...tenant.flags,
+    newCheckout,
+    darkMode,
+  };
+}
+
+const config = validateTenantsConfig(baseConfig);
+// → createTenantRegistry(config)  — flags now include Split values
+```
+
+##### Why sync into `flags`?
+
+- **Single API** — `isTenantFeatureEnabled` and `useTenantFlag` work the same regardless of where flag values originate.
+- **Edge-safe** — external SDKs are Node-only; syncing once at boot means Edge middleware and React client code still read plain `boolean` flags without importing heavy SDKs.
+- **Testable** — unit tests only need to set `flags` in the config fixture; no mocking of external SDKs.
+- **Incremental migration** — start with static JSON flags, then swap in LaunchDarkly or Split for specific flags without changing consumer code.
+
+---
+
+## Experiments
+
+Top-level **`experiments`** define A/B tests available across the app. Each key is an experiment id.
+
+### Experiment fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| **`defaultVariant`** | `string` | Yes | The variant used when no override is active (e.g. `"control"`). |
+| **`variants`** | `string[]` | Yes | All possible variant names (minimum one). Must include `defaultVariant`. |
+| **`description`** | `string` | No | Human-readable description of the experiment. |
+
+**Tenant overrides** — tenants can override experiments in their **`experiments`** field:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| **`forcedVariant`** | `string` | Pin this tenant to a specific variant (e.g. `"new"`). |
+| **`enabled`** | `boolean` | Enable or disable the experiment for this tenant. |
+
+```json
+"experiments": {
+  "checkout-v2": {
+    "description": "Test the new checkout flow",
+    "defaultVariant": "control",
+    "variants": ["control", "new"]
+  }
+}
+```
+
+---
+
+## Defaults
+
+The optional **`defaults`** object provides global settings:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| **`environment`** | `EnvironmentName` | Default environment (`"local"`, `"development"`, `"staging"`, `"production"`). |
+| **`localDomainTemplate`** | `string` | Template for auto-generating local domains (e.g. `"{tenant}.localhost"`). The `{tenant}` placeholder is replaced with the tenant key. |
+
+---
 
 ## Config merge
 
