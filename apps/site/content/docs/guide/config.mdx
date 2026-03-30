@@ -326,6 +326,83 @@ There is **no** separate **`features`** field — if a CMS says "features", **ma
 }
 ```
 
+#### Using 3rd-party feature flag providers
+
+Static `flags` in `tenants.config.json` work well for simple per-tenant toggles, but production apps often rely on **dynamic** feature flag services like [LaunchDarkly](https://launchdarkly.com/) or [Split.io](https://www.split.io/).
+
+The recommended pattern is to **sync** the external provider's evaluation into multitenant's `flags` at boot time (or periodically), so the rest of your app can use the unified `isTenantFeatureEnabled` / `useTenantFlag` API.
+
+##### LaunchDarkly example
+
+```ts
+import * as LaunchDarkly from '@launchdarkly/node-server-sdk';
+import {
+  loadTenantsConfig,
+  validateTenantsConfig,
+} from '@multitenant/config';
+
+const ldClient = LaunchDarkly.init(process.env.LAUNCHDARKLY_SDK_KEY!);
+await ldClient.waitForInitialization({ timeout: 5 });
+
+// Load the base config from tenants.config.json
+const baseConfig = await loadTenantsConfig();
+
+// For each tenant, evaluate LaunchDarkly flags and merge them in
+for (const [tenantKey, tenant] of Object.entries(baseConfig.tenants)) {
+  const ldContext = { kind: 'tenant', key: tenantKey };
+  const newCheckout = await ldClient.variation('new-checkout', ldContext, false);
+  const darkMode    = await ldClient.variation('dark-mode', ldContext, false);
+
+  tenant.flags = {
+    ...tenant.flags,      // keep any static flags from JSON
+    newCheckout,           // override with LaunchDarkly value
+    darkMode,
+  };
+}
+
+const config = validateTenantsConfig(baseConfig);
+// → createTenantRegistry(config)  — flags now include LD values
+```
+
+##### Split.io example
+
+```ts
+import { SplitFactory } from '@splitsoftware/splitio';
+import {
+  loadTenantsConfig,
+  validateTenantsConfig,
+} from '@multitenant/config';
+
+const factory = SplitFactory({
+  core: { authorizationKey: process.env.SPLIT_API_KEY! },
+});
+const splitClient = factory.client();
+await new Promise<void>((resolve) => splitClient.on(splitClient.Event.SDK_READY, resolve));
+
+const baseConfig = await loadTenantsConfig();
+
+for (const [tenantKey, tenant] of Object.entries(baseConfig.tenants)) {
+  const newCheckout = splitClient.getTreatment(tenantKey, 'new-checkout') === 'on';
+  const darkMode    = splitClient.getTreatment(tenantKey, 'dark-mode')    === 'on';
+
+  tenant.flags = {
+    ...tenant.flags,
+    newCheckout,
+    darkMode,
+  };
+}
+
+const config = validateTenantsConfig(baseConfig);
+// → createTenantRegistry(config)  — flags now include Split values
+```
+
+##### Why sync into `flags`?
+
+- **Single API** — `isTenantFeatureEnabled` and `useTenantFlag` work the same regardless of where flag values originate.
+- **Edge-safe** — external SDKs are Node-only; syncing once at boot means Edge middleware and React client code still read plain `boolean` flags without importing heavy SDKs.
+- **Testable** — unit tests only need to set `flags` in the config fixture; no mocking of external SDKs.
+- **Incremental migration** — start with static JSON flags, then swap in LaunchDarkly or Split for specific flags without changing consumer code.
+
 ---
 
 ## Experiments
