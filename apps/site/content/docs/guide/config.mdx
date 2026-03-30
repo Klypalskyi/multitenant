@@ -181,6 +181,120 @@ A comprehensive example using **all** available fields:
 }
 ```
 
+## Real-world example: EU tenant with country-level markets
+
+A common pattern for European businesses is one **tenant per country** with each country as its own **market** — separate currency, locale, timezone, and domain. This avoids a single catch-all `"eu"` market with mixed currencies and locales.
+
+```json
+{
+  "version": 1,
+  "defaultEnvironment": "local",
+  "markets": {
+    "de": {
+      "label": "Germany",
+      "currency": "EUR",
+      "locale": "de-DE",
+      "locales": ["de-DE", "en-DE"],
+      "timezone": "Europe/Berlin",
+      "primaryDomain": "de.example.com",
+      "config": {
+        "support": { "phone": "+49-800-000-0000" },
+        "legal": { "vatPrefix": "DE", "gdprBanner": true }
+      }
+    },
+    "es": {
+      "label": "Spain",
+      "currency": "EUR",
+      "locale": "es-ES",
+      "locales": ["es-ES", "ca-ES", "en-ES"],
+      "timezone": "Europe/Madrid",
+      "primaryDomain": "es.example.com",
+      "config": {
+        "support": { "phone": "+34-900-000-000" },
+        "legal": { "vatPrefix": "ES", "gdprBanner": true }
+      }
+    },
+    "gb": {
+      "label": "United Kingdom",
+      "currency": "GBP",
+      "locale": "en-GB",
+      "timezone": "Europe/London",
+      "primaryDomain": "uk.example.com",
+      "config": {
+        "support": { "phone": "+44-800-000-0000" },
+        "legal": { "vatPrefix": "GB", "gdprBanner": true }
+      }
+    },
+    "fr": {
+      "label": "France",
+      "currency": "EUR",
+      "locale": "fr-FR",
+      "locales": ["fr-FR", "en-FR"],
+      "timezone": "Europe/Paris",
+      "primaryDomain": "fr.example.com",
+      "config": {
+        "support": { "phone": "+33-800-000-000" },
+        "legal": { "vatPrefix": "FR", "gdprBanner": true }
+      }
+    }
+  },
+  "tenants": {
+    "eu-de": {
+      "label": "EU — Germany",
+      "market": "de",
+      "domains": {
+        "local": { "de.localhost": "eu-de" },
+        "staging": { "de.staging.example.com": "eu-de" },
+        "production": { "de.example.com": "eu-de" }
+      },
+      "flags": { "newCheckout": true },
+      "database": { "envVar": "DATABASE_URL_EU_DE" }
+    },
+    "eu-es": {
+      "label": "EU — Spain",
+      "market": "es",
+      "domains": {
+        "local": { "es.localhost": "eu-es" },
+        "staging": { "es.staging.example.com": "eu-es" },
+        "production": { "es.example.com": "eu-es" }
+      },
+      "flags": { "newCheckout": false },
+      "database": { "envVar": "DATABASE_URL_EU_ES" }
+    },
+    "eu-gb": {
+      "label": "EU — United Kingdom",
+      "market": "gb",
+      "domains": {
+        "local": { "uk.localhost": "eu-gb" },
+        "staging": { "uk.staging.example.com": "eu-gb" },
+        "production": { "uk.example.com": "eu-gb" }
+      },
+      "flags": { "newCheckout": true },
+      "database": { "envVar": "DATABASE_URL_EU_GB" }
+    },
+    "eu-fr": {
+      "label": "EU — France",
+      "market": "fr",
+      "domains": {
+        "local": { "fr.localhost": "eu-fr" },
+        "staging": { "fr.staging.example.com": "eu-fr" },
+        "production": { "fr.example.com": "eu-fr" }
+      },
+      "flags": { "newCheckout": false },
+      "database": { "envVar": "DATABASE_URL_EU_FR" }
+    }
+  }
+}
+```
+
+**Key points:**
+
+- Each **country is a market** (`de`, `es`, `gb`, `fr`) — this keeps currency (`EUR` vs `GBP`), timezone, and locale cleanly separated.
+- Each **tenant** (`eu-de`, `eu-es`, …) belongs to exactly **one** market and maps country-specific domains across environments.
+- Shared config like `legal.gdprBanner` lives in the **market `config`**; tenant-specific overrides (e.g. different `configByEnvironment` for production) layer on top via [Config merge](#config-merge).
+- Feature flags can differ per tenant — Germany and the UK opt into `newCheckout` while Spain and France do not.
+- Database URLs are per-tenant via `envVar` — the actual connection strings live in environment variables, never in the JSON file.
+
 ## Top-level fields
 
 | Field | Type | Required | Description |
