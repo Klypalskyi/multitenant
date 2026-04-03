@@ -1,0 +1,118 @@
+---
+title: Cache Command
+description: Manage the build-time fetch cache from the CLI.
+---
+
+The `multitenant cache` command helps you manage the build-time request cache, view statistics, and invalidate cached data by locale.
+
+## Usage
+
+```bash
+multitenant cache [options]
+```
+
+## Options
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `--stats` | flag | Print cache statistics (entry counts, last modified time per locale) |
+| `--locale <locale>` | string | Invalidate specific locale(s) (repeatable, or use `all`) |
+| `--cache-dir <dir>` | string | Custom cache directory (default: `.next/.build-cache`) |
+| `--cwd <dir>` | string | Working directory (default: current directory) |
+| `--help` | flag | Show help message |
+
+## Examples
+
+### View Cache Statistics
+
+```bash
+multitenant cache --stats
+```
+
+Output:
+```
+Cache stats (.next/.build-cache):
+  en-US: 42 entries, last cached 2026-04-03T10:30:45.123Z
+  es-US: 38 entries, last cached 2026-04-03T10:31:12.456Z
+  Total: 80 entries
+```
+
+### Invalidate Single Locale
+
+```bash
+multitenant cache --locale en-US
+```
+
+Output:
+```
+Invalidated cache for locale: en-US
+```
+
+### Invalidate Multiple Locales
+
+```bash
+multitenant cache --locale en-US --locale es-US --locale fr-CA
+```
+
+Output:
+```
+Invalidated cache for locale: en-US
+Invalidated cache for locale: es-US
+Invalidated cache for locale: fr-CA
+```
+
+### Invalidate All Locales
+
+```bash
+multitenant cache --locale all
+```
+
+Output:
+```
+Invalidated cache for all locales
+```
+
+## Common Workflows
+
+### Before Production Deploy
+
+```bash
+# View current cache size
+multitenant cache --stats
+
+# Invalidate caches for markets that changed content
+multitenant cache --locale en-US --locale es-US
+
+# Rebuild with fresh data
+npm run build
+```
+
+### CMS Webhook Integration
+
+Create a webhook in your CMS (Contentful, Sanity, etc.) that calls:
+
+```bash
+multitenant cache --locale all && npm run build
+```
+
+This ensures your site always builds with the latest CMS data.
+
+### Development: Clear All Caches
+
+```bash
+multitenant cache --locale all
+```
+
+## Cache Location
+
+By default, cache is stored at `.next/.build-cache/`. To use a custom location:
+
+```bash
+multitenant cache --stats --cache-dir .cache/build
+multitenant cache --locale all --cache-dir .cache/build
+```
+
+## See Also
+
+- [Build-Time Cache Guide](../guide/build-time-cache)
+- [Build-Time Cache Documentation](../../BUILD-TIME-CACHE.md)

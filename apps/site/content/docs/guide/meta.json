@@ -2,5 +2,5 @@
   "title": "Guide",
   "icon": "BookOpen",
   "defaultOpen": true,
-  "pages": ["quick-start", "getting-started", "config"]
+  "pages": ["quick-start", "getting-started", "config", "build-time-cache"]
 }

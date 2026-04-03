@@ -39,6 +39,8 @@ Peers: **`next`**, and typically **`@multitenant/core`** for **`createTenantRegi
 
 - **`createTenantMiddleware(registry, options?)`** — sets resolution headers; **`onMissingTenant`**: **`'passthrough'`** | **`'warn'`** | **`'throw'`**
 - **`getTenantFromHeaders`**, **`requireTenant`** — in Server Components / Route Handlers / **`nodejs`** runtime
+- **`cachedFetch<T>(url, { locale, ... })`** — build-time request cache to reduce redundant CMS API calls across locales
+- **`createTenantCachedFetch<T>(registry, tenantKey, options?)`** — cached fetch pre-bound to a tenant's locale
 
 ### Resolution vs data access
 
@@ -168,7 +170,62 @@ Install **`@multitenant/next-pages`**, **`next`**, **`react`**, **`@multitenant/
 
 For the App Router, see [Next.js — App Router](#nextjs-app-router) above.
 
+---
+
+<a id="nextjs-build-cache" />
+
+## Build-Time Request Cache (App Router)
+
+For multi-locale builds, `@multitenant/next-app` includes a built-in cache for fetch requests during `next build`. This dramatically reduces redundant API calls to Contentful, Sanity, Stripe, and other external services.
+
+### Quick Example
+
+```ts
+import { cachedFetch } from '@multitenant/next-app';
+
+export async function generateStaticParams() {
+  const data = await cachedFetch<PagesData>(
+    'https://api.contentful.com/pages',
+    { locale: 'en-US', debug: true },
+  );
+  return data.pages.map((p) => ({ slug: p.slug }));
+}
+```
+
+### How It Works
+
+1. During `next build`: check cache → on miss: fetch → store to `.next/.build-cache/`
+2. During `next dev` / runtime: pass through to native `fetch()` (no caching)
+3. CLI: `multitenant cache --stats` to view entries; `multitenant cache --locale all` to clear
+
+### Why It Helps
+
+Multi-locale builds without cache:
+- Build 4 locales × 10 endpoints = **40 API calls**
+- Rate limits exhausted
+- Longer builds
+
+With cache:
+- First locale: fetch all 10 endpoints
+- Next 3 locales: reuse cached data
+- Result: **13 API calls** (70% reduction)
+
+### APIs
+
+| Export | Use case |
+|--------|----------|
+| **`cachedFetch<T>(url, { locale, debug?, ... })`** | Simple per-locale caching |
+| **`createTenantCachedFetch<T>(registry, tenantKey, options?)`** | Pre-bound to tenant's market locale; override per-call |
+| **`getCacheStats()`** | Observe hit/miss counts |
+
+### Learn More
+
+Full guide, performance notes, invalidation strategies, and examples: [Build-Time Cache](/docs/guide/build-time-cache).
+
+---
+
 ## See also
 
 - [`@multitenant/react`](/docs/packages/react) — client context from the same headers as App Router
+- [Build-Time Cache guide](/docs/guide/build-time-cache) — detailed API & examples
 - [Home](/docs) — adapters & package map

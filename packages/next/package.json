@@ -1,6 +1,6 @@
 {
   "name": "@multitenant/next",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Meta-package: re-exports @multitenant/core, config, react, next-app for a single install line",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

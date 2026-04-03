@@ -141,3 +141,14 @@ export function requireTenant(
 }
 
 export type { TenantRegistry, ResolvedTenant, EnvironmentName } from '@multitenant/core';
+export {
+  cachedFetch,
+  createTenantCachedFetch,
+  getCacheStats,
+  resetCacheStats,
+  DEFAULT_CACHE_DIR,
+  type CachedFetchOptions,
+  type TenantCachedFetchOptions,
+  type CacheEntryStats,
+  type CacheLogEvent,
+} from './cache';

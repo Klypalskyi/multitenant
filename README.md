@@ -54,6 +54,7 @@ See [Next App Router checklist](docs/FRAMEWORKS/next-app-router.md) for Edge vs 
   - `multitenant check` – validate `tenants.config.json`
   - `multitenant print` – print tenants/markets summary
   - `multitenant dev` – local proxy with per-tenant subdomains
+  - `multitenant cache` – manage build-time request cache (view stats, invalidate per-locale)
 
 ### Packages
 

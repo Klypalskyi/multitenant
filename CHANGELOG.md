@@ -4,6 +4,12 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ## [Unreleased]
 
+### Added
+
+- **`@multitenant/next-app`** — build-time request cache: `cachedFetch` and `createTenantCachedFetch` for multi-locale builds. Reduces redundant API calls to CMS/data services during `next build` by caching responses at `.next/.build-cache/locales/<locale>/<hash>.json`. Includes `getCacheStats()` and `resetCacheStats()` for observability. Zero overhead outside `next build`.
+- **`@multitenant/cli`** — cache commands: `multitenant cache --stats` (view cache entries per locale) and `multitenant cache --locale [locale]` (invalidate cache for specific locales or `all`).
+- **`docs/BUILD-TIME-CACHE.md`** — comprehensive guide: problem statement, design decisions, API reference (cachedFetch, createTenantCachedFetch, CLI), examples, performance notes, and invalidation strategies.
+
 ## [2026-03-30] v0.6.20 — `@multitenant/dev-proxy` 0.4.2 + site docs
 
 ### Fixed

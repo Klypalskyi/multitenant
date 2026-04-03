@@ -11,8 +11,10 @@ Multi-tenant and multi-market management for TypeScript apps.
 - [Configuration reference](CONFIG/tenants-config.md) – `tenants.config.json` schema
 - [CLI: init](CLI/init.md) – `multitenant init` (scaffold config + optional framework stubs)
 - [CLI: dev / check / print](CLI/tenantify-dev.md) – `multitenant dev`, `check`, `print`
+- [CLI: cache](CLI/cache.md) – `multitenant cache` (view & invalidate build-time cache)
+- [Build-time request cache](BUILD-TIME-CACHE.md) – `cachedFetch`, `createTenantCachedFetch`, multi-locale optimization
 - [Frameworks](FRAMEWORKS/overview.md) – Next.js, React, Express, Nest
-- [Next.js App Router checklist](FRAMEWORKS/next-app-router.md) – Edge vs Node, middleware, Server Actions
+- [Next.js App Router checklist](FRAMEWORKS/next-app-router.md) – Edge vs Node, middleware, Server Actions, build cache
 - [Express](FRAMEWORKS/express.md) – `multitenantExpress`, `onMissingTenant`, typings
 - [NestJS](FRAMEWORKS/nestjs.md) – module, `@Tenant()`, null tenant
 - [React SSR / RSC](FRAMEWORKS/react-ssr.md) – `TenantProvider`, serializable `ResolvedTenant` vs registry, then Next.js examples
