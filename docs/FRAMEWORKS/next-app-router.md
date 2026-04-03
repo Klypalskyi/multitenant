@@ -149,9 +149,41 @@ To **force Node** for a subtree (e.g. before adding Edge‑unsafe code), set on 
 
 - Integration-style tests in this repo: `packages/next-app/src/middleware.integration.test.ts` (middleware + `NextRequest`, header propagation contract).
 
+## Build-time request caching (optional)
+
+For multi-locale builds, `@multitenant/next-app` exports `cachedFetch()` and `createTenantCachedFetch()` to cache fetch requests during `next build`. This reduces redundant API calls to Contentful, Sanity, Stripe, and other external services when pre-rendering across multiple locales.
+
+**When to use:** Multi-locale builds with shared content fetched from external APIs.
+
+**Quick example:**
+
+```ts
+import { cachedFetch } from '@multitenant/next-app';
+
+export async function generateStaticParams() {
+  const data = await cachedFetch<PagesData>(
+    'https://api.contentful.com/pages',
+    {
+      locale: process.env.NEXT_LOCALE || 'en-US',
+      debug: true, // log cache hits/misses
+    },
+  );
+  return data.pages.map((p) => ({ slug: p.slug }));
+}
+```
+
+**Features:**
+- Active only during `next build` (zero overhead in `next dev` or runtime)
+- Locale-scoped caching (same URL, different results per locale if needed)
+- Filesystem storage in `.next/.build-cache/locales/<locale>/`
+- CLI to view stats and invalidate cache: `multitenant cache --stats`
+
+See [Build-time cache guide](../BUILD-TIME-CACHE.md) for full API, examples, and strategies.
+
 ## See also
 
 - [Framework overview](overview.md)
+- [Build-time cache guide](../BUILD-TIME-CACHE.md) — cachedFetch, createTenantCachedFetch, CLI
 - [React SSR / RSC + `TenantProvider`](react-ssr.md) — server/client boundary; Next layout example
 - [CLI: init](../CLI/init.md) — generated `middleware` stub
 - [Internal: database scope](../INTERNAL/database-scope.md) — Node ALS for DB layers

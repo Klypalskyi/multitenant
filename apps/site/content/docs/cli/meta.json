@@ -2,5 +2,5 @@
   "title": "CLI",
   "icon": "Terminal",
   "defaultOpen": true,
-  "pages": ["init", "dev-check-print"]
+  "pages": ["init", "dev-check-print", "cache"]
 }

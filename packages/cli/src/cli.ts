@@ -8,6 +8,7 @@ import { createTenantRegistry } from '@multitenant/core';
 import { startDevProxy } from '@multitenant/dev-proxy';
 import chokidar from 'chokidar';
 import { runInit, InitAbortedError, type InitFramework } from './init';
+import { invalidateCache, printCacheStats } from './cache-invalidate';
 
 const program = new Command();
 
@@ -186,5 +187,33 @@ program
       process.exit(0);
     });
   });
+
+program
+  .command('cache')
+  .description('Manage the build-time fetch cache')
+  .option(
+    '-l, --locale <locale>',
+    'Locale(s) to invalidate (repeatable, or "all")',
+    (val, prev: string[]) => [...prev, val],
+    [] as string[],
+  )
+  .option('--stats', 'Print cache stats (entry counts per locale)')
+  .option('--cache-dir <dir>', 'Cache directory (default: .next/.build-cache)')
+  .option('--cwd <dir>', 'Working directory', process.cwd())
+  .action(
+    async (opts: { locale: string[]; stats?: boolean; cacheDir?: string; cwd: string }) => {
+      if (opts.stats) {
+        await printCacheStats({ cacheDir: opts.cacheDir, cwd: opts.cwd });
+        return;
+      }
+
+      if (opts.locale.length === 0) {
+        console.error('Error: pass --locale <locale> or --stats');
+        process.exit(1);
+      }
+
+      await invalidateCache({ locales: opts.locale, cacheDir: opts.cacheDir, cwd: opts.cwd });
+    },
+  );
 
 program.parse();
