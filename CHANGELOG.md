@@ -6,8 +6,11 @@ All notable changes to this project are documented here. Each `@multitenant/*` p
 
 ### Added
 
+- **`@multitenant/contentful`** — Contentful SDK wrapper with build-time caching. Wraps SDK methods (getEntries, getEntry, getAsset, etc.) with transparent, three-layer cache: (1) inflight Promise dedup (concurrent callers share one API request), (2) filesystem persistence (`.next/.build-cache/locales/{locale}/{hash}.json`), (3) real SDK call. Framework-agnostic build-phase detection (`isBuildPhase` injectable). Includes `getCacheStats()`, `resetCacheStats()`, debug logging, and structured log events. Two public factories: `createCachedContentfulClient(sdkClient, options)` (direct wrapping) and `createTenantContentfulClient(registry, tenantKey, sdkConfig, options?)` (TenantRegistry integration).
 - **`@multitenant/next-app`** — build-time request cache: `cachedFetch` and `createTenantCachedFetch` for multi-locale builds. Reduces redundant API calls to CMS/data services during `next build` by caching responses at `.next/.build-cache/locales/<locale>/<hash>.json`. Includes `getCacheStats()` and `resetCacheStats()` for observability. Zero overhead outside `next build`.
 - **`@multitenant/cli`** — cache commands: `multitenant cache --stats` (view cache entries per locale) and `multitenant cache --locale [locale]` (invalidate cache for specific locales or `all`).
+- **`docs/CONTENTFUL.md`** — comprehensive Contentful caching guide: problem statement (race condition, no persistence, request-scoped cache), architecture (three-layer cache), API reference, framework-agnostic build detection, cache key format, CLI integration, migration example, and verification.
+- **`apps/site/content/docs/guide/contentful-cache.mdx`** — site guide: when to use Contentful caching, quick start, TenantRegistry integration, framework-specific build detection, observability, real-world example, performance impact.
 - **`docs/BUILD-TIME-CACHE.md`** — comprehensive guide: problem statement, design decisions, API reference (cachedFetch, createTenantCachedFetch, CLI), examples, performance notes, and invalidation strategies.
 
 ## [2026-03-30] v0.6.20 — `@multitenant/dev-proxy` 0.4.2 + site docs

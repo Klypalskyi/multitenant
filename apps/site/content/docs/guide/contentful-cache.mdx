@@ -1,0 +1,246 @@
+---
+title: Contentful SDK Caching
+description: Build-time caching for Contentful SDK calls with inflight deduplication and persistence
+icon: Box
+---
+
+When building multi-locale sites with Contentful, your build scripts call the Contentful API repeatedly:
+- Multiple `generateStaticParams` calls fetch the same slugs across pages
+- Each locale's build runs separately, refetching the same entries
+- Every new build starts cold — no warm-up cache
+
+## The Problem
+
+The `cachedFetch` utility in `@multitenant/next-app` works great for REST APIs, but it **cannot cache Contentful SDK calls**. The SDK uses its own internal HTTP layer, not native `fetch()`.
+
+A naive in-memory cache breaks under concurrent load:
+
+```typescript
+// ❌ This pattern fails at scale
+const cache = new Map();
+async function getCachedEntry(id) {
+  if (cache.has(id)) return cache.get(id);  // ← Check
+  const data = await contentful.getEntry(id);  // ← Act
+  cache.set(id, data);  // 10 concurrent callers all fire getEntry()!
+  return data;
+}
+```
+
+`@multitenant/contentful` fixes this by storing the **Promise** (not the resolved value):
+
+```typescript
+// ✅ Concurrent callers share one Promise
+const inflightMap = new Map();
+async function getCachedEntry(id) {
+  const inFlight = inflightMap.get(id);
+  if (inFlight) return inFlight;  // Same Promise, one API call
+  
+  const promise = contentful.getEntry(id);
+  inflightMap.set(id, promise);
+  return promise;
+}
+```
+
+## Solution
+
+`@multitenant/contentful` wraps the Contentful SDK with a three-layer cache:
+
+1. **Inflight dedup** — concurrent callers share one Promise
+2. **Filesystem persistence** — results survive build restarts
+3. **Real API call** — only when cache misses
+
+### Installation
+
+```bash
+npm install @multitenant/contentful
+```
+
+### Quick Start
+
+```typescript
+import { createClient } from 'contentful';
+import { createCachedContentfulClient } from '@multitenant/contentful';
+
+const rawClient = createClient({
+  space: process.env.CONTENTFUL_SPACE_ID!,
+  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
+});
+
+const client = createCachedContentfulClient(rawClient, {
+  spaceId: process.env.CONTENTFUL_SPACE_ID!,
+  locale: 'en-US',
+  debug: true,
+});
+
+// First call: API hit
+const entries = await client.getEntries({ content_type: 'page' });
+
+// Subsequent calls: cache hit (filesystem or inflight)
+const entriesAgain = await client.getEntries({ content_type: 'page' });
+```
+
+## With TenantRegistry
+
+If you're using `@multitenant/core`'s `TenantRegistry`, use the convenience factory:
+
+```typescript
+import { createTenantRegistry } from '@multitenant/core';
+import { createTenantContentfulClient } from '@multitenant/contentful';
+
+const registry = createTenantRegistry();
+
+// Locale is auto-resolved from registry.markets[tenant.marketKey].locale
+const client = createTenantContentfulClient(
+  registry,
+  'us-main',
+  {
+    spaceId: process.env.CONTENTFUL_SPACE_ID!,
+    accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
+  },
+  { debug: true },
+);
+
+const entries = await client.getEntries({ content_type: 'page' });
+```
+
+## Framework-Agnostic Build Detection
+
+By default, the cache only persists to disk during `next build` (when `NEXT_PHASE === 'phase-production-build'`). For other frameworks, pass a custom detector:
+
+**Gatsby:**
+```typescript
+const client = createCachedContentfulClient(rawClient, {
+  spaceId: 'abc123',
+  locale: 'en-US',
+  isBuildPhase: () => process.env.GATSBY_BUILD_STAGE === 'build-html',
+});
+```
+
+**Remix:**
+```typescript
+const client = createCachedContentfulClient(rawClient, {
+  spaceId: 'abc123',
+  locale: 'en-US',
+  isBuildPhase: () => process.env.NODE_ENV === 'production' && process.argv.includes('build'),
+});
+```
+
+## Observability
+
+### Stats Tracking
+
+```typescript
+import { getCacheStats } from '@multitenant/contentful';
+
+// At end of build
+const stats = getCacheStats();
+console.log(stats);
+// [
+//   { url: 'getEntries::abc123::a3f4...', locale: 'en-US', hits: 5, misses: 1 },
+//   { url: 'getEntry::abc123::d7e2...', locale: 'en-US', hits: 0, misses: 3 },
+// ]
+```
+
+### Debug Logging
+
+```typescript
+const client = createCachedContentfulClient(rawClient, {
+  spaceId: 'abc123',
+  locale: 'en-US',
+  debug: true,  // Logs to console.debug
+});
+
+// Output:
+// [multitenant/contentful] MISS en-US getEntries::abc123::a3f4... (hits: 0, misses: 1)
+// [multitenant/contentful] HIT  en-US getEntries::abc123::a3f4... (hits: 1, misses: 1)
+```
+
+### Custom Logging
+
+```typescript
+const client = createCachedContentfulClient(rawClient, {
+  spaceId: 'abc123',
+  locale: 'en-US',
+  log: (event) => {
+    logger.info({
+      type: event.type,
+      method: event.url.split('::')[0],
+      hits: event.hits,
+      misses: event.misses,
+    });
+  },
+});
+```
+
+## Cache Management via CLI
+
+The `multitenant` CLI works with your cache:
+
+```bash
+# View cache stats
+multitenant cache --stats
+
+# Clear specific locale
+multitenant cache --locale en-US
+
+# Clear all
+multitenant cache --locale all
+```
+
+See [CLI: cache command](/cli/cache) for full reference.
+
+## Cached Methods
+
+These SDK methods are cached:
+
+- `getEntries(query?)`
+- `getEntry(id, query?)`
+- `getAsset(id, query?)`
+- `getAssets(query?)`
+- `getContentType(id)`
+- `getContentTypes(query?)`
+- `getTags(query?)`
+- `getLocales()`
+
+**Pass-through (not cached):**
+- `sync()` — stateful, not idempotent
+- `createAssetKey()` — pure computation
+- `parseEntries()` — pure computation
+
+## Real-World Example
+
+In a multi-locale Next.js site:
+
+```typescript
+// app/[locale]/page.tsx
+import { contentfulClient } from '@/lib/contentful';
+
+export async function generateStaticParams() {
+  // Locale is bound to the client at creation time
+  const pages = await contentfulClient.getEntries({ content_type: 'page' });
+  return pages.items.map(p => ({ slug: p.fields.slug }));
+}
+
+export default async function Page({ params }) {
+  const data = await contentfulClient.getEntry(params.id);
+  return <h1>{data.fields.title}</h1>;
+}
+```
+
+When you run `npm run build` with 6 locales:
+
+1. **First locale (en-US):** fetches all pages from Contentful, writes to `.next/.build-cache/locales/en-US/`
+2. **Other locales (es-US, fr-CA, etc.):** each gets its own cache directory
+3. **Rebuild same day:** all locales read from disk (no API calls)
+4. **Next day's rebuild:** cold start again (timestamp-aware invalidation or manual `multitenant cache --locale all`)
+
+## Performance Impact
+
+Typical multi-locale build:
+- **Cold build:** 20 minutes, 100+ API calls
+- **With cache:** 3–5 minutes, 0 API calls (warm)
+- **Between-day rebuild:** cold again (build artifacts expire)
+
+---
+
+For full API reference, see [Contentful Package Documentation](/docs/CONTENTFUL).

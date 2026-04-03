@@ -1,9 +1,11 @@
 ---
 title: Cache Command
-description: Manage the build-time fetch cache from the CLI.
+description: Manage the build-time request cache from the CLI.
 ---
 
-The `multitenant cache` command helps you manage the build-time request cache, view statistics, and invalidate cached data by locale.
+The `multitenant cache` command helps you manage the build-time request cache (for both `cachedFetch` and Contentful SDK), view statistics, and invalidate cached data by locale.
+
+The cache files live at `.next/.build-cache/locales/{locale}/` and are managed uniformly whether they come from `@multitenant/next-app`'s `cachedFetch` (REST API calls) or `@multitenant/contentful`'s SDK wrapper (Contentful SDK calls).
 
 ## Usage
 

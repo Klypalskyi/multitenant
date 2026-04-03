@@ -1,0 +1,45 @@
+{
+  "name": "@multitenant/contentful",
+  "version": "0.1.0",
+  "description": "Contentful SDK wrapper with build-time caching, inflight deduplication, and TenantRegistry integration",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "test": "../../node_modules/.bin/vitest run",
+    "test:coverage": "../../node_modules/.bin/vitest run --coverage"
+  },
+  "dependencies": {
+    "@multitenant/core": "^0.5.0"
+  },
+  "peerDependencies": {
+    "contentful": ">=10.0.0"
+  },
+  "devDependencies": {
+    "contentful": "^10.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klypalskyi/multitenant.git",
+    "directory": "packages/contentful"
+  },
+  "bugs": {
+    "url": "https://github.com/klypalskyi/multitenant/issues"
+  },
+  "homepage": "https://github.com/klypalskyi/multitenant/tree/master/packages/contentful",
+  "publishConfig": {
+    "access": "public"
+  }
+}

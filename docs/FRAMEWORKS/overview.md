@@ -6,6 +6,7 @@ Scaffold a minimal config and optional stubs: [`multitenant init`](../CLI/init.m
 |---------|----------|
 | `@multitenant/next` | Optional meta-install – re-exports `core`, `config`, `react`, `next-app` |
 | `@multitenant/next-app` | Next.js 13+ App Router – middleware, `getTenantFromHeaders`, `requireTenant`; `cachedFetch` for build-time request caching (reduces CMS API calls); `@multitenant/next-app/auto` and `/auto-node` for zero-config middleware (see package README) |
+| `@multitenant/contentful` | Contentful SDK wrapper – transparent caching at SDK method level (inflight dedup + filesystem persistence) for build-time request deduplication across multi-locale builds |
 | `@multitenant/next-pages` | Next.js Pages Router – `withTenantGSSP`, `withTenantApi` |
 | `@multitenant/react` | React – `TenantProvider`, `useTenant`, `useMarket`, `useTenantFlag`, `useExperiment`, `useTenantTheme`, `useTenantConfig` |
 | `@multitenant/express` | Express – `multitenantExpress({ registry, environment })` → `req.tenant` |

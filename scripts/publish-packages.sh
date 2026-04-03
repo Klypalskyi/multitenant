@@ -18,6 +18,7 @@ pkgs=(
   @multitenant/next-app
   @multitenant/next
   @multitenant/next-pages
+  @multitenant/contentful
   @multitenant/express
   @multitenant/nest
   @multitenant/cli
